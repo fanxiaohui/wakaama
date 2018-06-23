@@ -206,6 +206,17 @@ bool lwm2m_session_is_equal(void * session1, void * session2, void * userData);
 
 
 /*
+ * extend Object IDs by vendor
+ *
+ */
+
+#define LWM2M_VEHICLE_OBJECT_ID     1111
+
+#define LWM2M_VEHICLE_RPM_ID              0
+#define LWM2M_VEHICLE_SPEED_ID            1
+#define LWM2M_VEHICLE_TIMESTAMP_ID        2
+
+/*
  * Utility functions for sorted linked list
  */
 
@@ -403,7 +414,7 @@ struct _lwm2m_object_t
     lwm2m_create_callback_t   createFunc;
     lwm2m_delete_callback_t   deleteFunc;
     lwm2m_discover_callback_t discoverFunc;
-    void * userData;
+    void * userData;//store value if unique instance
 };
 
 /*

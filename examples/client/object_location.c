@@ -227,8 +227,8 @@ void location_setVelocity(lwm2m_object_t* locationObj,
 void location_setLocationAtTime(lwm2m_object_t* locationObj,
                              float latitude,
                              float longitude,
-                             float altitude,
-                             uint64_t timestamp)
+                             float altitude
+                             )
 {
     //-------------------------------------------------------------------- JH --
     location_data_t* pData = locationObj->userData;
@@ -236,7 +236,7 @@ void location_setLocationAtTime(lwm2m_object_t* locationObj,
     pData->latitude  = latitude;
     pData->longitude = longitude;
     pData->altitude  = altitude;
-    pData->timestamp = timestamp;
+    pData->timestamp = lwm2m_gettime();
 }
 
 /**
@@ -304,6 +304,18 @@ void free_object_location(lwm2m_object_t * object)
     lwm2m_list_free(object->instanceList);
     lwm2m_free(object->userData);
     lwm2m_free(object);
+}
+
+
+void stub_updateLocationAutomatic(lwm2m_context_t* context)
+{
+    static float latitude = 27.89;
+    latitude += 1.0;
+    lwm2m_object_t *locationObj = (lwm2m_object_t *) LWM2M_LIST_FIND(context->objectList,
+                                                                     LWM2M_LOCATION_OBJECT_ID);
+    location_setLocationAtTime(locationObj, latitude, 0, 0);
+    lwm2m_uri_t latitudeUrip = {LWM2M_URI_FLAG_OBJECT_ID, LWM2M_LOCATION_OBJECT_ID, 0, 0};
+    lwm2m_resource_value_changed(context, &latitudeUrip);
 }
 
 #endif  //LWM2M_CLIENT_MODE

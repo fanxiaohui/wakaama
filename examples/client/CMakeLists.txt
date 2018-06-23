@@ -7,7 +7,7 @@ option(DTLS "Enable DTLS" OFF)
 include(${CMAKE_CURRENT_LIST_DIR}/../../core/wakaama.cmake)
 include(${CMAKE_CURRENT_LIST_DIR}/../shared/shared.cmake)
 
-add_definitions(-DLWM2M_CLIENT_MODE -DLWM2M_BOOTSTRAP -DLWM2M_SUPPORT_JSON)
+add_definitions(-DLWM2M_CLIENT_MODE -DLWM2M_BOOTSTRAP -DLWM2M_SUPPORT_JSON -DLWM2M_WITH_LOGS -DWITH_LOGS)
 add_definitions(${SHARED_DEFINITIONS} ${WAKAAMA_DEFINITIONS})
 
 include_directories (${WAKAAMA_SOURCES_DIR} ${SHARED_INCLUDE_DIRS})
@@ -25,7 +25,7 @@ SET(SOURCES
     ${CMAKE_CURRENT_LIST_DIR}/object_connectivity_stat.c
     ${CMAKE_CURRENT_LIST_DIR}/object_access_control.c
     ${CMAKE_CURRENT_LIST_DIR}/test_object.c
-    )
+        shareMemData.h object_vehicle.c)
 
 add_executable(${PROJECT_NAME} ${SOURCES} ${WAKAAMA_SOURCES} ${SHARED_SOURCES})
 

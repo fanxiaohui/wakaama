@@ -79,15 +79,29 @@
 #include <sys/stat.h>
 #include <errno.h>
 #include <signal.h>
+#include <liblwm2m.h>
+#include <sys/shm.h>
+#include "shareMemData.h"
 
 #define MAX_PACKET_SIZE 1024
 #define DEFAULT_SERVER_IPV6 "[::1]"
 #define DEFAULT_SERVER_IPV4 "127.0.0.1"
 
+extern void location_setLocationAtTime(lwm2m_object_t* locationObj,
+                                       float latitude,
+                                       float longitude,
+                                       float altitude
+                                       );
+extern lwm2m_object_t * create_object_vehicle(void);
+extern void free_object_vehicle(lwm2m_object_t * object);
+extern void update_vehicle_measurement(lwm2m_context_t* context, const ObdData* meas);
+extern void display_vehicle_object(lwm2m_object_t * object);
+extern void stub_updateLocationAutomatic(lwm2m_context_t* context);
+
 int g_reboot = 0;
 static int g_quit = 0;
 
-#define OBJ_COUNT 9
+#define OBJ_COUNT 10
 lwm2m_object_t * objArray[OBJ_COUNT];
 
 // only backup security and server objects
@@ -656,6 +670,10 @@ static void prv_display_objects(char * buffer,
             case TEST_OBJECT_ID:
                 display_test_object(object);
                 break;
+            case LWM2M_VEHICLE_OBJECT_ID:
+                display_vehicle_object(object);
+                break;
+
             }
         }
     }
@@ -1102,6 +1120,13 @@ int main(int argc, char *argv[])
         fprintf(stderr, "Failed to create Access Control ACL resource for serverId: 999\r\n");
         return -1;
     }
+
+    objArray[9] = create_object_vehicle();
+    if (NULL == objArray[9])
+    {
+        fprintf(stderr, "Failed to create vehicle object\r\n");
+        return -1;
+    }
     /*
      * The liblwm2m library is now initialized with the functions that will be in
      * charge of communication
@@ -1148,42 +1173,50 @@ int main(int argc, char *argv[])
     /*
      * We now enter in a while loop that will handle the communications from the server
      */
-    while (0 == g_quit)
+    ObdData* vehicle_shmAddr = NULL;
+    int vehicle_shmid = -1;
     {
+       vehicle_shmid =  shmget((key_t)1234,sizeof(ObdData),0666|IPC_CREAT);
+       if(vehicle_shmid == -1)
+       {
+           fprintf(stderr,"create share memory failed.");
+           exit(EXIT_FAILURE);
+       }
+        vehicle_shmAddr = shmat(vehicle_shmid, 0,0);//attach to current process space
+        if(vehicle_shmAddr == (void*)-1)
+        {
+            fprintf(stderr, "attach sharememory fail.");
+            exit(EXIT_FAILURE);
+        }
+        fprintf(stdout, "sharememory attached at %p \n",vehicle_shmAddr);
+    }
+
+    while (0 == g_quit) {
         struct timeval tv;
         fd_set readfds;
 
-        if (g_reboot)
-        {
+        if (g_reboot) {
             time_t tv_sec;
 
             tv_sec = lwm2m_gettime();
 
-            if (0 == reboot_time)
-            {
+            if (0 == reboot_time) {
                 reboot_time = tv_sec + 5;
             }
-            if (reboot_time < tv_sec)
-            {
+            if (reboot_time < tv_sec) {
                 /*
                  * Message should normally be lost with reboot ...
                  */
                 fprintf(stderr, "reboot time expired, rebooting ...");
                 system_reboot();
-            }
-            else
-            {
+            } else {
                 tv.tv_sec = reboot_time - tv_sec;
             }
-        }
-        else if (batterylevelchanging)
-        {
+        } else if (batterylevelchanging) {
             update_battery_level(lwm2mH);
             tv.tv_sec = 5;
-        }
-        else
-        {
-            tv.tv_sec = 60;
+        } else {
+            tv.tv_sec = 2;
         }
         tv.tv_usec = 0;
 
@@ -1197,6 +1230,21 @@ int main(int argc, char *argv[])
          *  - Secondly it adjusts the timeout value (default 60s) depending on the state of the transaction
          *    (eg. retransmission) and the time between the next operation
          */
+        {//zengliang
+
+            {//GPS location
+                stub_updateLocationAutomatic(lwm2mH);
+            }
+
+            {//TODO:vehicle, need mutex for share memory here ??
+                if(vehicle_shmAddr->updated) {
+                    update_vehicle_measurement(lwm2mH, vehicle_shmAddr);
+                    vehicle_shmAddr->updated = false;
+                }
+            }
+
+        }
+
         result = lwm2m_step(lwm2mH, &(tv.tv_sec));
         fprintf(stdout, " -> State: ");
         switch (lwm2mH->state)
@@ -1374,6 +1422,13 @@ int main(int argc, char *argv[])
     close(data.sock);
     connection_free(data.connList);
 
+    {
+        if (shmdt(vehicle_shmAddr) == -1)//detach sharememory
+            fprintf(stderr, "detach sharememory failed\n");
+        if(shmctl(vehicle_shmid,IPC_RMID, NULL) == -1)
+            fprintf(stderr,"release sharememory failed\n");
+    }
+
     clean_security_object(objArray[0]);
     lwm2m_free(objArray[0]);
     clean_server_object(objArray[1]);
@@ -1385,6 +1440,7 @@ int main(int argc, char *argv[])
     free_object_conn_m(objArray[6]);
     free_object_conn_s(objArray[7]);
     acl_ctrl_free_object(objArray[8]);
+    free_object_vehicle(objArray[9]);
 
 #ifdef MEMORY_TRACE
     if (g_quit == 1)
