@@ -1,0 +1,1989 @@
+usage: ./lwm2mclient -n hzedge -h 192.168.56.1 -4 -t 30
+
+lianzeng@VBox:~/lwm2m/wakaama/examples/client$ ./lwm2mclient -n hzedge -h 192.168.56.1 -4
+Trying to bind LWM2M Client to port 56830
+[lwm2m_init:64] Entering
+[lwm2m_configure:264] endpointName: "hzedge", msisdn: "(null)", altPath: "(null)", numObject: 9
+LWM2M Client "hzedge" started on port 56830
+> [lwm2m_resource_value_changed:451] /6/0
+[lwm2m_step:370] timeoutP: 2
+[lwm2m_step:375] State: STATE_INITIAL
+[object_getServers:741] Entering
+[lwm2m_data_new:143] size: 3
+[lwm2m_data_encode_bool:406] value: false
+[lwm2m_data_encode_int:270] value: 123
+[lwm2m_data_encode_int:270] value: 10
+[lwm2m_data_decode_bool:416] Entering
+[lwm2m_data_decode_bool:467] result: 1, value: false
+[lwm2m_data_decode_int:280] Entering
+[lwm2m_data_decode_int:335] result: 1, value: 123
+[lwm2m_data_new:143] size: 1
+[lwm2m_data_encode_int:270] value: 123
+[lwm2m_data_decode_int:280] Entering
+[lwm2m_data_decode_int:335] result: 1, value: 123
+[lwm2m_data_free:161] size: 1
+[lwm2m_data_new:143] size: 2
+[lwm2m_data_encode_int:270] value: 300
+[lwm2m_data_encode_string:195] "U"
+[lwm2m_data_decode_int:280] Entering
+[lwm2m_data_decode_int:335] result: 1, value: 300
+[lwm2m_data_free:161] size: 2
+[lwm2m_data_free:161] size: 3
+[registration_start:477] State: STATE_REGISTER_REQUIRED
+[object_getRegisterPayloadBufferLength:508] Entering
+[object_getRegisterPayload:579] Entering
+Opening connection to server at 192.168.56.1:5683
+[transaction_new:156] method: 2, altPath: "(null)", mID: 2336, token_len: 4
+[transaction_new:157] NULL
+[transaction_new:235] Exiting on success
+[transaction_send:351] Entering
+Sending 157 bytes to [192.168.56.1]:5683
+44 02 09 20  20 09 FE D9  B2 72 64 11  28 39 6C 77   D..  ....rd.(9lw
+6D 32 6D 3D  31 2E 30 09  65 70 3D 68  7A 65 64 67   m2m=1.0.ep=hzedg
+65 03 62 3D  55 06 6C 74  3D 33 30 30  FF 3C 2F 3E   e.b=U.lt=300.</>
+3B 72 74 3D  22 6F 6D 61  2E 6C 77 6D  32 6D 22 3B   ;rt="oma.lwm2m";
+63 74 3D 31  31 35 34 33  2C 3C 2F 31  2F 30 3E 2C   ct=11543,</1/0>,
+3C 2F 32 2F  30 3E 2C 3C  2F 33 2F 30  3E 2C 3C 2F   </2/0>,</3/0>,</
+34 2F 30 3E  2C 3C 2F 35  2F 30 3E 2C  3C 2F 36 2F   4/0>,</5/0>,</6/
+30 3E 2C 3C  2F 37 2F 30  3E 2C 3C 2F  33 31 30 32   0>,</7/0>,</3102
+34 2F 31 30  3E 2C 3C 2F  33 31 30 32  34 2F 31 31   4/10>,</31024/11
+3E 2C 3C 2F  33 31 30 32  34 2F 31 32  3E            >,</31024/12>
+[observe_step:491] Entering
+[registration_step:1299] State: STATE_REGISTERING
+[transaction_step:433] Entering
+[lwm2m_step:478] Final timeoutP: 2
+[lwm2m_step:480] Final state: STATE_REGISTERING
+ -> State: STATE_REGISTERING
+22 bytes received from [192.168.56.1]:5683
+64 41 09 20  20 09 FE D9  82 72 64 0A  31 47 37 75   dA.  ....rd.1G7u
+67 51 79 53  32 34                                   gQyS24
+[lwm2m_handle_packet:209] Entering
+[lwm2m_handle_packet:214] Parsed: ver 1, type 2, tkl 4, code 2.01, mid 2336, Content type: 0
+[lwm2m_handle_packet:215] Payload: 
+[transaction_handleResponse:274] Entering
+[prv_handleRegistrationReply:212] Registration successful
+[transaction_remove:260] Entering
+[transaction_free:246] Entering
+[lwm2m_resource_value_changed:451] /6/0
+[lwm2m_step:370] timeoutP: 2
+[lwm2m_step:375] State: STATE_REGISTERING
+[registration_getStatus:506] State: STATE_REGISTERING
+[registration_getStatus:513] targetP->status: STATE_REGISTERED
+[registration_getStatus:536] reg_status: STATE_REGISTERED
+[observe_step:491] Entering
+[registration_step:1299] State: STATE_READY
+[transaction_step:433] Entering
+[lwm2m_step:478] Final timeoutP: 2
+[lwm2m_step:480] Final state: STATE_READY
+ -> State: STATE_READY
+[lwm2m_resource_value_changed:451] /6/0
+[lwm2m_step:370] timeoutP: 2
+[lwm2m_step:375] State: STATE_READY
+[registration_getStatus:506] State: STATE_READY
+[registration_getStatus:513] targetP->status: STATE_REGISTERED
+[registration_getStatus:536] reg_status: STATE_REGISTERED
+[observe_step:491] Entering
+[registration_step:1299] State: STATE_READY
+[transaction_step:433] Entering
+[lwm2m_step:478] Final timeoutP: 2
+[lwm2m_step:480] Final state: STATE_READY
+ -> State: STATE_READY
+[lwm2m_resource_value_changed:451] /6/0
+[lwm2m_step:370] timeoutP: 2
+[lwm2m_step:375] State: STATE_READY
+[registration_getStatus:506] State: STATE_READY
+[registration_getStatus:513] targetP->status: STATE_REGISTERED
+[registration_getStatus:536] reg_status: STATE_REGISTERED
+[observe_step:491] Entering
+[registration_step:1299] State: STATE_READY
+[transaction_step:433] Entering
+[lwm2m_step:478] Final timeoutP: 2
+[lwm2m_step:480] Final state: STATE_READY
+ -> State: STATE_READY
+[lwm2m_resource_value_changed:451] /6/0
+[lwm2m_step:370] timeoutP: 2
+[lwm2m_step:375] State: STATE_READY
+[registration_getStatus:506] State: STATE_READY
+[registration_getStatus:513] targetP->status: STATE_REGISTERED
+[registration_getStatus:536] reg_status: STATE_REGISTERED
+[observe_step:491] Entering
+[registration_step:1299] State: STATE_READY
+[transaction_step:433] Entering
+[lwm2m_step:478] Final timeoutP: 2
+[lwm2m_step:480] Final state: STATE_READY
+ -> State: STATE_READY
+[lwm2m_resource_value_changed:451] /6/0
+[lwm2m_step:370] timeoutP: 2
+[lwm2m_step:375] State: STATE_READY
+[registration_getStatus:506] State: STATE_READY
+[registration_getStatus:513] targetP->status: STATE_REGISTERED
+[registration_getStatus:536] reg_status: STATE_REGISTERED
+[observe_step:491] Entering
+[registration_step:1299] State: STATE_READY
+[transaction_step:433] Entering
+[lwm2m_step:478] Final timeoutP: 2
+[lwm2m_step:480] Final state: STATE_READY
+ -> State: STATE_READY
+[lwm2m_resource_value_changed:451] /6/0
+[lwm2m_step:370] timeoutP: 2
+[lwm2m_step:375] State: STATE_READY
+[registration_getStatus:506] State: STATE_READY
+[registration_getStatus:513] targetP->status: STATE_REGISTERED
+[registration_getStatus:536] reg_status: STATE_REGISTERED
+[observe_step:491] Entering
+[registration_step:1299] State: STATE_READY
+[transaction_step:433] Entering
+[lwm2m_step:478] Final timeoutP: 2
+[lwm2m_step:480] Final state: STATE_READY
+ -> State: STATE_READY
+[lwm2m_resource_value_changed:451] /6/0
+[lwm2m_step:370] timeoutP: 2
+[lwm2m_step:375] State: STATE_READY
+[registration_getStatus:506] State: STATE_READY
+[registration_getStatus:513] targetP->status: STATE_REGISTERED
+[registration_getStatus:536] reg_status: STATE_REGISTERED
+[observe_step:491] Entering
+[registration_step:1299] State: STATE_READY
+[transaction_step:433] Entering
+[lwm2m_step:478] Final timeoutP: 2
+[lwm2m_step:480] Final state: STATE_READY
+ -> State: STATE_READY
+[lwm2m_resource_value_changed:451] /6/0
+[lwm2m_step:370] timeoutP: 2
+[lwm2m_step:375] State: STATE_READY
+[registration_getStatus:506] State: STATE_READY
+[registration_getStatus:513] targetP->status: STATE_REGISTERED
+[registration_getStatus:536] reg_status: STATE_REGISTERED
+[observe_step:491] Entering
+[registration_step:1299] State: STATE_READY
+[transaction_step:433] Entering
+[lwm2m_step:478] Final timeoutP: 2
+[lwm2m_step:480] Final state: STATE_READY
+ -> State: STATE_READY
+[lwm2m_resource_value_changed:451] /6/0
+[lwm2m_step:370] timeoutP: 2
+[lwm2m_step:375] State: STATE_READY
+[registration_getStatus:506] State: STATE_READY
+[registration_getStatus:513] targetP->status: STATE_REGISTERED
+[registration_getStatus:536] reg_status: STATE_REGISTERED
+[observe_step:491] Entering
+[registration_step:1299] State: STATE_READY
+[transaction_step:433] Entering
+[lwm2m_step:478] Final timeoutP: 2
+[lwm2m_step:480] Final state: STATE_READY
+ -> State: STATE_READY
+[lwm2m_resource_value_changed:451] /6/0
+[lwm2m_step:370] timeoutP: 2
+[lwm2m_step:375] State: STATE_READY
+[registration_getStatus:506] State: STATE_READY
+[registration_getStatus:513] targetP->status: STATE_REGISTERED
+[registration_getStatus:536] reg_status: STATE_REGISTERED
+[observe_step:491] Entering
+[registration_step:1299] State: STATE_READY
+[transaction_step:433] Entering
+[lwm2m_step:478] Final timeoutP: 2
+[lwm2m_step:480] Final state: STATE_READY
+ -> State: STATE_READY
+[lwm2m_resource_value_changed:451] /6/0
+[lwm2m_step:370] timeoutP: 2
+[lwm2m_step:375] State: STATE_READY
+[registration_getStatus:506] State: STATE_READY
+[registration_getStatus:513] targetP->status: STATE_REGISTERED
+[registration_getStatus:536] reg_status: STATE_REGISTERED
+[observe_step:491] Entering
+[registration_step:1299] State: STATE_READY
+[transaction_step:433] Entering
+[lwm2m_step:478] Final timeoutP: 2
+[lwm2m_step:480] Final state: STATE_READY
+ -> State: STATE_READY
+[lwm2m_resource_value_changed:451] /6/0
+[lwm2m_step:370] timeoutP: 2
+[lwm2m_step:375] State: STATE_READY
+[registration_getStatus:506] State: STATE_READY
+[registration_getStatus:513] targetP->status: STATE_REGISTERED
+[registration_getStatus:536] reg_status: STATE_REGISTERED
+[observe_step:491] Entering
+[registration_step:1299] State: STATE_READY
+[transaction_step:433] Entering
+[lwm2m_step:478] Final timeoutP: 2
+[lwm2m_step:480] Final state: STATE_READY
+ -> State: STATE_READY
+[lwm2m_resource_value_changed:451] /6/0
+[lwm2m_step:370] timeoutP: 2
+[lwm2m_step:375] State: STATE_READY
+[registration_getStatus:506] State: STATE_READY
+[registration_getStatus:513] targetP->status: STATE_REGISTERED
+[registration_getStatus:536] reg_status: STATE_REGISTERED
+[observe_step:491] Entering
+[registration_step:1299] State: STATE_READY
+[transaction_step:433] Entering
+[lwm2m_step:478] Final timeoutP: 2
+[lwm2m_step:480] Final state: STATE_READY
+ -> State: STATE_READY
+[lwm2m_resource_value_changed:451] /6/0
+[lwm2m_step:370] timeoutP: 2
+[lwm2m_step:375] State: STATE_READY
+[registration_getStatus:506] State: STATE_READY
+[registration_getStatus:513] targetP->status: STATE_REGISTERED
+[registration_getStatus:536] reg_status: STATE_REGISTERED
+[observe_step:491] Entering
+[registration_step:1299] State: STATE_READY
+[transaction_step:433] Entering
+[lwm2m_step:478] Final timeoutP: 2
+[lwm2m_step:480] Final state: STATE_READY
+ -> State: STATE_READY
+[lwm2m_resource_value_changed:451] /6/0
+[lwm2m_step:370] timeoutP: 2
+[lwm2m_step:375] State: STATE_READY
+[registration_getStatus:506] State: STATE_READY
+[registration_getStatus:513] targetP->status: STATE_REGISTERED
+[registration_getStatus:536] reg_status: STATE_REGISTERED
+[observe_step:491] Entering
+[registration_step:1299] State: STATE_READY
+[transaction_step:433] Entering
+[lwm2m_step:478] Final timeoutP: 2
+[lwm2m_step:480] Final state: STATE_READY
+ -> State: STATE_READY
+[lwm2m_resource_value_changed:451] /6/0
+[lwm2m_step:370] timeoutP: 2
+[lwm2m_step:375] State: STATE_READY
+[registration_getStatus:506] State: STATE_READY
+[registration_getStatus:513] targetP->status: STATE_REGISTERED
+[registration_getStatus:536] reg_status: STATE_REGISTERED
+[observe_step:491] Entering
+[registration_step:1299] State: STATE_READY
+[transaction_step:433] Entering
+[lwm2m_step:478] Final timeoutP: 2
+[lwm2m_step:480] Final state: STATE_READY
+ -> State: STATE_READY
+[lwm2m_resource_value_changed:451] /6/0
+[lwm2m_step:370] timeoutP: 2
+[lwm2m_step:375] State: STATE_READY
+[registration_getStatus:506] State: STATE_READY
+[registration_getStatus:513] targetP->status: STATE_REGISTERED
+[registration_getStatus:536] reg_status: STATE_REGISTERED
+[observe_step:491] Entering
+[registration_step:1299] State: STATE_READY
+[transaction_step:433] Entering
+[lwm2m_step:478] Final timeoutP: 2
+[lwm2m_step:480] Final state: STATE_READY
+ -> State: STATE_READY
+22 bytes received from [192.168.56.1]:5683
+48 01 5D D6  D5 D8 7C 9F  4B C2 C5 A1  60 51 36 01   H.]...|.K...`Q6.
+30 01 30 62  2D 16                                   0.0b-.
+[lwm2m_handle_packet:209] Entering
+[lwm2m_handle_packet:214] Parsed: ver 1, type 0, tkl 8, code 0.01, mid 24022, Content type: 0
+[lwm2m_handle_packet:215] Payload: 
+[handle_request:114] Entering
+[uri_decode:102] altPath: "(null)"
+[uri_decode:198] /6/0/0
+[dm_handleRequest:171] Code: 01, server status: STATE_REGISTERED
+[dm_handleRequest:172] /6/0/0
+[object_readData:116] /6/0/0
+[lwm2m_data_new:143] size: 1
+[lwm2m_data_encode_float:343] value: 45.889999
+[object_readData:173] result: 2. 5, size: 1
+[observe_handleRequest:168] Code: 01, server status: STATE_REGISTERED
+[observe_handleRequest:169] /6/0/0
+[lwm2m_data_decode_float:353] Entering
+[lwm2m_data_decode_float:398] result: 1, value: 45.889999
+[lwm2m_data_serialize:584] /6/0/0
+[lwm2m_data_serialize:585] size: 1, formatP: LWM2M_CONTENT_TLV
+[lwm2m_data_serialize:612] Final format: LWM2M_CONTENT_TLV
+[tlv_serialize:456] isResourceInstance: false, size: 1
+[tlv_serialize:576] returning 6
+[dm_handleRequest:234] Observe Request[/6/0/0]: �
+
+[lwm2m_data_free:161] size: 1
+[message_send:426] Entering
+[message_send:428] Size to allocate: 29
+[message_send:435] coap_serialize_message() returned 23
+Sending 23 bytes to [192.168.56.1]:5683
+68 45 5D D6  D5 D8 7C 9F  4B C2 C5 A1  60 62 2D 16   hE]...|.K...`b-.
+FF C4 00 42  37 8F 5C                                ...B7.\
+[lwm2m_resource_value_changed:451] /6/0
+[lwm2m_resource_value_changed:467] Found an observation
+[lwm2m_resource_value_changed:468] /6/0/0
+[lwm2m_resource_value_changed:474] Tagging a watcher
+[lwm2m_step:370] timeoutP: 2
+[lwm2m_step:375] State: STATE_READY
+[registration_getStatus:506] State: STATE_READY
+[registration_getStatus:513] targetP->status: STATE_REGISTERED
+[registration_getStatus:536] reg_status: STATE_REGISTERED
+[observe_step:491] Entering
+[observe_step:505] /6/0/0
+[object_readData:116] /6/0/0
+[lwm2m_data_new:143] size: 1
+[lwm2m_data_encode_float:343] value: 46.889999
+[object_readData:173] result: 2. 5, size: 1
+[lwm2m_data_decode_float:353] Entering
+[lwm2m_data_decode_float:398] result: 1, value: 46.889999
+[observe_step:545] Notify with no conditions
+[observe_step:546] /6/0/0
+[lwm2m_data_serialize:584] /6/0/0
+[lwm2m_data_serialize:585] size: 1, formatP: LWM2M_CONTENT_TLV
+[lwm2m_data_serialize:612] Final format: LWM2M_CONTENT_TLV
+[tlv_serialize:456] isResourceInstance: false, size: 1
+[tlv_serialize:576] returning 6
+[message_send:426] Entering
+[message_send:428] Size to allocate: 29
+[message_send:435] coap_serialize_message() returned 24
+Sending 24 bytes to [192.168.56.1]:5683
+58 45 09 21  D5 D8 7C 9F  4B C2 C5 A1  61 01 62 2D   XE.!..|.K...a.b-
+16 FF C4 00  42 3B 8F 5C                             ....B;.\
+[lwm2m_data_free:161] size: 1
+[registration_step:1299] State: STATE_READY
+[transaction_step:433] Entering
+[lwm2m_step:478] Final timeoutP: 2
+[lwm2m_step:480] Final state: STATE_READY
+ -> State: STATE_READY
+[lwm2m_resource_value_changed:451] /6/0
+[lwm2m_resource_value_changed:467] Found an observation
+[lwm2m_resource_value_changed:468] /6/0/0
+[lwm2m_resource_value_changed:474] Tagging a watcher
+[lwm2m_step:370] timeoutP: 2
+[lwm2m_step:375] State: STATE_READY
+[registration_getStatus:506] State: STATE_READY
+[registration_getStatus:513] targetP->status: STATE_REGISTERED
+[registration_getStatus:536] reg_status: STATE_REGISTERED
+[observe_step:491] Entering
+[observe_step:505] /6/0/0
+[object_readData:116] /6/0/0
+[lwm2m_data_new:143] size: 1
+[lwm2m_data_encode_float:343] value: 47.889999
+[object_readData:173] result: 2. 5, size: 1
+[lwm2m_data_decode_float:353] Entering
+[lwm2m_data_decode_float:398] result: 1, value: 47.889999
+[observe_step:545] Notify with no conditions
+[observe_step:546] /6/0/0
+[lwm2m_data_serialize:584] /6/0/0
+[lwm2m_data_serialize:585] size: 1, formatP: LWM2M_CONTENT_TLV
+[lwm2m_data_serialize:612] Final format: LWM2M_CONTENT_TLV
+[tlv_serialize:456] isResourceInstance: false, size: 1
+[tlv_serialize:576] returning 6
+[message_send:426] Entering
+[message_send:428] Size to allocate: 29
+[message_send:435] coap_serialize_message() returned 24
+Sending 24 bytes to [192.168.56.1]:5683
+58 45 09 22  D5 D8 7C 9F  4B C2 C5 A1  61 02 62 2D   XE."..|.K...a.b-
+16 FF C4 00  42 3F 8F 5C                             ....B?.\
+[lwm2m_data_free:161] size: 1
+[registration_step:1299] State: STATE_READY
+[transaction_step:433] Entering
+[lwm2m_step:478] Final timeoutP: 2
+[lwm2m_step:480] Final state: STATE_READY
+ -> State: STATE_READY
+[lwm2m_resource_value_changed:451] /6/0
+[lwm2m_resource_value_changed:467] Found an observation
+[lwm2m_resource_value_changed:468] /6/0/0
+[lwm2m_resource_value_changed:474] Tagging a watcher
+[lwm2m_step:370] timeoutP: 2
+[lwm2m_step:375] State: STATE_READY
+[registration_getStatus:506] State: STATE_READY
+[registration_getStatus:513] targetP->status: STATE_REGISTERED
+[registration_getStatus:536] reg_status: STATE_REGISTERED
+[observe_step:491] Entering
+[observe_step:505] /6/0/0
+[object_readData:116] /6/0/0
+[lwm2m_data_new:143] size: 1
+[lwm2m_data_encode_float:343] value: 48.889999
+[object_readData:173] result: 2. 5, size: 1
+[lwm2m_data_decode_float:353] Entering
+[lwm2m_data_decode_float:398] result: 1, value: 48.889999
+[observe_step:545] Notify with no conditions
+[observe_step:546] /6/0/0
+[lwm2m_data_serialize:584] /6/0/0
+[lwm2m_data_serialize:585] size: 1, formatP: LWM2M_CONTENT_TLV
+[lwm2m_data_serialize:612] Final format: LWM2M_CONTENT_TLV
+[tlv_serialize:456] isResourceInstance: false, size: 1
+[tlv_serialize:576] returning 6
+[message_send:426] Entering
+[message_send:428] Size to allocate: 29
+[message_send:435] coap_serialize_message() returned 24
+Sending 24 bytes to [192.168.56.1]:5683
+58 45 09 23  D5 D8 7C 9F  4B C2 C5 A1  61 03 62 2D   XE.#..|.K...a.b-
+16 FF C4 00  42 43 8F 5C                             ....BC.\
+[lwm2m_data_free:161] size: 1
+[registration_step:1299] State: STATE_READY
+[transaction_step:433] Entering
+[lwm2m_step:478] Final timeoutP: 2
+[lwm2m_step:480] Final state: STATE_READY
+ -> State: STATE_READY
+[lwm2m_resource_value_changed:451] /6/0
+[lwm2m_resource_value_changed:467] Found an observation
+[lwm2m_resource_value_changed:468] /6/0/0
+[lwm2m_resource_value_changed:474] Tagging a watcher
+[lwm2m_step:370] timeoutP: 2
+[lwm2m_step:375] State: STATE_READY
+[registration_getStatus:506] State: STATE_READY
+[registration_getStatus:513] targetP->status: STATE_REGISTERED
+[registration_getStatus:536] reg_status: STATE_REGISTERED
+[observe_step:491] Entering
+[observe_step:505] /6/0/0
+[object_readData:116] /6/0/0
+[lwm2m_data_new:143] size: 1
+[lwm2m_data_encode_float:343] value: 49.889999
+[object_readData:173] result: 2. 5, size: 1
+[lwm2m_data_decode_float:353] Entering
+[lwm2m_data_decode_float:398] result: 1, value: 49.889999
+[observe_step:545] Notify with no conditions
+[observe_step:546] /6/0/0
+[lwm2m_data_serialize:584] /6/0/0
+[lwm2m_data_serialize:585] size: 1, formatP: LWM2M_CONTENT_TLV
+[lwm2m_data_serialize:612] Final format: LWM2M_CONTENT_TLV
+[tlv_serialize:456] isResourceInstance: false, size: 1
+[tlv_serialize:576] returning 6
+[message_send:426] Entering
+[message_send:428] Size to allocate: 29
+[message_send:435] coap_serialize_message() returned 24
+Sending 24 bytes to [192.168.56.1]:5683
+58 45 09 24  D5 D8 7C 9F  4B C2 C5 A1  61 04 62 2D   XE.$..|.K...a.b-
+16 FF C4 00  42 47 8F 5C                             ....BG.\
+[lwm2m_data_free:161] size: 1
+[registration_step:1299] State: STATE_READY
+[transaction_step:433] Entering
+[lwm2m_step:478] Final timeoutP: 2
+[lwm2m_step:480] Final state: STATE_READY
+ -> State: STATE_READY
+[lwm2m_resource_value_changed:451] /6/0
+[lwm2m_resource_value_changed:467] Found an observation
+[lwm2m_resource_value_changed:468] /6/0/0
+[lwm2m_resource_value_changed:474] Tagging a watcher
+[lwm2m_step:370] timeoutP: 2
+[lwm2m_step:375] State: STATE_READY
+[registration_getStatus:506] State: STATE_READY
+[registration_getStatus:513] targetP->status: STATE_REGISTERED
+[registration_getStatus:536] reg_status: STATE_REGISTERED
+[observe_step:491] Entering
+[observe_step:505] /6/0/0
+[object_readData:116] /6/0/0
+[lwm2m_data_new:143] size: 1
+[lwm2m_data_encode_float:343] value: 50.889999
+[object_readData:173] result: 2. 5, size: 1
+[lwm2m_data_decode_float:353] Entering
+[lwm2m_data_decode_float:398] result: 1, value: 50.889999
+[observe_step:545] Notify with no conditions
+[observe_step:546] /6/0/0
+[lwm2m_data_serialize:584] /6/0/0
+[lwm2m_data_serialize:585] size: 1, formatP: LWM2M_CONTENT_TLV
+[lwm2m_data_serialize:612] Final format: LWM2M_CONTENT_TLV
+[tlv_serialize:456] isResourceInstance: false, size: 1
+[tlv_serialize:576] returning 6
+[message_send:426] Entering
+[message_send:428] Size to allocate: 29
+[message_send:435] coap_serialize_message() returned 24
+Sending 24 bytes to [192.168.56.1]:5683
+58 45 09 25  D5 D8 7C 9F  4B C2 C5 A1  61 05 62 2D   XE.%..|.K...a.b-
+16 FF C4 00  42 4B 8F 5C                             ....BK.\
+[lwm2m_data_free:161] size: 1
+[registration_step:1299] State: STATE_READY
+[transaction_step:433] Entering
+[lwm2m_step:478] Final timeoutP: 2
+[lwm2m_step:480] Final state: STATE_READY
+ -> State: STATE_READY
+[lwm2m_resource_value_changed:451] /6/0
+[lwm2m_resource_value_changed:467] Found an observation
+[lwm2m_resource_value_changed:468] /6/0/0
+[lwm2m_resource_value_changed:474] Tagging a watcher
+[lwm2m_step:370] timeoutP: 2
+[lwm2m_step:375] State: STATE_READY
+[registration_getStatus:506] State: STATE_READY
+[registration_getStatus:513] targetP->status: STATE_REGISTERED
+[registration_getStatus:536] reg_status: STATE_REGISTERED
+[observe_step:491] Entering
+[observe_step:505] /6/0/0
+[object_readData:116] /6/0/0
+[lwm2m_data_new:143] size: 1
+[lwm2m_data_encode_float:343] value: 51.889999
+[object_readData:173] result: 2. 5, size: 1
+[lwm2m_data_decode_float:353] Entering
+[lwm2m_data_decode_float:398] result: 1, value: 51.889999
+[observe_step:545] Notify with no conditions
+[observe_step:546] /6/0/0
+[lwm2m_data_serialize:584] /6/0/0
+[lwm2m_data_serialize:585] size: 1, formatP: LWM2M_CONTENT_TLV
+[lwm2m_data_serialize:612] Final format: LWM2M_CONTENT_TLV
+[tlv_serialize:456] isResourceInstance: false, size: 1
+[tlv_serialize:576] returning 6
+[message_send:426] Entering
+[message_send:428] Size to allocate: 29
+[message_send:435] coap_serialize_message() returned 24
+Sending 24 bytes to [192.168.56.1]:5683
+58 45 09 26  D5 D8 7C 9F  4B C2 C5 A1  61 06 62 2D   XE.&..|.K...a.b-
+16 FF C4 00  42 4F 8F 5C                             ....BO.\
+[lwm2m_data_free:161] size: 1
+[registration_step:1299] State: STATE_READY
+[transaction_step:433] Entering
+[lwm2m_step:478] Final timeoutP: 2
+[lwm2m_step:480] Final state: STATE_READY
+ -> State: STATE_READY
+[lwm2m_resource_value_changed:451] /6/0
+[lwm2m_resource_value_changed:467] Found an observation
+[lwm2m_resource_value_changed:468] /6/0/0
+[lwm2m_resource_value_changed:474] Tagging a watcher
+[lwm2m_step:370] timeoutP: 2
+[lwm2m_step:375] State: STATE_READY
+[registration_getStatus:506] State: STATE_READY
+[registration_getStatus:513] targetP->status: STATE_REGISTERED
+[registration_getStatus:536] reg_status: STATE_REGISTERED
+[observe_step:491] Entering
+[observe_step:505] /6/0/0
+[object_readData:116] /6/0/0
+[lwm2m_data_new:143] size: 1
+[lwm2m_data_encode_float:343] value: 52.889999
+[object_readData:173] result: 2. 5, size: 1
+[lwm2m_data_decode_float:353] Entering
+[lwm2m_data_decode_float:398] result: 1, value: 52.889999
+[observe_step:545] Notify with no conditions
+[observe_step:546] /6/0/0
+[lwm2m_data_serialize:584] /6/0/0
+[lwm2m_data_serialize:585] size: 1, formatP: LWM2M_CONTENT_TLV
+[lwm2m_data_serialize:612] Final format: LWM2M_CONTENT_TLV
+[tlv_serialize:456] isResourceInstance: false, size: 1
+[tlv_serialize:576] returning 6
+[message_send:426] Entering
+[message_send:428] Size to allocate: 29
+[message_send:435] coap_serialize_message() returned 24
+Sending 24 bytes to [192.168.56.1]:5683
+58 45 09 27  D5 D8 7C 9F  4B C2 C5 A1  61 07 62 2D   XE.'..|.K...a.b-
+16 FF C4 00  42 53 8F 5C                             ....BS.\
+[lwm2m_data_free:161] size: 1
+[registration_step:1299] State: STATE_READY
+[transaction_step:433] Entering
+[lwm2m_step:478] Final timeoutP: 2
+[lwm2m_step:480] Final state: STATE_READY
+ -> State: STATE_READY
+[lwm2m_resource_value_changed:451] /6/0
+[lwm2m_resource_value_changed:467] Found an observation
+[lwm2m_resource_value_changed:468] /6/0/0
+[lwm2m_resource_value_changed:474] Tagging a watcher
+[lwm2m_step:370] timeoutP: 2
+[lwm2m_step:375] State: STATE_READY
+[registration_getStatus:506] State: STATE_READY
+[registration_getStatus:513] targetP->status: STATE_REGISTERED
+[registration_getStatus:536] reg_status: STATE_REGISTERED
+[observe_step:491] Entering
+[observe_step:505] /6/0/0
+[object_readData:116] /6/0/0
+[lwm2m_data_new:143] size: 1
+[lwm2m_data_encode_float:343] value: 53.889999
+[object_readData:173] result: 2. 5, size: 1
+[lwm2m_data_decode_float:353] Entering
+[lwm2m_data_decode_float:398] result: 1, value: 53.889999
+[observe_step:545] Notify with no conditions
+[observe_step:546] /6/0/0
+[lwm2m_data_serialize:584] /6/0/0
+[lwm2m_data_serialize:585] size: 1, formatP: LWM2M_CONTENT_TLV
+[lwm2m_data_serialize:612] Final format: LWM2M_CONTENT_TLV
+[tlv_serialize:456] isResourceInstance: false, size: 1
+[tlv_serialize:576] returning 6
+[message_send:426] Entering
+[message_send:428] Size to allocate: 29
+[message_send:435] coap_serialize_message() returned 24
+Sending 24 bytes to [192.168.56.1]:5683
+58 45 09 28  D5 D8 7C 9F  4B C2 C5 A1  61 08 62 2D   XE.(..|.K...a.b-
+16 FF C4 00  42 57 8F 5C                             ....BW.\
+[lwm2m_data_free:161] size: 1
+[registration_step:1299] State: STATE_READY
+[transaction_step:433] Entering
+[lwm2m_step:478] Final timeoutP: 2
+[lwm2m_step:480] Final state: STATE_READY
+ -> State: STATE_READY
+[lwm2m_resource_value_changed:451] /6/0
+[lwm2m_resource_value_changed:467] Found an observation
+[lwm2m_resource_value_changed:468] /6/0/0
+[lwm2m_resource_value_changed:474] Tagging a watcher
+[lwm2m_step:370] timeoutP: 2
+[lwm2m_step:375] State: STATE_READY
+[registration_getStatus:506] State: STATE_READY
+[registration_getStatus:513] targetP->status: STATE_REGISTERED
+[registration_getStatus:536] reg_status: STATE_REGISTERED
+[observe_step:491] Entering
+[observe_step:505] /6/0/0
+[object_readData:116] /6/0/0
+[lwm2m_data_new:143] size: 1
+[lwm2m_data_encode_float:343] value: 54.889999
+[object_readData:173] result: 2. 5, size: 1
+[lwm2m_data_decode_float:353] Entering
+[lwm2m_data_decode_float:398] result: 1, value: 54.889999
+[observe_step:545] Notify with no conditions
+[observe_step:546] /6/0/0
+[lwm2m_data_serialize:584] /6/0/0
+[lwm2m_data_serialize:585] size: 1, formatP: LWM2M_CONTENT_TLV
+[lwm2m_data_serialize:612] Final format: LWM2M_CONTENT_TLV
+[tlv_serialize:456] isResourceInstance: false, size: 1
+[tlv_serialize:576] returning 6
+[message_send:426] Entering
+[message_send:428] Size to allocate: 29
+[message_send:435] coap_serialize_message() returned 24
+Sending 24 bytes to [192.168.56.1]:5683
+58 45 09 29  D5 D8 7C 9F  4B C2 C5 A1  61 09 62 2D   XE.)..|.K...a.b-
+16 FF C4 00  42 5B 8F 5C                             ....B[.\
+[lwm2m_data_free:161] size: 1
+[registration_step:1299] State: STATE_READY
+[transaction_step:433] Entering
+[lwm2m_step:478] Final timeoutP: 2
+[lwm2m_step:480] Final state: STATE_READY
+ -> State: STATE_READY
+[lwm2m_resource_value_changed:451] /6/0
+[lwm2m_resource_value_changed:467] Found an observation
+[lwm2m_resource_value_changed:468] /6/0/0
+[lwm2m_resource_value_changed:474] Tagging a watcher
+[lwm2m_step:370] timeoutP: 2
+[lwm2m_step:375] State: STATE_READY
+[registration_getStatus:506] State: STATE_READY
+[registration_getStatus:513] targetP->status: STATE_REGISTERED
+[registration_getStatus:536] reg_status: STATE_REGISTERED
+[observe_step:491] Entering
+[observe_step:505] /6/0/0
+[object_readData:116] /6/0/0
+[lwm2m_data_new:143] size: 1
+[lwm2m_data_encode_float:343] value: 55.889999
+[object_readData:173] result: 2. 5, size: 1
+[lwm2m_data_decode_float:353] Entering
+[lwm2m_data_decode_float:398] result: 1, value: 55.889999
+[observe_step:545] Notify with no conditions
+[observe_step:546] /6/0/0
+[lwm2m_data_serialize:584] /6/0/0
+[lwm2m_data_serialize:585] size: 1, formatP: LWM2M_CONTENT_TLV
+[lwm2m_data_serialize:612] Final format: LWM2M_CONTENT_TLV
+[tlv_serialize:456] isResourceInstance: false, size: 1
+[tlv_serialize:576] returning 6
+[message_send:426] Entering
+[message_send:428] Size to allocate: 29
+[message_send:435] coap_serialize_message() returned 24
+Sending 24 bytes to [192.168.56.1]:5683
+58 45 09 2A  D5 D8 7C 9F  4B C2 C5 A1  61 0A 62 2D   XE.*..|.K...a.b-
+16 FF C4 00  42 5F 8F 5C                             ....B_.\
+[lwm2m_data_free:161] size: 1
+[registration_step:1299] State: STATE_READY
+[transaction_step:433] Entering
+[lwm2m_step:478] Final timeoutP: 2
+[lwm2m_step:480] Final state: STATE_READY
+ -> State: STATE_READY
+[lwm2m_resource_value_changed:451] /6/0
+[lwm2m_resource_value_changed:467] Found an observation
+[lwm2m_resource_value_changed:468] /6/0/0
+[lwm2m_resource_value_changed:474] Tagging a watcher
+[lwm2m_step:370] timeoutP: 2
+[lwm2m_step:375] State: STATE_READY
+[registration_getStatus:506] State: STATE_READY
+[registration_getStatus:513] targetP->status: STATE_REGISTERED
+[registration_getStatus:536] reg_status: STATE_REGISTERED
+[observe_step:491] Entering
+[observe_step:505] /6/0/0
+[object_readData:116] /6/0/0
+[lwm2m_data_new:143] size: 1
+[lwm2m_data_encode_float:343] value: 56.889999
+[object_readData:173] result: 2. 5, size: 1
+[lwm2m_data_decode_float:353] Entering
+[lwm2m_data_decode_float:398] result: 1, value: 56.889999
+[observe_step:545] Notify with no conditions
+[observe_step:546] /6/0/0
+[lwm2m_data_serialize:584] /6/0/0
+[lwm2m_data_serialize:585] size: 1, formatP: LWM2M_CONTENT_TLV
+[lwm2m_data_serialize:612] Final format: LWM2M_CONTENT_TLV
+[tlv_serialize:456] isResourceInstance: false, size: 1
+[tlv_serialize:576] returning 6
+[message_send:426] Entering
+[message_send:428] Size to allocate: 29
+[message_send:435] coap_serialize_message() returned 24
+Sending 24 bytes to [192.168.56.1]:5683
+58 45 09 2B  D5 D8 7C 9F  4B C2 C5 A1  61 0B 62 2D   XE.+..|.K...a.b-
+16 FF C4 00  42 63 8F 5C                             ....Bc.\
+[lwm2m_data_free:161] size: 1
+[registration_step:1299] State: STATE_READY
+[transaction_step:433] Entering
+[lwm2m_step:478] Final timeoutP: 2
+[lwm2m_step:480] Final state: STATE_READY
+ -> State: STATE_READY
+[lwm2m_resource_value_changed:451] /6/0
+[lwm2m_resource_value_changed:467] Found an observation
+[lwm2m_resource_value_changed:468] /6/0/0
+[lwm2m_resource_value_changed:474] Tagging a watcher
+[lwm2m_step:370] timeoutP: 2
+[lwm2m_step:375] State: STATE_READY
+[registration_getStatus:506] State: STATE_READY
+[registration_getStatus:513] targetP->status: STATE_REGISTERED
+[registration_getStatus:536] reg_status: STATE_REGISTERED
+[observe_step:491] Entering
+[observe_step:505] /6/0/0
+[object_readData:116] /6/0/0
+[lwm2m_data_new:143] size: 1
+[lwm2m_data_encode_float:343] value: 57.889999
+[object_readData:173] result: 2. 5, size: 1
+[lwm2m_data_decode_float:353] Entering
+[lwm2m_data_decode_float:398] result: 1, value: 57.889999
+[observe_step:545] Notify with no conditions
+[observe_step:546] /6/0/0
+[lwm2m_data_serialize:584] /6/0/0
+[lwm2m_data_serialize:585] size: 1, formatP: LWM2M_CONTENT_TLV
+[lwm2m_data_serialize:612] Final format: LWM2M_CONTENT_TLV
+[tlv_serialize:456] isResourceInstance: false, size: 1
+[tlv_serialize:576] returning 6
+[message_send:426] Entering
+[message_send:428] Size to allocate: 29
+[message_send:435] coap_serialize_message() returned 24
+Sending 24 bytes to [192.168.56.1]:5683
+58 45 09 2C  D5 D8 7C 9F  4B C2 C5 A1  61 0C 62 2D   XE.,..|.K...a.b-
+16 FF C4 00  42 67 8F 5C                             ....Bg.\
+[lwm2m_data_free:161] size: 1
+[registration_step:1299] State: STATE_READY
+[transaction_step:433] Entering
+[lwm2m_step:478] Final timeoutP: 2
+[lwm2m_step:480] Final state: STATE_READY
+ -> State: STATE_READY
+[lwm2m_resource_value_changed:451] /6/0
+[lwm2m_resource_value_changed:467] Found an observation
+[lwm2m_resource_value_changed:468] /6/0/0
+[lwm2m_resource_value_changed:474] Tagging a watcher
+[lwm2m_step:370] timeoutP: 2
+[lwm2m_step:375] State: STATE_READY
+[registration_getStatus:506] State: STATE_READY
+[registration_getStatus:513] targetP->status: STATE_REGISTERED
+[registration_getStatus:536] reg_status: STATE_REGISTERED
+[observe_step:491] Entering
+[observe_step:505] /6/0/0
+[object_readData:116] /6/0/0
+[lwm2m_data_new:143] size: 1
+[lwm2m_data_encode_float:343] value: 58.889999
+[object_readData:173] result: 2. 5, size: 1
+[lwm2m_data_decode_float:353] Entering
+[lwm2m_data_decode_float:398] result: 1, value: 58.889999
+[observe_step:545] Notify with no conditions
+[observe_step:546] /6/0/0
+[lwm2m_data_serialize:584] /6/0/0
+[lwm2m_data_serialize:585] size: 1, formatP: LWM2M_CONTENT_TLV
+[lwm2m_data_serialize:612] Final format: LWM2M_CONTENT_TLV
+[tlv_serialize:456] isResourceInstance: false, size: 1
+[tlv_serialize:576] returning 6
+[message_send:426] Entering
+[message_send:428] Size to allocate: 29
+[message_send:435] coap_serialize_message() returned 24
+Sending 24 bytes to [192.168.56.1]:5683
+58 45 09 2D  D5 D8 7C 9F  4B C2 C5 A1  61 0D 62 2D   XE.-..|.K...a.b-
+16 FF C4 00  42 6B 8F 5C                             ....Bk.\
+[lwm2m_data_free:161] size: 1
+[registration_step:1299] State: STATE_READY
+[transaction_step:433] Entering
+[lwm2m_step:478] Final timeoutP: 2
+[lwm2m_step:480] Final state: STATE_READY
+ -> State: STATE_READY
+[lwm2m_resource_value_changed:451] /6/0
+[lwm2m_resource_value_changed:467] Found an observation
+[lwm2m_resource_value_changed:468] /6/0/0
+[lwm2m_resource_value_changed:474] Tagging a watcher
+[lwm2m_step:370] timeoutP: 2
+[lwm2m_step:375] State: STATE_READY
+[registration_getStatus:506] State: STATE_READY
+[registration_getStatus:513] targetP->status: STATE_REGISTERED
+[registration_getStatus:536] reg_status: STATE_REGISTERED
+[observe_step:491] Entering
+[observe_step:505] /6/0/0
+[object_readData:116] /6/0/0
+[lwm2m_data_new:143] size: 1
+[lwm2m_data_encode_float:343] value: 59.889999
+[object_readData:173] result: 2. 5, size: 1
+[lwm2m_data_decode_float:353] Entering
+[lwm2m_data_decode_float:398] result: 1, value: 59.889999
+[observe_step:545] Notify with no conditions
+[observe_step:546] /6/0/0
+[lwm2m_data_serialize:584] /6/0/0
+[lwm2m_data_serialize:585] size: 1, formatP: LWM2M_CONTENT_TLV
+[lwm2m_data_serialize:612] Final format: LWM2M_CONTENT_TLV
+[tlv_serialize:456] isResourceInstance: false, size: 1
+[tlv_serialize:576] returning 6
+[message_send:426] Entering
+[message_send:428] Size to allocate: 29
+[message_send:435] coap_serialize_message() returned 24
+Sending 24 bytes to [192.168.56.1]:5683
+58 45 09 2E  D5 D8 7C 9F  4B C2 C5 A1  61 0E 62 2D   XE....|.K...a.b-
+16 FF C4 00  42 6F 8F 5C                             ....Bo.\
+[lwm2m_data_free:161] size: 1
+[registration_step:1299] State: STATE_READY
+[transaction_step:433] Entering
+[lwm2m_step:478] Final timeoutP: 2
+[lwm2m_step:480] Final state: STATE_READY
+ -> State: STATE_READY
+[lwm2m_resource_value_changed:451] /6/0
+[lwm2m_resource_value_changed:467] Found an observation
+[lwm2m_resource_value_changed:468] /6/0/0
+[lwm2m_resource_value_changed:474] Tagging a watcher
+[lwm2m_step:370] timeoutP: 2
+[lwm2m_step:375] State: STATE_READY
+[registration_getStatus:506] State: STATE_READY
+[registration_getStatus:513] targetP->status: STATE_REGISTERED
+[registration_getStatus:536] reg_status: STATE_REGISTERED
+[observe_step:491] Entering
+[observe_step:505] /6/0/0
+[object_readData:116] /6/0/0
+[lwm2m_data_new:143] size: 1
+[lwm2m_data_encode_float:343] value: 60.889999
+[object_readData:173] result: 2. 5, size: 1
+[lwm2m_data_decode_float:353] Entering
+[lwm2m_data_decode_float:398] result: 1, value: 60.889999
+[observe_step:545] Notify with no conditions
+[observe_step:546] /6/0/0
+[lwm2m_data_serialize:584] /6/0/0
+[lwm2m_data_serialize:585] size: 1, formatP: LWM2M_CONTENT_TLV
+[lwm2m_data_serialize:612] Final format: LWM2M_CONTENT_TLV
+[tlv_serialize:456] isResourceInstance: false, size: 1
+[tlv_serialize:576] returning 6
+[message_send:426] Entering
+[message_send:428] Size to allocate: 29
+[message_send:435] coap_serialize_message() returned 24
+Sending 24 bytes to [192.168.56.1]:5683
+58 45 09 2F  D5 D8 7C 9F  4B C2 C5 A1  61 0F 62 2D   XE./..|.K...a.b-
+16 FF C4 00  42 73 8F 5C                             ....Bs.\
+[lwm2m_data_free:161] size: 1
+[registration_step:1299] State: STATE_READY
+[transaction_step:433] Entering
+[lwm2m_step:478] Final timeoutP: 2
+[lwm2m_step:480] Final state: STATE_READY
+ -> State: STATE_READY
+[lwm2m_resource_value_changed:451] /6/0
+[lwm2m_resource_value_changed:467] Found an observation
+[lwm2m_resource_value_changed:468] /6/0/0
+[lwm2m_resource_value_changed:474] Tagging a watcher
+[lwm2m_step:370] timeoutP: 2
+[lwm2m_step:375] State: STATE_READY
+[registration_getStatus:506] State: STATE_READY
+[registration_getStatus:513] targetP->status: STATE_REGISTERED
+[registration_getStatus:536] reg_status: STATE_REGISTERED
+[observe_step:491] Entering
+[observe_step:505] /6/0/0
+[object_readData:116] /6/0/0
+[lwm2m_data_new:143] size: 1
+[lwm2m_data_encode_float:343] value: 61.889999
+[object_readData:173] result: 2. 5, size: 1
+[lwm2m_data_decode_float:353] Entering
+[lwm2m_data_decode_float:398] result: 1, value: 61.889999
+[observe_step:545] Notify with no conditions
+[observe_step:546] /6/0/0
+[lwm2m_data_serialize:584] /6/0/0
+[lwm2m_data_serialize:585] size: 1, formatP: LWM2M_CONTENT_TLV
+[lwm2m_data_serialize:612] Final format: LWM2M_CONTENT_TLV
+[tlv_serialize:456] isResourceInstance: false, size: 1
+[tlv_serialize:576] returning 6
+[message_send:426] Entering
+[message_send:428] Size to allocate: 29
+[message_send:435] coap_serialize_message() returned 24
+Sending 24 bytes to [192.168.56.1]:5683
+58 45 09 30  D5 D8 7C 9F  4B C2 C5 A1  61 10 62 2D   XE.0..|.K...a.b-
+16 FF C4 00  42 77 8F 5C                             ....Bw.\
+[lwm2m_data_free:161] size: 1
+[registration_step:1299] State: STATE_READY
+[transaction_step:433] Entering
+[lwm2m_step:478] Final timeoutP: 2
+[lwm2m_step:480] Final state: STATE_READY
+ -> State: STATE_READY
+[lwm2m_resource_value_changed:451] /6/0
+[lwm2m_resource_value_changed:467] Found an observation
+[lwm2m_resource_value_changed:468] /6/0/0
+[lwm2m_resource_value_changed:474] Tagging a watcher
+[lwm2m_step:370] timeoutP: 2
+[lwm2m_step:375] State: STATE_READY
+[registration_getStatus:506] State: STATE_READY
+[registration_getStatus:513] targetP->status: STATE_REGISTERED
+[registration_getStatus:536] reg_status: STATE_REGISTERED
+[observe_step:491] Entering
+[observe_step:505] /6/0/0
+[object_readData:116] /6/0/0
+[lwm2m_data_new:143] size: 1
+[lwm2m_data_encode_float:343] value: 62.889999
+[object_readData:173] result: 2. 5, size: 1
+[lwm2m_data_decode_float:353] Entering
+[lwm2m_data_decode_float:398] result: 1, value: 62.889999
+[observe_step:545] Notify with no conditions
+[observe_step:546] /6/0/0
+[lwm2m_data_serialize:584] /6/0/0
+[lwm2m_data_serialize:585] size: 1, formatP: LWM2M_CONTENT_TLV
+[lwm2m_data_serialize:612] Final format: LWM2M_CONTENT_TLV
+[tlv_serialize:456] isResourceInstance: false, size: 1
+[tlv_serialize:576] returning 6
+[message_send:426] Entering
+[message_send:428] Size to allocate: 29
+[message_send:435] coap_serialize_message() returned 24
+Sending 24 bytes to [192.168.56.1]:5683
+58 45 09 31  D5 D8 7C 9F  4B C2 C5 A1  61 11 62 2D   XE.1..|.K...a.b-
+16 FF C4 00  42 7B 8F 5C                             ....B{.\
+[lwm2m_data_free:161] size: 1
+[registration_step:1299] State: STATE_READY
+[transaction_step:433] Entering
+[lwm2m_step:478] Final timeoutP: 2
+[lwm2m_step:480] Final state: STATE_READY
+ -> State: STATE_READY
+[lwm2m_resource_value_changed:451] /6/0
+[lwm2m_resource_value_changed:467] Found an observation
+[lwm2m_resource_value_changed:468] /6/0/0
+[lwm2m_resource_value_changed:474] Tagging a watcher
+[lwm2m_step:370] timeoutP: 2
+[lwm2m_step:375] State: STATE_READY
+[registration_getStatus:506] State: STATE_READY
+[registration_getStatus:513] targetP->status: STATE_REGISTERED
+[registration_getStatus:536] reg_status: STATE_REGISTERED
+[observe_step:491] Entering
+[observe_step:505] /6/0/0
+[object_readData:116] /6/0/0
+[lwm2m_data_new:143] size: 1
+[lwm2m_data_encode_float:343] value: 63.889999
+[object_readData:173] result: 2. 5, size: 1
+[lwm2m_data_decode_float:353] Entering
+[lwm2m_data_decode_float:398] result: 1, value: 63.889999
+[observe_step:545] Notify with no conditions
+[observe_step:546] /6/0/0
+[lwm2m_data_serialize:584] /6/0/0
+[lwm2m_data_serialize:585] size: 1, formatP: LWM2M_CONTENT_TLV
+[lwm2m_data_serialize:612] Final format: LWM2M_CONTENT_TLV
+[tlv_serialize:456] isResourceInstance: false, size: 1
+[tlv_serialize:576] returning 6
+[message_send:426] Entering
+[message_send:428] Size to allocate: 29
+[message_send:435] coap_serialize_message() returned 24
+Sending 24 bytes to [192.168.56.1]:5683
+58 45 09 32  D5 D8 7C 9F  4B C2 C5 A1  61 12 62 2D   XE.2..|.K...a.b-
+16 FF C4 00  42 7F 8F 5C                             ....B..\
+[lwm2m_data_free:161] size: 1
+[registration_step:1299] State: STATE_READY
+[transaction_step:433] Entering
+[lwm2m_step:478] Final timeoutP: 2
+[lwm2m_step:480] Final state: STATE_READY
+ -> State: STATE_READY
+[lwm2m_resource_value_changed:451] /6/0
+[lwm2m_resource_value_changed:467] Found an observation
+[lwm2m_resource_value_changed:468] /6/0/0
+[lwm2m_resource_value_changed:474] Tagging a watcher
+[lwm2m_step:370] timeoutP: 2
+[lwm2m_step:375] State: STATE_READY
+[registration_getStatus:506] State: STATE_READY
+[registration_getStatus:513] targetP->status: STATE_REGISTERED
+[registration_getStatus:536] reg_status: STATE_REGISTERED
+[observe_step:491] Entering
+[observe_step:505] /6/0/0
+[object_readData:116] /6/0/0
+[lwm2m_data_new:143] size: 1
+[lwm2m_data_encode_float:343] value: 64.889999
+[object_readData:173] result: 2. 5, size: 1
+[lwm2m_data_decode_float:353] Entering
+[lwm2m_data_decode_float:398] result: 1, value: 64.889999
+[observe_step:545] Notify with no conditions
+[observe_step:546] /6/0/0
+[lwm2m_data_serialize:584] /6/0/0
+[lwm2m_data_serialize:585] size: 1, formatP: LWM2M_CONTENT_TLV
+[lwm2m_data_serialize:612] Final format: LWM2M_CONTENT_TLV
+[tlv_serialize:456] isResourceInstance: false, size: 1
+[tlv_serialize:576] returning 6
+[message_send:426] Entering
+[message_send:428] Size to allocate: 29
+[message_send:435] coap_serialize_message() returned 24
+Sending 24 bytes to [192.168.56.1]:5683
+58 45 09 33  D5 D8 7C 9F  4B C2 C5 A1  61 13 62 2D   XE.3..|.K...a.b-
+16 FF C4 00  42 81 C7 AE                             ....B...
+[lwm2m_data_free:161] size: 1
+[registration_step:1299] State: STATE_READY
+[transaction_step:433] Entering
+[lwm2m_step:478] Final timeoutP: 2
+[lwm2m_step:480] Final state: STATE_READY
+ -> State: STATE_READY
+[lwm2m_resource_value_changed:451] /6/0
+[lwm2m_resource_value_changed:467] Found an observation
+[lwm2m_resource_value_changed:468] /6/0/0
+[lwm2m_resource_value_changed:474] Tagging a watcher
+[lwm2m_step:370] timeoutP: 2
+[lwm2m_step:375] State: STATE_READY
+[registration_getStatus:506] State: STATE_READY
+[registration_getStatus:513] targetP->status: STATE_REGISTERED
+[registration_getStatus:536] reg_status: STATE_REGISTERED
+[observe_step:491] Entering
+[observe_step:505] /6/0/0
+[object_readData:116] /6/0/0
+[lwm2m_data_new:143] size: 1
+[lwm2m_data_encode_float:343] value: 65.889999
+[object_readData:173] result: 2. 5, size: 1
+[lwm2m_data_decode_float:353] Entering
+[lwm2m_data_decode_float:398] result: 1, value: 65.889999
+[observe_step:545] Notify with no conditions
+[observe_step:546] /6/0/0
+[lwm2m_data_serialize:584] /6/0/0
+[lwm2m_data_serialize:585] size: 1, formatP: LWM2M_CONTENT_TLV
+[lwm2m_data_serialize:612] Final format: LWM2M_CONTENT_TLV
+[tlv_serialize:456] isResourceInstance: false, size: 1
+[tlv_serialize:576] returning 6
+[message_send:426] Entering
+[message_send:428] Size to allocate: 29
+[message_send:435] coap_serialize_message() returned 24
+Sending 24 bytes to [192.168.56.1]:5683
+58 45 09 34  D5 D8 7C 9F  4B C2 C5 A1  61 14 62 2D   XE.4..|.K...a.b-
+16 FF C4 00  42 83 C7 AE                             ....B...
+[lwm2m_data_free:161] size: 1
+[registration_step:1299] State: STATE_READY
+[transaction_step:433] Entering
+[lwm2m_step:478] Final timeoutP: 2
+[lwm2m_step:480] Final state: STATE_READY
+ -> State: STATE_READY
+[lwm2m_resource_value_changed:451] /6/0
+[lwm2m_resource_value_changed:467] Found an observation
+[lwm2m_resource_value_changed:468] /6/0/0
+[lwm2m_resource_value_changed:474] Tagging a watcher
+[lwm2m_step:370] timeoutP: 2
+[lwm2m_step:375] State: STATE_READY
+[registration_getStatus:506] State: STATE_READY
+[registration_getStatus:513] targetP->status: STATE_REGISTERED
+[registration_getStatus:536] reg_status: STATE_REGISTERED
+[observe_step:491] Entering
+[observe_step:505] /6/0/0
+[object_readData:116] /6/0/0
+[lwm2m_data_new:143] size: 1
+[lwm2m_data_encode_float:343] value: 66.889999
+[object_readData:173] result: 2. 5, size: 1
+[lwm2m_data_decode_float:353] Entering
+[lwm2m_data_decode_float:398] result: 1, value: 66.889999
+[observe_step:545] Notify with no conditions
+[observe_step:546] /6/0/0
+[lwm2m_data_serialize:584] /6/0/0
+[lwm2m_data_serialize:585] size: 1, formatP: LWM2M_CONTENT_TLV
+[lwm2m_data_serialize:612] Final format: LWM2M_CONTENT_TLV
+[tlv_serialize:456] isResourceInstance: false, size: 1
+[tlv_serialize:576] returning 6
+[message_send:426] Entering
+[message_send:428] Size to allocate: 29
+[message_send:435] coap_serialize_message() returned 24
+Sending 24 bytes to [192.168.56.1]:5683
+58 45 09 35  D5 D8 7C 9F  4B C2 C5 A1  61 15 62 2D   XE.5..|.K...a.b-
+16 FF C4 00  42 85 C7 AE                             ....B...
+[lwm2m_data_free:161] size: 1
+[registration_step:1299] State: STATE_READY
+[transaction_step:433] Entering
+[lwm2m_step:478] Final timeoutP: 2
+[lwm2m_step:480] Final state: STATE_READY
+ -> State: STATE_READY
+[lwm2m_resource_value_changed:451] /6/0
+[lwm2m_resource_value_changed:467] Found an observation
+[lwm2m_resource_value_changed:468] /6/0/0
+[lwm2m_resource_value_changed:474] Tagging a watcher
+[lwm2m_step:370] timeoutP: 2
+[lwm2m_step:375] State: STATE_READY
+[registration_getStatus:506] State: STATE_READY
+[registration_getStatus:513] targetP->status: STATE_REGISTERED
+[registration_getStatus:536] reg_status: STATE_REGISTERED
+[observe_step:491] Entering
+[observe_step:505] /6/0/0
+[object_readData:116] /6/0/0
+[lwm2m_data_new:143] size: 1
+[lwm2m_data_encode_float:343] value: 67.889999
+[object_readData:173] result: 2. 5, size: 1
+[lwm2m_data_decode_float:353] Entering
+[lwm2m_data_decode_float:398] result: 1, value: 67.889999
+[observe_step:545] Notify with no conditions
+[observe_step:546] /6/0/0
+[lwm2m_data_serialize:584] /6/0/0
+[lwm2m_data_serialize:585] size: 1, formatP: LWM2M_CONTENT_TLV
+[lwm2m_data_serialize:612] Final format: LWM2M_CONTENT_TLV
+[tlv_serialize:456] isResourceInstance: false, size: 1
+[tlv_serialize:576] returning 6
+[message_send:426] Entering
+[message_send:428] Size to allocate: 29
+[message_send:435] coap_serialize_message() returned 24
+Sending 24 bytes to [192.168.56.1]:5683
+58 45 09 36  D5 D8 7C 9F  4B C2 C5 A1  61 16 62 2D   XE.6..|.K...a.b-
+16 FF C4 00  42 87 C7 AE                             ....B...
+[lwm2m_data_free:161] size: 1
+[registration_step:1299] State: STATE_READY
+[transaction_step:433] Entering
+[lwm2m_step:478] Final timeoutP: 2
+[lwm2m_step:480] Final state: STATE_READY
+ -> State: STATE_READY
+[lwm2m_resource_value_changed:451] /6/0
+[lwm2m_resource_value_changed:467] Found an observation
+[lwm2m_resource_value_changed:468] /6/0/0
+[lwm2m_resource_value_changed:474] Tagging a watcher
+[lwm2m_step:370] timeoutP: 2
+[lwm2m_step:375] State: STATE_READY
+[registration_getStatus:506] State: STATE_READY
+[registration_getStatus:513] targetP->status: STATE_REGISTERED
+[registration_getStatus:536] reg_status: STATE_REGISTERED
+[observe_step:491] Entering
+[observe_step:505] /6/0/0
+[object_readData:116] /6/0/0
+[lwm2m_data_new:143] size: 1
+[lwm2m_data_encode_float:343] value: 68.889999
+[object_readData:173] result: 2. 5, size: 1
+[lwm2m_data_decode_float:353] Entering
+[lwm2m_data_decode_float:398] result: 1, value: 68.889999
+[observe_step:545] Notify with no conditions
+[observe_step:546] /6/0/0
+[lwm2m_data_serialize:584] /6/0/0
+[lwm2m_data_serialize:585] size: 1, formatP: LWM2M_CONTENT_TLV
+[lwm2m_data_serialize:612] Final format: LWM2M_CONTENT_TLV
+[tlv_serialize:456] isResourceInstance: false, size: 1
+[tlv_serialize:576] returning 6
+[message_send:426] Entering
+[message_send:428] Size to allocate: 29
+[message_send:435] coap_serialize_message() returned 24
+Sending 24 bytes to [192.168.56.1]:5683
+58 45 09 37  D5 D8 7C 9F  4B C2 C5 A1  61 17 62 2D   XE.7..|.K...a.b-
+16 FF C4 00  42 89 C7 AE                             ....B...
+[lwm2m_data_free:161] size: 1
+[registration_step:1299] State: STATE_READY
+[transaction_step:433] Entering
+[lwm2m_step:478] Final timeoutP: 2
+[lwm2m_step:480] Final state: STATE_READY
+ -> State: STATE_READY
+[lwm2m_resource_value_changed:451] /6/0
+[lwm2m_resource_value_changed:467] Found an observation
+[lwm2m_resource_value_changed:468] /6/0/0
+[lwm2m_resource_value_changed:474] Tagging a watcher
+[lwm2m_step:370] timeoutP: 2
+[lwm2m_step:375] State: STATE_READY
+[registration_getStatus:506] State: STATE_READY
+[registration_getStatus:513] targetP->status: STATE_REGISTERED
+[registration_getStatus:536] reg_status: STATE_REGISTERED
+[observe_step:491] Entering
+[observe_step:505] /6/0/0
+[object_readData:116] /6/0/0
+[lwm2m_data_new:143] size: 1
+[lwm2m_data_encode_float:343] value: 69.889999
+[object_readData:173] result: 2. 5, size: 1
+[lwm2m_data_decode_float:353] Entering
+[lwm2m_data_decode_float:398] result: 1, value: 69.889999
+[observe_step:545] Notify with no conditions
+[observe_step:546] /6/0/0
+[lwm2m_data_serialize:584] /6/0/0
+[lwm2m_data_serialize:585] size: 1, formatP: LWM2M_CONTENT_TLV
+[lwm2m_data_serialize:612] Final format: LWM2M_CONTENT_TLV
+[tlv_serialize:456] isResourceInstance: false, size: 1
+[tlv_serialize:576] returning 6
+[message_send:426] Entering
+[message_send:428] Size to allocate: 29
+[message_send:435] coap_serialize_message() returned 24
+Sending 24 bytes to [192.168.56.1]:5683
+58 45 09 38  D5 D8 7C 9F  4B C2 C5 A1  61 18 62 2D   XE.8..|.K...a.b-
+16 FF C4 00  42 8B C7 AE                             ....B...
+[lwm2m_data_free:161] size: 1
+[registration_step:1299] State: STATE_READY
+[transaction_step:433] Entering
+[lwm2m_step:478] Final timeoutP: 2
+[lwm2m_step:480] Final state: STATE_READY
+ -> State: STATE_READY
+[lwm2m_resource_value_changed:451] /6/0
+[lwm2m_resource_value_changed:467] Found an observation
+[lwm2m_resource_value_changed:468] /6/0/0
+[lwm2m_resource_value_changed:474] Tagging a watcher
+[lwm2m_step:370] timeoutP: 2
+[lwm2m_step:375] State: STATE_READY
+[registration_getStatus:506] State: STATE_READY
+[registration_getStatus:513] targetP->status: STATE_REGISTERED
+[registration_getStatus:536] reg_status: STATE_REGISTERED
+[observe_step:491] Entering
+[observe_step:505] /6/0/0
+[object_readData:116] /6/0/0
+[lwm2m_data_new:143] size: 1
+[lwm2m_data_encode_float:343] value: 70.889999
+[object_readData:173] result: 2. 5, size: 1
+[lwm2m_data_decode_float:353] Entering
+[lwm2m_data_decode_float:398] result: 1, value: 70.889999
+[observe_step:545] Notify with no conditions
+[observe_step:546] /6/0/0
+[lwm2m_data_serialize:584] /6/0/0
+[lwm2m_data_serialize:585] size: 1, formatP: LWM2M_CONTENT_TLV
+[lwm2m_data_serialize:612] Final format: LWM2M_CONTENT_TLV
+[tlv_serialize:456] isResourceInstance: false, size: 1
+[tlv_serialize:576] returning 6
+[message_send:426] Entering
+[message_send:428] Size to allocate: 29
+[message_send:435] coap_serialize_message() returned 24
+Sending 24 bytes to [192.168.56.1]:5683
+58 45 09 39  D5 D8 7C 9F  4B C2 C5 A1  61 19 62 2D   XE.9..|.K...a.b-
+16 FF C4 00  42 8D C7 AE                             ....B...
+[lwm2m_data_free:161] size: 1
+[registration_step:1299] State: STATE_READY
+[transaction_step:433] Entering
+[lwm2m_step:478] Final timeoutP: 2
+[lwm2m_step:480] Final state: STATE_READY
+ -> State: STATE_READY
+[lwm2m_resource_value_changed:451] /6/0
+[lwm2m_resource_value_changed:467] Found an observation
+[lwm2m_resource_value_changed:468] /6/0/0
+[lwm2m_resource_value_changed:474] Tagging a watcher
+[lwm2m_step:370] timeoutP: 2
+[lwm2m_step:375] State: STATE_READY
+[registration_getStatus:506] State: STATE_READY
+[registration_getStatus:513] targetP->status: STATE_REGISTERED
+[registration_getStatus:536] reg_status: STATE_REGISTERED
+[observe_step:491] Entering
+[observe_step:505] /6/0/0
+[object_readData:116] /6/0/0
+[lwm2m_data_new:143] size: 1
+[lwm2m_data_encode_float:343] value: 71.889999
+[object_readData:173] result: 2. 5, size: 1
+[lwm2m_data_decode_float:353] Entering
+[lwm2m_data_decode_float:398] result: 1, value: 71.889999
+[observe_step:545] Notify with no conditions
+[observe_step:546] /6/0/0
+[lwm2m_data_serialize:584] /6/0/0
+[lwm2m_data_serialize:585] size: 1, formatP: LWM2M_CONTENT_TLV
+[lwm2m_data_serialize:612] Final format: LWM2M_CONTENT_TLV
+[tlv_serialize:456] isResourceInstance: false, size: 1
+[tlv_serialize:576] returning 6
+[message_send:426] Entering
+[message_send:428] Size to allocate: 29
+[message_send:435] coap_serialize_message() returned 24
+Sending 24 bytes to [192.168.56.1]:5683
+58 45 09 3A  D5 D8 7C 9F  4B C2 C5 A1  61 1A 62 2D   XE.:..|.K...a.b-
+16 FF C4 00  42 8F C7 AE                             ....B...
+[lwm2m_data_free:161] size: 1
+[registration_step:1299] State: STATE_READY
+[transaction_step:433] Entering
+[lwm2m_step:478] Final timeoutP: 2
+[lwm2m_step:480] Final state: STATE_READY
+ -> State: STATE_READY
+[lwm2m_resource_value_changed:451] /6/0
+[lwm2m_resource_value_changed:467] Found an observation
+[lwm2m_resource_value_changed:468] /6/0/0
+[lwm2m_resource_value_changed:474] Tagging a watcher
+[lwm2m_step:370] timeoutP: 2
+[lwm2m_step:375] State: STATE_READY
+[registration_getStatus:506] State: STATE_READY
+[registration_getStatus:513] targetP->status: STATE_REGISTERED
+[registration_getStatus:536] reg_status: STATE_REGISTERED
+[observe_step:491] Entering
+[observe_step:505] /6/0/0
+[object_readData:116] /6/0/0
+[lwm2m_data_new:143] size: 1
+[lwm2m_data_encode_float:343] value: 72.889999
+[object_readData:173] result: 2. 5, size: 1
+[lwm2m_data_decode_float:353] Entering
+[lwm2m_data_decode_float:398] result: 1, value: 72.889999
+[observe_step:545] Notify with no conditions
+[observe_step:546] /6/0/0
+[lwm2m_data_serialize:584] /6/0/0
+[lwm2m_data_serialize:585] size: 1, formatP: LWM2M_CONTENT_TLV
+[lwm2m_data_serialize:612] Final format: LWM2M_CONTENT_TLV
+[tlv_serialize:456] isResourceInstance: false, size: 1
+[tlv_serialize:576] returning 6
+[message_send:426] Entering
+[message_send:428] Size to allocate: 29
+[message_send:435] coap_serialize_message() returned 24
+Sending 24 bytes to [192.168.56.1]:5683
+58 45 09 3B  D5 D8 7C 9F  4B C2 C5 A1  61 1B 62 2D   XE.;..|.K...a.b-
+16 FF C4 00  42 91 C7 AE                             ....B...
+[lwm2m_data_free:161] size: 1
+[registration_step:1299] State: STATE_READY
+[transaction_step:433] Entering
+[lwm2m_step:478] Final timeoutP: 2
+[lwm2m_step:480] Final state: STATE_READY
+ -> State: STATE_READY
+[lwm2m_resource_value_changed:451] /6/0
+[lwm2m_resource_value_changed:467] Found an observation
+[lwm2m_resource_value_changed:468] /6/0/0
+[lwm2m_resource_value_changed:474] Tagging a watcher
+[lwm2m_step:370] timeoutP: 2
+[lwm2m_step:375] State: STATE_READY
+[registration_getStatus:506] State: STATE_READY
+[registration_getStatus:513] targetP->status: STATE_REGISTERED
+[registration_getStatus:536] reg_status: STATE_REGISTERED
+[observe_step:491] Entering
+[observe_step:505] /6/0/0
+[object_readData:116] /6/0/0
+[lwm2m_data_new:143] size: 1
+[lwm2m_data_encode_float:343] value: 73.889999
+[object_readData:173] result: 2. 5, size: 1
+[lwm2m_data_decode_float:353] Entering
+[lwm2m_data_decode_float:398] result: 1, value: 73.889999
+[observe_step:545] Notify with no conditions
+[observe_step:546] /6/0/0
+[lwm2m_data_serialize:584] /6/0/0
+[lwm2m_data_serialize:585] size: 1, formatP: LWM2M_CONTENT_TLV
+[lwm2m_data_serialize:612] Final format: LWM2M_CONTENT_TLV
+[tlv_serialize:456] isResourceInstance: false, size: 1
+[tlv_serialize:576] returning 6
+[message_send:426] Entering
+[message_send:428] Size to allocate: 29
+[message_send:435] coap_serialize_message() returned 24
+Sending 24 bytes to [192.168.56.1]:5683
+58 45 09 3C  D5 D8 7C 9F  4B C2 C5 A1  61 1C 62 2D   XE.<..|.K...a.b-
+16 FF C4 00  42 93 C7 AE                             ....B...
+[lwm2m_data_free:161] size: 1
+[registration_step:1299] State: STATE_READY
+[transaction_step:433] Entering
+[lwm2m_step:478] Final timeoutP: 2
+[lwm2m_step:480] Final state: STATE_READY
+ -> State: STATE_READY
+[lwm2m_resource_value_changed:451] /6/0
+[lwm2m_resource_value_changed:467] Found an observation
+[lwm2m_resource_value_changed:468] /6/0/0
+[lwm2m_resource_value_changed:474] Tagging a watcher
+[lwm2m_step:370] timeoutP: 2
+[lwm2m_step:375] State: STATE_READY
+[registration_getStatus:506] State: STATE_READY
+[registration_getStatus:513] targetP->status: STATE_REGISTERED
+[registration_getStatus:536] reg_status: STATE_REGISTERED
+[observe_step:491] Entering
+[observe_step:505] /6/0/0
+[object_readData:116] /6/0/0
+[lwm2m_data_new:143] size: 1
+[lwm2m_data_encode_float:343] value: 74.889999
+[object_readData:173] result: 2. 5, size: 1
+[lwm2m_data_decode_float:353] Entering
+[lwm2m_data_decode_float:398] result: 1, value: 74.889999
+[observe_step:545] Notify with no conditions
+[observe_step:546] /6/0/0
+[lwm2m_data_serialize:584] /6/0/0
+[lwm2m_data_serialize:585] size: 1, formatP: LWM2M_CONTENT_TLV
+[lwm2m_data_serialize:612] Final format: LWM2M_CONTENT_TLV
+[tlv_serialize:456] isResourceInstance: false, size: 1
+[tlv_serialize:576] returning 6
+[message_send:426] Entering
+[message_send:428] Size to allocate: 29
+[message_send:435] coap_serialize_message() returned 24
+Sending 24 bytes to [192.168.56.1]:5683
+58 45 09 3D  D5 D8 7C 9F  4B C2 C5 A1  61 1D 62 2D   XE.=..|.K...a.b-
+16 FF C4 00  42 95 C7 AE                             ....B...
+[lwm2m_data_free:161] size: 1
+[registration_step:1299] State: STATE_READY
+[transaction_step:433] Entering
+[lwm2m_step:478] Final timeoutP: 2
+[lwm2m_step:480] Final state: STATE_READY
+ -> State: STATE_READY
+[lwm2m_resource_value_changed:451] /6/0
+[lwm2m_resource_value_changed:467] Found an observation
+[lwm2m_resource_value_changed:468] /6/0/0
+[lwm2m_resource_value_changed:474] Tagging a watcher
+[lwm2m_step:370] timeoutP: 2
+[lwm2m_step:375] State: STATE_READY
+[registration_getStatus:506] State: STATE_READY
+[registration_getStatus:513] targetP->status: STATE_REGISTERED
+[registration_getStatus:536] reg_status: STATE_REGISTERED
+[observe_step:491] Entering
+[observe_step:505] /6/0/0
+[object_readData:116] /6/0/0
+[lwm2m_data_new:143] size: 1
+[lwm2m_data_encode_float:343] value: 75.889999
+[object_readData:173] result: 2. 5, size: 1
+[lwm2m_data_decode_float:353] Entering
+[lwm2m_data_decode_float:398] result: 1, value: 75.889999
+[observe_step:545] Notify with no conditions
+[observe_step:546] /6/0/0
+[lwm2m_data_serialize:584] /6/0/0
+[lwm2m_data_serialize:585] size: 1, formatP: LWM2M_CONTENT_TLV
+[lwm2m_data_serialize:612] Final format: LWM2M_CONTENT_TLV
+[tlv_serialize:456] isResourceInstance: false, size: 1
+[tlv_serialize:576] returning 6
+[message_send:426] Entering
+[message_send:428] Size to allocate: 29
+[message_send:435] coap_serialize_message() returned 24
+Sending 24 bytes to [192.168.56.1]:5683
+58 45 09 3E  D5 D8 7C 9F  4B C2 C5 A1  61 1E 62 2D   XE.>..|.K...a.b-
+16 FF C4 00  42 97 C7 AE                             ....B...
+[lwm2m_data_free:161] size: 1
+[registration_step:1299] State: STATE_READY
+[transaction_step:433] Entering
+[lwm2m_step:478] Final timeoutP: 2
+[lwm2m_step:480] Final state: STATE_READY
+ -> State: STATE_READY
+[lwm2m_resource_value_changed:451] /6/0
+[lwm2m_resource_value_changed:467] Found an observation
+[lwm2m_resource_value_changed:468] /6/0/0
+[lwm2m_resource_value_changed:474] Tagging a watcher
+[lwm2m_step:370] timeoutP: 2
+[lwm2m_step:375] State: STATE_READY
+[registration_getStatus:506] State: STATE_READY
+[registration_getStatus:513] targetP->status: STATE_REGISTERED
+[registration_getStatus:536] reg_status: STATE_REGISTERED
+[observe_step:491] Entering
+[observe_step:505] /6/0/0
+[object_readData:116] /6/0/0
+[lwm2m_data_new:143] size: 1
+[lwm2m_data_encode_float:343] value: 76.889999
+[object_readData:173] result: 2. 5, size: 1
+[lwm2m_data_decode_float:353] Entering
+[lwm2m_data_decode_float:398] result: 1, value: 76.889999
+[observe_step:545] Notify with no conditions
+[observe_step:546] /6/0/0
+[lwm2m_data_serialize:584] /6/0/0
+[lwm2m_data_serialize:585] size: 1, formatP: LWM2M_CONTENT_TLV
+[lwm2m_data_serialize:612] Final format: LWM2M_CONTENT_TLV
+[tlv_serialize:456] isResourceInstance: false, size: 1
+[tlv_serialize:576] returning 6
+[message_send:426] Entering
+[message_send:428] Size to allocate: 29
+[message_send:435] coap_serialize_message() returned 24
+Sending 24 bytes to [192.168.56.1]:5683
+58 45 09 3F  D5 D8 7C 9F  4B C2 C5 A1  61 1F 62 2D   XE.?..|.K...a.b-
+16 FF C4 00  42 99 C7 AE                             ....B...
+[lwm2m_data_free:161] size: 1
+[registration_step:1299] State: STATE_READY
+[transaction_step:433] Entering
+[lwm2m_step:478] Final timeoutP: 2
+[lwm2m_step:480] Final state: STATE_READY
+ -> State: STATE_READY
+[lwm2m_resource_value_changed:451] /6/0
+[lwm2m_resource_value_changed:467] Found an observation
+[lwm2m_resource_value_changed:468] /6/0/0
+[lwm2m_resource_value_changed:474] Tagging a watcher
+[lwm2m_step:370] timeoutP: 2
+[lwm2m_step:375] State: STATE_READY
+[registration_getStatus:506] State: STATE_READY
+[registration_getStatus:513] targetP->status: STATE_REGISTERED
+[registration_getStatus:536] reg_status: STATE_REGISTERED
+[observe_step:491] Entering
+[observe_step:505] /6/0/0
+[object_readData:116] /6/0/0
+[lwm2m_data_new:143] size: 1
+[lwm2m_data_encode_float:343] value: 77.889999
+[object_readData:173] result: 2. 5, size: 1
+[lwm2m_data_decode_float:353] Entering
+[lwm2m_data_decode_float:398] result: 1, value: 77.889999
+[observe_step:545] Notify with no conditions
+[observe_step:546] /6/0/0
+[lwm2m_data_serialize:584] /6/0/0
+[lwm2m_data_serialize:585] size: 1, formatP: LWM2M_CONTENT_TLV
+[lwm2m_data_serialize:612] Final format: LWM2M_CONTENT_TLV
+[tlv_serialize:456] isResourceInstance: false, size: 1
+[tlv_serialize:576] returning 6
+[message_send:426] Entering
+[message_send:428] Size to allocate: 29
+[message_send:435] coap_serialize_message() returned 24
+Sending 24 bytes to [192.168.56.1]:5683
+58 45 09 40  D5 D8 7C 9F  4B C2 C5 A1  61 20 62 2D   XE.@..|.K...a b-
+16 FF C4 00  42 9B C7 AE                             ....B...
+[lwm2m_data_free:161] size: 1
+[registration_step:1299] State: STATE_READY
+[transaction_step:433] Entering
+[lwm2m_step:478] Final timeoutP: 2
+[lwm2m_step:480] Final state: STATE_READY
+ -> State: STATE_READY
+[lwm2m_resource_value_changed:451] /6/0
+[lwm2m_resource_value_changed:467] Found an observation
+[lwm2m_resource_value_changed:468] /6/0/0
+[lwm2m_resource_value_changed:474] Tagging a watcher
+[lwm2m_step:370] timeoutP: 2
+[lwm2m_step:375] State: STATE_READY
+[registration_getStatus:506] State: STATE_READY
+[registration_getStatus:513] targetP->status: STATE_REGISTERED
+[registration_getStatus:536] reg_status: STATE_REGISTERED
+[observe_step:491] Entering
+[observe_step:505] /6/0/0
+[object_readData:116] /6/0/0
+[lwm2m_data_new:143] size: 1
+[lwm2m_data_encode_float:343] value: 78.889999
+[object_readData:173] result: 2. 5, size: 1
+[lwm2m_data_decode_float:353] Entering
+[lwm2m_data_decode_float:398] result: 1, value: 78.889999
+[observe_step:545] Notify with no conditions
+[observe_step:546] /6/0/0
+[lwm2m_data_serialize:584] /6/0/0
+[lwm2m_data_serialize:585] size: 1, formatP: LWM2M_CONTENT_TLV
+[lwm2m_data_serialize:612] Final format: LWM2M_CONTENT_TLV
+[tlv_serialize:456] isResourceInstance: false, size: 1
+[tlv_serialize:576] returning 6
+[message_send:426] Entering
+[message_send:428] Size to allocate: 29
+[message_send:435] coap_serialize_message() returned 24
+Sending 24 bytes to [192.168.56.1]:5683
+58 45 09 41  D5 D8 7C 9F  4B C2 C5 A1  61 21 62 2D   XE.A..|.K...a!b-
+16 FF C4 00  42 9D C7 AE                             ....B...
+[lwm2m_data_free:161] size: 1
+[registration_step:1299] State: STATE_READY
+[transaction_step:433] Entering
+[lwm2m_step:478] Final timeoutP: 2
+[lwm2m_step:480] Final state: STATE_READY
+ -> State: STATE_READY
+4 bytes received from [192.168.56.1]:5683
+70 00 09 41   p..A
+[lwm2m_handle_packet:209] Entering
+[lwm2m_handle_packet:214] Parsed: ver 1, type 3, tkl 0, code 0.00, mid 2369, Content type: 0
+[lwm2m_handle_packet:215] Payload: 
+[handle_reset:101] Entering
+[observe_cancel:239] mid: 2369
+[transaction_handleResponse:274] Entering
+[lwm2m_resource_value_changed:451] /6/0
+[lwm2m_step:370] timeoutP: 2
+[lwm2m_step:375] State: STATE_READY
+[registration_getStatus:506] State: STATE_READY
+[registration_getStatus:513] targetP->status: STATE_REGISTERED
+[registration_getStatus:536] reg_status: STATE_REGISTERED
+[observe_step:491] Entering
+[registration_step:1299] State: STATE_READY
+[transaction_step:433] Entering
+[lwm2m_step:478] Final timeoutP: 2
+[lwm2m_step:480] Final state: STATE_READY
+ -> State: STATE_READY
+[lwm2m_resource_value_changed:451] /6/0
+[lwm2m_step:370] timeoutP: 2
+[lwm2m_step:375] State: STATE_READY
+[registration_getStatus:506] State: STATE_READY
+[registration_getStatus:513] targetP->status: STATE_REGISTERED
+[registration_getStatus:536] reg_status: STATE_REGISTERED
+[observe_step:491] Entering
+[registration_step:1299] State: STATE_READY
+[transaction_step:433] Entering
+[lwm2m_step:478] Final timeoutP: 2
+[lwm2m_step:480] Final state: STATE_READY
+ -> State: STATE_READY
+[lwm2m_resource_value_changed:451] /6/0
+[lwm2m_step:370] timeoutP: 2
+[lwm2m_step:375] State: STATE_READY
+[registration_getStatus:506] State: STATE_READY
+[registration_getStatus:513] targetP->status: STATE_REGISTERED
+[registration_getStatus:536] reg_status: STATE_REGISTERED
+[observe_step:491] Entering
+[registration_step:1299] State: STATE_READY
+[transaction_step:433] Entering
+[lwm2m_step:478] Final timeoutP: 2
+[lwm2m_step:480] Final state: STATE_READY
+ -> State: STATE_READY
+[lwm2m_resource_value_changed:451] /6/0
+[lwm2m_step:370] timeoutP: 2
+[lwm2m_step:375] State: STATE_READY
+[registration_getStatus:506] State: STATE_READY
+[registration_getStatus:513] targetP->status: STATE_REGISTERED
+[registration_getStatus:536] reg_status: STATE_REGISTERED
+[observe_step:491] Entering
+[registration_step:1299] State: STATE_READY
+[transaction_step:433] Entering
+[lwm2m_step:478] Final timeoutP: 2
+[lwm2m_step:480] Final state: STATE_READY
+ -> State: STATE_READY
+[lwm2m_resource_value_changed:451] /6/0
+[lwm2m_step:370] timeoutP: 2
+[lwm2m_step:375] State: STATE_READY
+[registration_getStatus:506] State: STATE_READY
+[registration_getStatus:513] targetP->status: STATE_REGISTERED
+[registration_getStatus:536] reg_status: STATE_REGISTERED
+[observe_step:491] Entering
+[registration_step:1299] State: STATE_READY
+[transaction_step:433] Entering
+[lwm2m_step:478] Final timeoutP: 2
+[lwm2m_step:480] Final state: STATE_READY
+ -> State: STATE_READY
+[lwm2m_resource_value_changed:451] /6/0
+[lwm2m_step:370] timeoutP: 2
+[lwm2m_step:375] State: STATE_READY
+[registration_getStatus:506] State: STATE_READY
+[registration_getStatus:513] targetP->status: STATE_REGISTERED
+[registration_getStatus:536] reg_status: STATE_REGISTERED
+[observe_step:491] Entering
+[registration_step:1299] State: STATE_READY
+[transaction_step:433] Entering
+[lwm2m_step:478] Final timeoutP: 2
+[lwm2m_step:480] Final state: STATE_READY
+ -> State: STATE_READY
+[lwm2m_resource_value_changed:451] /6/0
+[lwm2m_step:370] timeoutP: 2
+[lwm2m_step:375] State: STATE_READY
+[registration_getStatus:506] State: STATE_READY
+[registration_getStatus:513] targetP->status: STATE_REGISTERED
+[registration_getStatus:536] reg_status: STATE_REGISTERED
+[observe_step:491] Entering
+[registration_step:1299] State: STATE_READY
+[transaction_step:433] Entering
+[lwm2m_step:478] Final timeoutP: 2
+[lwm2m_step:480] Final state: STATE_READY
+ -> State: STATE_READY
+[lwm2m_resource_value_changed:451] /6/0
+[lwm2m_step:370] timeoutP: 2
+[lwm2m_step:375] State: STATE_READY
+[registration_getStatus:506] State: STATE_READY
+[registration_getStatus:513] targetP->status: STATE_REGISTERED
+[registration_getStatus:536] reg_status: STATE_REGISTERED
+[observe_step:491] Entering
+[registration_step:1299] State: STATE_READY
+[transaction_step:433] Entering
+[lwm2m_step:478] Final timeoutP: 2
+[lwm2m_step:480] Final state: STATE_READY
+ -> State: STATE_READY
+[lwm2m_resource_value_changed:451] /6/0
+[lwm2m_step:370] timeoutP: 2
+[lwm2m_step:375] State: STATE_READY
+[registration_getStatus:506] State: STATE_READY
+[registration_getStatus:513] targetP->status: STATE_REGISTERED
+[registration_getStatus:536] reg_status: STATE_REGISTERED
+[observe_step:491] Entering
+[registration_step:1299] State: STATE_READY
+[transaction_step:433] Entering
+[lwm2m_step:478] Final timeoutP: 2
+[lwm2m_step:480] Final state: STATE_READY
+ -> State: STATE_READY
+[lwm2m_resource_value_changed:451] /6/0
+[lwm2m_step:370] timeoutP: 2
+[lwm2m_step:375] State: STATE_READY
+[registration_getStatus:506] State: STATE_READY
+[registration_getStatus:513] targetP->status: STATE_REGISTERED
+[registration_getStatus:536] reg_status: STATE_REGISTERED
+[observe_step:491] Entering
+[registration_step:1299] State: STATE_READY
+[transaction_step:433] Entering
+[lwm2m_step:478] Final timeoutP: 2
+[lwm2m_step:480] Final state: STATE_READY
+ -> State: STATE_READY
+[lwm2m_resource_value_changed:451] /6/0
+[lwm2m_step:370] timeoutP: 2
+[lwm2m_step:375] State: STATE_READY
+[registration_getStatus:506] State: STATE_READY
+[registration_getStatus:513] targetP->status: STATE_REGISTERED
+[registration_getStatus:536] reg_status: STATE_REGISTERED
+[observe_step:491] Entering
+[registration_step:1299] State: STATE_READY
+[transaction_step:433] Entering
+[lwm2m_step:478] Final timeoutP: 2
+[lwm2m_step:480] Final state: STATE_READY
+ -> State: STATE_READY
+22 bytes received from [192.168.56.1]:5683
+48 01 5D D7  8D 58 76 CD  D8 73 05 C7  60 51 36 01   H.]..Xv..s..`Q6.
+30 01 30 62  2D 16                                   0.0b-.
+[lwm2m_handle_packet:209] Entering
+[lwm2m_handle_packet:214] Parsed: ver 1, type 0, tkl 8, code 0.01, mid 24023, Content type: 0
+[lwm2m_handle_packet:215] Payload: 
+[handle_request:114] Entering
+[uri_decode:102] altPath: "(null)"
+[uri_decode:198] /6/0/0
+[dm_handleRequest:171] Code: 01, server status: STATE_REGISTERED
+[dm_handleRequest:172] /6/0/0
+[object_readData:116] /6/0/0
+[lwm2m_data_new:143] size: 1
+[lwm2m_data_encode_float:343] value: 89.889999
+[object_readData:173] result: 2. 5, size: 1
+[observe_handleRequest:168] Code: 01, server status: STATE_REGISTERED
+[observe_handleRequest:169] /6/0/0
+[lwm2m_data_decode_float:353] Entering
+[lwm2m_data_decode_float:398] result: 1, value: 89.889999
+[lwm2m_data_serialize:584] /6/0/0
+[lwm2m_data_serialize:585] size: 1, formatP: LWM2M_CONTENT_TLV
+[lwm2m_data_serialize:612] Final format: LWM2M_CONTENT_TLV
+[tlv_serialize:456] isResourceInstance: false, size: 1
+[tlv_serialize:576] returning 6
+[dm_handleRequest:234] Observe Request[/6/0/0]: �
+
+[lwm2m_data_free:161] size: 1
+[message_send:426] Entering
+[message_send:428] Size to allocate: 29
+[message_send:435] coap_serialize_message() returned 23
+Sending 23 bytes to [192.168.56.1]:5683
+68 45 5D D7  8D 58 76 CD  D8 73 05 C7  60 62 2D 16   hE]..Xv..s..`b-.
+FF C4 00 42  B3 C7 AE                                ...B...
+[lwm2m_resource_value_changed:451] /6/0
+[lwm2m_resource_value_changed:467] Found an observation
+[lwm2m_resource_value_changed:468] /6/0/0
+[lwm2m_resource_value_changed:474] Tagging a watcher
+[lwm2m_step:370] timeoutP: 2
+[lwm2m_step:375] State: STATE_READY
+[registration_getStatus:506] State: STATE_READY
+[registration_getStatus:513] targetP->status: STATE_REGISTERED
+[registration_getStatus:536] reg_status: STATE_REGISTERED
+[observe_step:491] Entering
+[observe_step:505] /6/0/0
+[object_readData:116] /6/0/0
+[lwm2m_data_new:143] size: 1
+[lwm2m_data_encode_float:343] value: 90.889999
+[object_readData:173] result: 2. 5, size: 1
+[lwm2m_data_decode_float:353] Entering
+[lwm2m_data_decode_float:398] result: 1, value: 90.889999
+[observe_step:545] Notify with no conditions
+[observe_step:546] /6/0/0
+[lwm2m_data_serialize:584] /6/0/0
+[lwm2m_data_serialize:585] size: 1, formatP: LWM2M_CONTENT_TLV
+[lwm2m_data_serialize:612] Final format: LWM2M_CONTENT_TLV
+[tlv_serialize:456] isResourceInstance: false, size: 1
+[tlv_serialize:576] returning 6
+[message_send:426] Entering
+[message_send:428] Size to allocate: 29
+[message_send:435] coap_serialize_message() returned 24
+Sending 24 bytes to [192.168.56.1]:5683
+58 45 09 42  8D 58 76 CD  D8 73 05 C7  61 01 62 2D   XE.B.Xv..s..a.b-
+16 FF C4 00  42 B5 C7 AE                             ....B...
+[lwm2m_data_free:161] size: 1
+[registration_step:1299] State: STATE_READY
+[transaction_step:433] Entering
+[lwm2m_step:478] Final timeoutP: 2
+[lwm2m_step:480] Final state: STATE_READY
+ -> State: STATE_READY
+[lwm2m_resource_value_changed:451] /6/0
+[lwm2m_resource_value_changed:467] Found an observation
+[lwm2m_resource_value_changed:468] /6/0/0
+[lwm2m_resource_value_changed:474] Tagging a watcher
+[lwm2m_step:370] timeoutP: 2
+[lwm2m_step:375] State: STATE_READY
+[registration_getStatus:506] State: STATE_READY
+[registration_getStatus:513] targetP->status: STATE_REGISTERED
+[registration_getStatus:536] reg_status: STATE_REGISTERED
+[observe_step:491] Entering
+[observe_step:505] /6/0/0
+[object_readData:116] /6/0/0
+[lwm2m_data_new:143] size: 1
+[lwm2m_data_encode_float:343] value: 91.889999
+[object_readData:173] result: 2. 5, size: 1
+[lwm2m_data_decode_float:353] Entering
+[lwm2m_data_decode_float:398] result: 1, value: 91.889999
+[observe_step:545] Notify with no conditions
+[observe_step:546] /6/0/0
+[lwm2m_data_serialize:584] /6/0/0
+[lwm2m_data_serialize:585] size: 1, formatP: LWM2M_CONTENT_TLV
+[lwm2m_data_serialize:612] Final format: LWM2M_CONTENT_TLV
+[tlv_serialize:456] isResourceInstance: false, size: 1
+[tlv_serialize:576] returning 6
+[message_send:426] Entering
+[message_send:428] Size to allocate: 29
+[message_send:435] coap_serialize_message() returned 24
+Sending 24 bytes to [192.168.56.1]:5683
+58 45 09 43  8D 58 76 CD  D8 73 05 C7  61 02 62 2D   XE.C.Xv..s..a.b-
+16 FF C4 00  42 B7 C7 AE                             ....B...
+[lwm2m_data_free:161] size: 1
+[registration_step:1299] State: STATE_READY
+[transaction_step:433] Entering
+[lwm2m_step:478] Final timeoutP: 2
+[lwm2m_step:480] Final state: STATE_READY
+ -> State: STATE_READY
+[lwm2m_resource_value_changed:451] /6/0
+[lwm2m_resource_value_changed:467] Found an observation
+[lwm2m_resource_value_changed:468] /6/0/0
+[lwm2m_resource_value_changed:474] Tagging a watcher
+[lwm2m_step:370] timeoutP: 2
+[lwm2m_step:375] State: STATE_READY
+[registration_getStatus:506] State: STATE_READY
+[registration_getStatus:513] targetP->status: STATE_REGISTERED
+[registration_getStatus:536] reg_status: STATE_REGISTERED
+[observe_step:491] Entering
+[observe_step:505] /6/0/0
+[object_readData:116] /6/0/0
+[lwm2m_data_new:143] size: 1
+[lwm2m_data_encode_float:343] value: 92.889999
+[object_readData:173] result: 2. 5, size: 1
+[lwm2m_data_decode_float:353] Entering
+[lwm2m_data_decode_float:398] result: 1, value: 92.889999
+[observe_step:545] Notify with no conditions
+[observe_step:546] /6/0/0
+[lwm2m_data_serialize:584] /6/0/0
+[lwm2m_data_serialize:585] size: 1, formatP: LWM2M_CONTENT_TLV
+[lwm2m_data_serialize:612] Final format: LWM2M_CONTENT_TLV
+[tlv_serialize:456] isResourceInstance: false, size: 1
+[tlv_serialize:576] returning 6
+[message_send:426] Entering
+[message_send:428] Size to allocate: 29
+[message_send:435] coap_serialize_message() returned 24
+Sending 24 bytes to [192.168.56.1]:5683
+58 45 09 44  8D 58 76 CD  D8 73 05 C7  61 03 62 2D   XE.D.Xv..s..a.b-
+16 FF C4 00  42 B9 C7 AE                             ....B...
+[lwm2m_data_free:161] size: 1
+[registration_step:1299] State: STATE_READY
+[transaction_step:433] Entering
+[lwm2m_step:478] Final timeoutP: 2
+[lwm2m_step:480] Final state: STATE_READY
+ -> State: STATE_READY
+[lwm2m_resource_value_changed:451] /6/0
+[lwm2m_resource_value_changed:467] Found an observation
+[lwm2m_resource_value_changed:468] /6/0/0
+[lwm2m_resource_value_changed:474] Tagging a watcher
+[lwm2m_step:370] timeoutP: 2
+[lwm2m_step:375] State: STATE_READY
+[registration_getStatus:506] State: STATE_READY
+[registration_getStatus:513] targetP->status: STATE_REGISTERED
+[registration_getStatus:536] reg_status: STATE_REGISTERED
+[observe_step:491] Entering
+[observe_step:505] /6/0/0
+[object_readData:116] /6/0/0
+[lwm2m_data_new:143] size: 1
+[lwm2m_data_encode_float:343] value: 93.889999
+[object_readData:173] result: 2. 5, size: 1
+[lwm2m_data_decode_float:353] Entering
+[lwm2m_data_decode_float:398] result: 1, value: 93.889999
+[observe_step:545] Notify with no conditions
+[observe_step:546] /6/0/0
+[lwm2m_data_serialize:584] /6/0/0
+[lwm2m_data_serialize:585] size: 1, formatP: LWM2M_CONTENT_TLV
+[lwm2m_data_serialize:612] Final format: LWM2M_CONTENT_TLV
+[tlv_serialize:456] isResourceInstance: false, size: 1
+[tlv_serialize:576] returning 6
+[message_send:426] Entering
+[message_send:428] Size to allocate: 29
+[message_send:435] coap_serialize_message() returned 24
+Sending 24 bytes to [192.168.56.1]:5683
+58 45 09 45  8D 58 76 CD  D8 73 05 C7  61 04 62 2D   XE.E.Xv..s..a.b-
+16 FF C4 00  42 BB C7 AE                             ....B...
+[lwm2m_data_free:161] size: 1
+[registration_step:1299] State: STATE_READY
+[transaction_step:433] Entering
+[lwm2m_step:478] Final timeoutP: 2
+[lwm2m_step:480] Final state: STATE_READY
+ -> State: STATE_READY
+[lwm2m_resource_value_changed:451] /6/0
+[lwm2m_resource_value_changed:467] Found an observation
+[lwm2m_resource_value_changed:468] /6/0/0
+[lwm2m_resource_value_changed:474] Tagging a watcher
+[lwm2m_step:370] timeoutP: 2
+[lwm2m_step:375] State: STATE_READY
+[registration_getStatus:506] State: STATE_READY
+[registration_getStatus:513] targetP->status: STATE_REGISTERED
+[registration_getStatus:536] reg_status: STATE_REGISTERED
+[observe_step:491] Entering
+[observe_step:505] /6/0/0
+[object_readData:116] /6/0/0
+[lwm2m_data_new:143] size: 1
+[lwm2m_data_encode_float:343] value: 94.889999
+[object_readData:173] result: 2. 5, size: 1
+[lwm2m_data_decode_float:353] Entering
+[lwm2m_data_decode_float:398] result: 1, value: 94.889999
+[observe_step:545] Notify with no conditions
+[observe_step:546] /6/0/0
+[lwm2m_data_serialize:584] /6/0/0
+[lwm2m_data_serialize:585] size: 1, formatP: LWM2M_CONTENT_TLV
+[lwm2m_data_serialize:612] Final format: LWM2M_CONTENT_TLV
+[tlv_serialize:456] isResourceInstance: false, size: 1
+[tlv_serialize:576] returning 6
+[message_send:426] Entering
+[message_send:428] Size to allocate: 29
+[message_send:435] coap_serialize_message() returned 24
+Sending 24 bytes to [192.168.56.1]:5683
+58 45 09 46  8D 58 76 CD  D8 73 05 C7  61 05 62 2D   XE.F.Xv..s..a.b-
+16 FF C4 00  42 BD C7 AE                             ....B...
+[lwm2m_data_free:161] size: 1
+[registration_step:1299] State: STATE_READY
+[transaction_step:433] Entering
+[lwm2m_step:478] Final timeoutP: 2
+[lwm2m_step:480] Final state: STATE_READY
+ -> State: STATE_READY
+[lwm2m_resource_value_changed:451] /6/0
+[lwm2m_resource_value_changed:467] Found an observation
+[lwm2m_resource_value_changed:468] /6/0/0
+[lwm2m_resource_value_changed:474] Tagging a watcher
+[lwm2m_step:370] timeoutP: 2
+[lwm2m_step:375] State: STATE_READY
+[registration_getStatus:506] State: STATE_READY
+[registration_getStatus:513] targetP->status: STATE_REGISTERED
+[registration_getStatus:536] reg_status: STATE_REGISTERED
+[observe_step:491] Entering
+[observe_step:505] /6/0/0
+[object_readData:116] /6/0/0
+[lwm2m_data_new:143] size: 1
+[lwm2m_data_encode_float:343] value: 95.889999
+[object_readData:173] result: 2. 5, size: 1
+[lwm2m_data_decode_float:353] Entering
+[lwm2m_data_decode_float:398] result: 1, value: 95.889999
+[observe_step:545] Notify with no conditions
+[observe_step:546] /6/0/0
+[lwm2m_data_serialize:584] /6/0/0
+[lwm2m_data_serialize:585] size: 1, formatP: LWM2M_CONTENT_TLV
+[lwm2m_data_serialize:612] Final format: LWM2M_CONTENT_TLV
+[tlv_serialize:456] isResourceInstance: false, size: 1
+[tlv_serialize:576] returning 6
+[message_send:426] Entering
+[message_send:428] Size to allocate: 29
+[message_send:435] coap_serialize_message() returned 24
+Sending 24 bytes to [192.168.56.1]:5683
+58 45 09 47  8D 58 76 CD  D8 73 05 C7  61 06 62 2D   XE.G.Xv..s..a.b-
+16 FF C4 00  42 BF C7 AE                             ....B...
+[lwm2m_data_free:161] size: 1
+[registration_step:1299] State: STATE_READY
+[transaction_step:433] Entering
+[lwm2m_step:478] Final timeoutP: 2
+[lwm2m_step:480] Final state: STATE_READY
+ -> State: STATE_READY
+[lwm2m_resource_value_changed:451] /6/0
+[lwm2m_resource_value_changed:467] Found an observation
+[lwm2m_resource_value_changed:468] /6/0/0
+[lwm2m_resource_value_changed:474] Tagging a watcher
+[lwm2m_step:370] timeoutP: 2
+[lwm2m_step:375] State: STATE_READY
+[registration_getStatus:506] State: STATE_READY
+[registration_getStatus:513] targetP->status: STATE_REGISTERED
+[registration_getStatus:536] reg_status: STATE_REGISTERED
+[observe_step:491] Entering
+[observe_step:505] /6/0/0
+[object_readData:116] /6/0/0
+[lwm2m_data_new:143] size: 1
+[lwm2m_data_encode_float:343] value: 96.889999
+[object_readData:173] result: 2. 5, size: 1
+[lwm2m_data_decode_float:353] Entering
+[lwm2m_data_decode_float:398] result: 1, value: 96.889999
+[observe_step:545] Notify with no conditions
+[observe_step:546] /6/0/0
+[lwm2m_data_serialize:584] /6/0/0
+[lwm2m_data_serialize:585] size: 1, formatP: LWM2M_CONTENT_TLV
+[lwm2m_data_serialize:612] Final format: LWM2M_CONTENT_TLV
+[tlv_serialize:456] isResourceInstance: false, size: 1
+[tlv_serialize:576] returning 6
+[message_send:426] Entering
+[message_send:428] Size to allocate: 29
+[message_send:435] coap_serialize_message() returned 24
+Sending 24 bytes to [192.168.56.1]:5683
+58 45 09 48  8D 58 76 CD  D8 73 05 C7  61 07 62 2D   XE.H.Xv..s..a.b-
+16 FF C4 00  42 C1 C7 AE                             ....B...
+[lwm2m_data_free:161] size: 1
+[registration_step:1299] State: STATE_READY
+[transaction_step:433] Entering
+[lwm2m_step:478] Final timeoutP: 2
+[lwm2m_step:480] Final state: STATE_READY
+ -> State: STATE_READY
+[lwm2m_resource_value_changed:451] /6/0
+[lwm2m_resource_value_changed:467] Found an observation
+[lwm2m_resource_value_changed:468] /6/0/0
+[lwm2m_resource_value_changed:474] Tagging a watcher
+[lwm2m_step:370] timeoutP: 2
+[lwm2m_step:375] State: STATE_READY
+[registration_getStatus:506] State: STATE_READY
+[registration_getStatus:513] targetP->status: STATE_REGISTERED
+[registration_getStatus:536] reg_status: STATE_REGISTERED
+[observe_step:491] Entering
+[observe_step:505] /6/0/0
+[object_readData:116] /6/0/0
+[lwm2m_data_new:143] size: 1
+[lwm2m_data_encode_float:343] value: 97.889999
+[object_readData:173] result: 2. 5, size: 1
+[lwm2m_data_decode_float:353] Entering
+[lwm2m_data_decode_float:398] result: 1, value: 97.889999
+[observe_step:545] Notify with no conditions
+[observe_step:546] /6/0/0
+[lwm2m_data_serialize:584] /6/0/0
+[lwm2m_data_serialize:585] size: 1, formatP: LWM2M_CONTENT_TLV
+[lwm2m_data_serialize:612] Final format: LWM2M_CONTENT_TLV
+[tlv_serialize:456] isResourceInstance: false, size: 1
+[tlv_serialize:576] returning 6
+[message_send:426] Entering
+[message_send:428] Size to allocate: 29
+[message_send:435] coap_serialize_message() returned 24
+Sending 24 bytes to [192.168.56.1]:5683
+58 45 09 49  8D 58 76 CD  D8 73 05 C7  61 08 62 2D   XE.I.Xv..s..a.b-
+16 FF C4 00  42 C3 C7 AE                             ....B...
+[lwm2m_data_free:161] size: 1
+[registration_step:1299] State: STATE_READY
+[transaction_step:433] Entering
+[lwm2m_step:478] Final timeoutP: 2
+[lwm2m_step:480] Final state: STATE_READY
+ -> State: STATE_READY
+[lwm2m_resource_value_changed:451] /6/0
+[lwm2m_resource_value_changed:467] Found an observation
+[lwm2m_resource_value_changed:468] /6/0/0
+[lwm2m_resource_value_changed:474] Tagging a watcher
+[lwm2m_step:370] timeoutP: 2
+[lwm2m_step:375] State: STATE_READY
+[registration_getStatus:506] State: STATE_READY
+[registration_getStatus:513] targetP->status: STATE_REGISTERED
+[registration_getStatus:536] reg_status: STATE_REGISTERED
+[observe_step:491] Entering
+[observe_step:505] /6/0/0
+[object_readData:116] /6/0/0
+[lwm2m_data_new:143] size: 1
+[lwm2m_data_encode_float:343] value: 98.889999
+[object_readData:173] result: 2. 5, size: 1
+[lwm2m_data_decode_float:353] Entering
+[lwm2m_data_decode_float:398] result: 1, value: 98.889999
+[observe_step:545] Notify with no conditions
+[observe_step:546] /6/0/0
+[lwm2m_data_serialize:584] /6/0/0
+[lwm2m_data_serialize:585] size: 1, formatP: LWM2M_CONTENT_TLV
+[lwm2m_data_serialize:612] Final format: LWM2M_CONTENT_TLV
+[tlv_serialize:456] isResourceInstance: false, size: 1
+[tlv_serialize:576] returning 6
+[message_send:426] Entering
+[message_send:428] Size to allocate: 29
+[message_send:435] coap_serialize_message() returned 24
+Sending 24 bytes to [192.168.56.1]:5683
+58 45 09 4A  8D 58 76 CD  D8 73 05 C7  61 09 62 2D   XE.J.Xv..s..a.b-
+16 FF C4 00  42 C5 C7 AE                             ....B...
+[lwm2m_data_free:161] size: 1
+[registration_step:1299] State: STATE_READY
+[transaction_step:433] Entering
+[lwm2m_step:478] Final timeoutP: 2
+[lwm2m_step:480] Final state: STATE_READY
+ -> State: STATE_READY
+^Clianzeng@VBox:~/lwm2m/wakaama/examples/client$
