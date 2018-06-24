@@ -17,16 +17,18 @@
  *  Resources:
  *  Name        | ID  | Oper.|Instances|Mand.|  Type   | Range | Units | Description                                                                      |
  * -------------+-----+------+---------+-----+---------+-------+-------+----------------------------------------------------------------------------------+
- *  rpm         |  0  |R(ead)| Single  | Yes | Float   |       |  rpm  | engine speed read from obd interface |
- *  speed       |  1  |  R   | Single  | Yes | Float   |       |  km/h | vehicle speed read from obd interface |
- *  Timestamp   |  2  |  R   | Single  | Yes | Time    |       |   s   | The timestamp when the location measurement was performed.                       |
+ *  state       |  0  |R(ead)| Single  | Yes | int     |       |       | state of the vehicle. 0: idle 1: driving 2: charging 3: limp-home 4-15: reserved for future use |
+ *  rpm         |  1  |R(ead)| Single  | Yes | Float   |       |  rpm  | engine speed read from obd interface |
+ *  speed       |  2  |  R   | Single  | Yes | Float   |       |  km/h | vehicle speed read from obd interface |
+ *  Timestamp   |  3  |  R   | Single  | Yes | Time    |       |   s   | The timestamp when the location measurement was performed.                       |
  *              |     |      |         |     |         |       |       |                              |
  */
 #ifdef LWM2M_CLIENT_MODE
 
-#define RES_ID_M_RPM        0
+#define RES_ID_M_STATE      0
 #define RES_ID_M_SPEED      1
-#define RES_ID_M_TIMESTAMP  2
+#define RES_ID_M_RPM        2
+#define RES_ID_M_TIMESTAMP  3
 
 
 static uint8_t prv_res2tlv(const ObdData* locDataP,
@@ -36,6 +38,9 @@ static uint8_t prv_res2tlv(const ObdData* locDataP,
     uint8_t ret = COAP_205_CONTENT;
     switch (dataP->id)     // location resourceId
     {
+        case RES_ID_M_STATE:
+            lwm2m_data_encode_int(locDataP->state, dataP);
+            break;
         case RES_ID_M_RPM:
             lwm2m_data_encode_float(locDataP->rpm, dataP);
             break;
@@ -69,6 +74,7 @@ static uint8_t prv_vehicle_read(uint16_t instanceId,
     if (*numResourceId == 0)     // full object, readable resources!
     {
         uint16_t readResIds[] = {
+                RES_ID_M_STATE,
                 RES_ID_M_RPM,
                 RES_ID_M_SPEED,
                 RES_ID_M_TIMESTAMP
@@ -101,8 +107,8 @@ void display_vehicle_object(lwm2m_object_t * object)
     fprintf(stdout, "  /%u: vehicle object:\r\n", object->objID);
     if (NULL != data)
     {
-        fprintf(stdout, "    rpm: %.6f, speed: %.6f, timestamp: %lu \r\n",
-                data->rpm, data->speed, data->timestamp);
+        fprintf(stdout, "  state: %d,  rpm: %.6f, speed: %.6f, timestamp: %lu \r\n",
+                data->state,data->rpm, data->speed, data->timestamp);
     }
 #endif
 }
@@ -113,6 +119,7 @@ void update_vehicle_measurement(lwm2m_context_t* context, const ObdData* meas)
     if(vehicleObj != NULL)
     {
         ObdData* obdData = (ObdData*)vehicleObj->userData;
+        obdData->state = meas->state;
         obdData->rpm = meas->rpm;
         obdData->speed = meas->speed;
         obdData->timestamp = lwm2m_gettime();

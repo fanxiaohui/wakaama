@@ -210,7 +210,7 @@ bool lwm2m_session_is_equal(void * session1, void * session2, void * userData);
  *
  */
 
-#define LWM2M_VEHICLE_OBJECT_ID     1111
+#define LWM2M_VEHICLE_OBJECT_ID     10244
 
 #define LWM2M_VEHICLE_RPM_ID              0
 #define LWM2M_VEHICLE_SPEED_ID            1
