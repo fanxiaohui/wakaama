@@ -101,7 +101,7 @@ extern void stub_updateLocationAutomatic(lwm2m_context_t* context);
 int g_reboot = 0;
 static int g_quit = 0;
 
-#define OBJ_COUNT 10
+#define OBJ_COUNT 9
 lwm2m_object_t * objArray[OBJ_COUNT];
 
 // only backup security and server objects
@@ -1076,11 +1076,18 @@ int main(int argc, char *argv[])
         fprintf(stderr, "Failed to create location object\r\n");
         return -1;
     }
-
+#if 0
     objArray[5] = get_test_object();
     if (NULL == objArray[5])
     {
         fprintf(stderr, "Failed to create test object\r\n");
+        return -1;
+    }
+#endif
+    objArray[5] = create_object_vehicle();
+    if (NULL == objArray[5])
+    {
+        fprintf(stderr, "Failed to create vehicle object\r\n");
         return -1;
     }
 
@@ -1121,12 +1128,7 @@ int main(int argc, char *argv[])
         return -1;
     }
 
-    objArray[9] = create_object_vehicle();
-    if (NULL == objArray[9])
-    {
-        fprintf(stderr, "Failed to create vehicle object\r\n");
-        return -1;
-    }
+
     /*
      * The liblwm2m library is now initialized with the functions that will be in
      * charge of communication
