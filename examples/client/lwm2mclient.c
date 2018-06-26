@@ -1191,6 +1191,7 @@ int main(int argc, char *argv[])
             exit(EXIT_FAILURE);
         }
         fprintf(stdout, "sharememory attached at %p \n",vehicle_shmAddr);
+        memset(vehicle_shmAddr, 0, sizeof(ObdData));
     }
 
     while (0 == g_quit) {
