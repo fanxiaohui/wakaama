@@ -1,0 +1,70 @@
+Note these 3 files must be deleted before switch compile platform, and need open a new shell, otherwise will cause following compile error
+
+0)open a new shell , otherwise can't switch platform, i don't know why ? 
+1)rm -rf CMakeFiles ; rm CMakeCache.txt; rm Makefile; 
+2)mv CMakeLists_arm.txt CMakeLists.txt
+2)cd to examples/client; cmake ./
+3)make , then generate lwm2mclient bin
+
+//////////////////////////////compile error(use guide above to avoid this error): 
+/opt/fsl-imx-x11/4.9.11-1.0.0/sysroots/x86_64-pokysdk-linux/usr/lib/arm-poky-linux-gnueabi/gcc/arm-poky-linux-gnueabi/6.2.0/include/stdint.h:9:26: fatal error: stdint.h: No such file or directory
+ # include_next <stdint.h>
+/////////////////////////////
+
+
+./lwm2mclient -4  -n 8657100077 -h 52.80.95.56 -t 30
+
+
+hasiId(4e038d3abb8d398bba2373815a05308d41774aa1) has following issue when integrate with impact, but is ok to integrate with leshan server, need early version(2017-10) to work with nokia-impact
+
+///////////////////////////////////////////////////////////integrate issue with impact
+[lwm2m_data_serialize:585] size: 6, formatP: Unknown
+[lwm2m_data_serialize:612] Final format: Unknown
+[tlv_serialize:456] isResourceInstance: false, size: 6
+[tlv_serialize:456] isResourceInstance: true, size: 2
+[tlv_serialize:576] returning 6
+[tlv_serialize:576] returning 36
+[lwm2m_data_free:161] size: 6
+[lwm2m_data_free:161] size: 2
+*** Error in `./x86_lwm2mclient': free(): invalid next size (fast): 0x0000000001633d30 ***
+======= Backtrace: =========
+/lib/x86_64-linux-gnu/libc.so.6(+0x777e5)[0x7fe5715dc7e5]
+/lib/x86_64-linux-gnu/libc.so.6(+0x8037a)[0x7fe5715e537a]
+/lib/x86_64-linux-gnu/libc.so.6(cfree+0x4c)[0x7fe5715e953c]
+./x86_lwm2mclient(lwm2m_free+0x18)[0x425159]
+./x86_lwm2mclient(lwm2m_data_free+0x140)[0x41392b]
+./x86_lwm2mclient(object_read+0x15a)[0x410306]
+./x86_lwm2mclient(dm_handleRequest+0x585)[0x419d54]
+./x86_lwm2mclient[0x414c4c]
+./x86_lwm2mclient(lwm2m_handle_packet+0x3d2)[0x4150f6]
+./x86_lwm2mclient(main+0x10f1)[0x406cd3]
+/lib/x86_64-linux-gnu/libc.so.6(__libc_start_main+0xf0)[0x7fe571585830]
+./x86_lwm2mclient(_start+0x29)[0x4044a9]
+======= Memory map: ========
+00400000-0042e000 r-xp 00000000 08:02 8131554                            /home/impact/lwm2m/wakaama/examples/client/x86_lwm2mclient
+0062d000-0062e000 r--p 0002d000 08:02 8131554                            /home/impact/lwm2m/wakaama/examples/client/x86_lwm2mclient
+0062e000-0062f000 rw-p 0002e000 08:02 8131554                            /home/impact/lwm2m/wakaama/examples/client/x86_lwm2mclient
+01633000-01654000 rw-p 00000000 00:00 0                                  [heap]
+7fe56c000000-7fe56c021000 rw-p 00000000 00:00 0
+7fe56c021000-7fe570000000 ---p 00000000 00:00 0
+7fe57134f000-7fe571365000 r-xp 00000000 08:02 1053208                    /lib/x86_64-linux-gnu/libgcc_s.so.1
+7fe571365000-7fe571564000 ---p 00016000 08:02 1053208                    /lib/x86_64-linux-gnu/libgcc_s.so.1
+7fe571564000-7fe571565000 rw-p 00015000 08:02 1053208                    /lib/x86_64-linux-gnu/libgcc_s.so.1
+7fe571565000-7fe571725000 r-xp 00000000 08:02 1048659                    /lib/x86_64-linux-gnu/libc-2.23.so
+7fe571725000-7fe571925000 ---p 001c0000 08:02 1048659                    /lib/x86_64-linux-gnu/libc-2.23.so
+7fe571925000-7fe571929000 r--p 001c0000 08:02 1048659                    /lib/x86_64-linux-gnu/libc-2.23.so
+7fe571929000-7fe57192b000 rw-p 001c4000 08:02 1048659                    /lib/x86_64-linux-gnu/libc-2.23.so
+7fe57192b000-7fe57192f000 rw-p 00000000 00:00 0
+7fe57192f000-7fe571955000 r-xp 00000000 08:02 1048593                    /lib/x86_64-linux-gnu/ld-2.23.so
+7fe571b3a000-7fe571b3d000 rw-p 00000000 00:00 0
+7fe571b52000-7fe571b53000 rw-p 00000000 00:00 0
+7fe571b53000-7fe571b54000 rw-s 00000000 00:05 47644684                   /SYSV000004d2 (deleted)
+7fe571b54000-7fe571b55000 r--p 00025000 08:02 1048593                    /lib/x86_64-linux-gnu/ld-2.23.so
+7fe571b55000-7fe571b56000 rw-p 00026000 08:02 1048593                    /lib/x86_64-linux-gnu/ld-2.23.so
+7fe571b56000-7fe571b57000 rw-p 00000000 00:00 0
+7ffcf17a3000-7ffcf17c4000 rw-p 00000000 00:00 0                          [stack]
+7ffcf17db000-7ffcf17de000 r--p 00000000 00:00 0                          [vvar]
+7ffcf17de000-7ffcf17e0000 r-xp 00000000 00:00 0                          [vdso]
+ffffffffff600000-ffffffffff601000 r-xp 00000000 00:00 0                  [vsyscall]
+Aborted (core dumped)
+
