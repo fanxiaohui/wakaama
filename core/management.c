@@ -177,7 +177,7 @@ uint8_t dm_handleRequest(lwm2m_context_t * contextP,
     }
     else
     {
-        format = LWM2M_CONTENT_TLV;
+        format = LWM2M_CONTENT_JSON;
     }
 
     if (uriP->objectId == LWM2M_SECURITY_OBJECT_ID)

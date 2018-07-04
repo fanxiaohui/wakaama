@@ -190,7 +190,7 @@ uint8_t observe_handleRequest(lwm2m_context_t * contextP,
         }
         else
         {
-            watcherP->format = LWM2M_CONTENT_TLV;
+            watcherP->format = LWM2M_CONTENT_JSON;
         }
 
         if (LWM2M_URI_IS_SET_RESOURCE(uriP))
