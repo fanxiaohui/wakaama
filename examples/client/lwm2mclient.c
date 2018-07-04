@@ -97,6 +97,8 @@ extern void free_object_vehicle(lwm2m_object_t * object);
 extern void update_vehicle_measurement(lwm2m_context_t* context, const ObdData* meas);
 extern void display_vehicle_object(lwm2m_object_t * object);
 extern void stub_updateLocationAutomatic(lwm2m_context_t* context);
+extern int createUnixSocket();
+extern void processIpcData(int fd);
 
 int g_reboot = 0;
 static int g_quit = 0;
@@ -1175,24 +1177,10 @@ int main(int argc, char *argv[])
     /*
      * We now enter in a while loop that will handle the communications from the server
      */
-    ObdData* vehicle_shmAddr = NULL;
-    int vehicle_shmid = -1;
-    {
-       vehicle_shmid =  shmget((key_t)1234,sizeof(ObdData),0666|IPC_CREAT);
-       if(vehicle_shmid == -1)
-       {
-           fprintf(stderr,"create share memory failed.");
-           exit(EXIT_FAILURE);
-       }
-        vehicle_shmAddr = shmat(vehicle_shmid, 0,0);//attach to current process space
-        if(vehicle_shmAddr == (void*)-1)
-        {
-            fprintf(stderr, "attach sharememory fail.");
-            exit(EXIT_FAILURE);
-        }
-        fprintf(stdout, "sharememory attached at %p \n",vehicle_shmAddr);
-        memset(vehicle_shmAddr, 0, sizeof(ObdData));
-    }
+
+
+
+    int fdIpc = createUnixSocket();
 
     while (0 == g_quit) {
         struct timeval tv;
@@ -1225,6 +1213,7 @@ int main(int argc, char *argv[])
 
         FD_ZERO(&readfds);
         FD_SET(data.sock, &readfds);
+        FD_SET(fdIpc,&readfds);
         FD_SET(STDIN_FILENO, &readfds);
 
         /*
@@ -1238,14 +1227,6 @@ int main(int argc, char *argv[])
             {//GPS location
                 stub_updateLocationAutomatic(lwm2mH);
             }
-
-            {//TODO:vehicle, need mutex for share memory here ??
-                if(vehicle_shmAddr->updated) {
-                    update_vehicle_measurement(lwm2mH, vehicle_shmAddr);
-                    vehicle_shmAddr->updated = false;
-                }
-            }
-
         }
 
         result = lwm2m_step(lwm2mH, &(tv.tv_sec));
@@ -1294,7 +1275,7 @@ int main(int argc, char *argv[])
          * This part will set up an interruption until an event happen on SDTIN or the socket until "tv" timed out (set
          * with the precedent function)
          */
-        result = select(FD_SETSIZE, &readfds, NULL, NULL, &tv);
+        result = select(FD_SETSIZE, &readfds, NULL, NULL, &tv);//zengliang: not use FD_SETSIZE to save cpu
 
         if (result < 0)
         {
@@ -1405,6 +1386,11 @@ int main(int argc, char *argv[])
                     fprintf(stdout, "\r\n");
                 }
             }
+
+            if(FD_ISSET(fdIpc, &readfds))
+            {
+                processIpcData(fdIpc);
+            }
         }
     }
 
@@ -1425,12 +1411,7 @@ int main(int argc, char *argv[])
     close(data.sock);
     connection_free(data.connList);
 
-    {
-        if (shmdt(vehicle_shmAddr) == -1)//detach sharememory
-            fprintf(stderr, "detach sharememory failed\n");
-        if(shmctl(vehicle_shmid,IPC_RMID, NULL) == -1)
-            fprintf(stderr,"release sharememory failed\n");
-    }
+
 
     clean_security_object(objArray[0]);
     lwm2m_free(objArray[0]);
