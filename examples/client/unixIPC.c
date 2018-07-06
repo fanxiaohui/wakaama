@@ -48,7 +48,7 @@ int createUnixSocket()
 }
 
 
-void processIpcData(int fd)
+char* receiveIpcData(int fd)
 {
     static char buffer[MAX_PACKET_SIZE];
     memset(buffer, 0, sizeof(buffer));
@@ -59,13 +59,6 @@ void processIpcData(int fd)
     if(numBytes > 0)
     {
         fprintf(stdout, "recvfrom %d bytes: %s \n", numBytes, buffer);
-
-        static SensorData sensorData;// static to avoid stackoverflow
-        memset(&sensorData, 0, sizeof(sensorData));
-
-        if(convertJsonToSensorData(buffer, &sensorData))
-            saveSensorDataToLocal(&sensorData);
-
         fflush(stdout);
     }
     else
@@ -73,4 +66,6 @@ void processIpcData(int fd)
         fprintf(stdout, "recvfrom error=%d :%s  \n", errno, strerror(errno));
         fflush(stdout);
     }
+
+    return (numBytes > 0) ? buffer : NULL;
 }

@@ -32,10 +32,15 @@ example:
  */
 
 #define FAILURE   (0)
-#define SUCCESS  (1)
+#define SUCCESS   (1)
 
-int convertJsonToSensorData(const char * const jsonData, SensorData* sensorData)
+SensorData* convertJsonToSensorData(const char * const jsonData)
 {
+    if(jsonData == NULL) return NULL;
+
+    static SensorData sensorData;// static to avoid stackoverflow
+    memset(&sensorData, 0, sizeof(sensorData));
+
     const cJSON *resValue = NULL;
     const cJSON *resValues = NULL;
 
@@ -62,8 +67,8 @@ int convertJsonToSensorData(const char * const jsonData, SensorData* sensorData)
         goto end;
     }
 
-    sensorData->objId = objId->valueint;
-    sensorData->instId = instId->valueint;
+    sensorData.objId = objId->valueint;
+    sensorData.instId = instId->valueint;
 
 
     resValues = cJSON_GetObjectItemCaseSensitive(result_json, "resValues");
@@ -80,30 +85,16 @@ int convertJsonToSensorData(const char * const jsonData, SensorData* sensorData)
         }
 
 
-        appendResourceIdValue(resId->valueint, rvalue->valuestring, sensorData);
+        appendResourceIdValue(resId->valueint, rvalue->valuestring, &sensorData);
 
     }
 
 
     end:
     cJSON_Delete(result_json);
-    return status;
-}
-
-
-void printSensorData(const SensorData *sensorData)
-{
-    fprintf(stdout,"objId=%d,  instId=%d \n", sensorData->objId, sensorData->instId);
-    for(int i = 0; i< sensorData->resNum; i++)
-    {
-        fprintf(stdout, "resId=%d, resV= %s \n", sensorData->resValues[i].resId, sensorData->resValues[i].value);
-    }
+    return (status == SUCCESS) ? &sensorData : NULL;
 }
 
 
 
-void saveSensorDataToLocal(const SensorData *sensorData)
-{
-    printSensorData(sensorData);
-}
 

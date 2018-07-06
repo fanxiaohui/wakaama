@@ -82,6 +82,7 @@
 #include <liblwm2m.h>
 #include <sys/shm.h>
 #include "shareMemData.h"
+#include "sensorData.h"
 
 #define MAX_PACKET_SIZE 1024
 #define DEFAULT_SERVER_IPV6 "[::1]"
@@ -98,7 +99,9 @@ extern void update_vehicle_measurement(lwm2m_context_t* context, const ObdData* 
 extern void display_vehicle_object(lwm2m_object_t * object);
 extern void stub_updateLocationAutomatic(lwm2m_context_t* context);
 extern int createUnixSocket();
-extern void processIpcData(int fd);
+extern char* receiveIpcData(int fd);
+extern SensorData* convertJsonToSensorData(const char * const jsonData);
+extern void saveSensorDataToLocal(const SensorData *sensorData);
 
 int g_reboot = 0;
 static int g_quit = 0;
@@ -1216,18 +1219,16 @@ int main(int argc, char *argv[])
         FD_SET(fdIpc,&readfds);
         FD_SET(STDIN_FILENO, &readfds);
 
+        {//zengliang,GPS location
+            stub_updateLocationAutomatic(lwm2mH);
+        }
+
         /*
          * This function does two things:
          *  - first it does the work needed by liblwm2m (eg. (re)sending some packets).
          *  - Secondly it adjusts the timeout value (default 60s) depending on the state of the transaction
          *    (eg. retransmission) and the time between the next operation
          */
-        {//zengliang
-
-            {//GPS location
-                stub_updateLocationAutomatic(lwm2mH);
-            }
-        }
 
         result = lwm2m_step(lwm2mH, &(tv.tv_sec));
         fprintf(stdout, " -> State: ");
@@ -1389,7 +1390,10 @@ int main(int argc, char *argv[])
 
             if(FD_ISSET(fdIpc, &readfds))
             {
-                processIpcData(fdIpc);
+                const char* jsonData = receiveIpcData(fdIpc);
+                const SensorData* sensorData = convertJsonToSensorData(jsonData);
+                saveSensorDataToLocal(sensorData);
+
             }
         }
     }
