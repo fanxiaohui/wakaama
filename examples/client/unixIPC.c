@@ -54,7 +54,7 @@ char* receiveIpcData(int fd)
     memset(buffer, 0, sizeof(buffer));
 
     struct sockaddr_un client;
-    socklen_t addrLen;
+    socklen_t addrLen = sizeof(client);
     int numBytes = recvfrom(fd, buffer, MAX_PACKET_SIZE, 0, (struct sockaddr *)&client, &addrLen);
     if(numBytes > 0)
     {
