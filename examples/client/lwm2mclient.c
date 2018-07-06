@@ -81,7 +81,6 @@
 #include <signal.h>
 #include <liblwm2m.h>
 #include <sys/shm.h>
-#include "shareMemData.h"
 #include "sensorData.h"
 
 #define MAX_PACKET_SIZE 1024
@@ -95,13 +94,12 @@ extern void location_setLocationAtTime(lwm2m_object_t* locationObj,
                                        );
 extern lwm2m_object_t * create_object_vehicle(void);
 extern void free_object_vehicle(lwm2m_object_t * object);
-extern void update_vehicle_measurement(lwm2m_context_t* context, const ObdData* meas);
 extern void display_vehicle_object(lwm2m_object_t * object);
 extern void stub_updateLocationAutomatic(lwm2m_context_t* context);
 extern int createUnixSocket();
 extern char* receiveIpcData(int fd);
 extern SensorData* convertJsonToSensorData(const char * const jsonData);
-extern void saveSensorDataToLocal(const SensorData *sensorData);
+extern void saveSensorDataToLocal(const SensorData *sensorData, lwm2m_context_t* context);
 
 int g_reboot = 0;
 static int g_quit = 0;
@@ -1392,7 +1390,7 @@ int main(int argc, char *argv[])
             {
                 const char* jsonData = receiveIpcData(fdIpc);
                 const SensorData* sensorData = convertJsonToSensorData(jsonData);
-                saveSensorDataToLocal(sensorData);
+                saveSensorDataToLocal(sensorData, lwm2mH);
 
             }
         }

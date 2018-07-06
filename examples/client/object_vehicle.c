@@ -6,7 +6,8 @@
 #include <stdio.h>
 #include <stdlib.h>
 #include <string.h>
-#include "shareMemData.h"
+#include <assert.h>
+#include "sensorData.h"
 
 /*
  *  Object     |      | Multiple  |     | Description                   |
@@ -30,6 +31,14 @@
 #define RES_ID_M_RPM        2
 #define RES_ID_M_TIMESTAMP  3
 
+typedef  struct{
+    float rpm;//engine speed
+    float speed; //vehicle speed
+    unsigned long timestamp;
+    char   state[20];//0-idle,1-driving,2-charging
+    bool  updated;
+    char  padding[3];
+}ObdData;
 
 static uint8_t prv_res2tlv(const ObdData* locDataP,
                            lwm2m_data_t* dataP)
@@ -39,7 +48,7 @@ static uint8_t prv_res2tlv(const ObdData* locDataP,
     switch (dataP->id)     // location resourceId
     {
         case RES_ID_M_STATE:
-            lwm2m_data_encode_int(locDataP->state, dataP);
+            lwm2m_data_encode_string(locDataP->state, dataP);
             break;
         case RES_ID_M_RPM:
             lwm2m_data_encode_float(locDataP->rpm, dataP);
@@ -107,26 +116,46 @@ void display_vehicle_object(lwm2m_object_t * object)
     fprintf(stdout, "  /%u: vehicle object:\r\n", object->objID);
     if (NULL != data)
     {
-        fprintf(stdout, "  state: %d,  rpm: %.6f, speed: %.6f, timestamp: %lu \r\n",
+        fprintf(stdout, "  state: %s,  rpm: %.6f, speed: %.6f, timestamp: %lu \r\n",
                 data->state,data->rpm, data->speed, data->timestamp);
     }
 #endif
 }
 
-void update_vehicle_measurement(lwm2m_context_t* context, const ObdData* meas)
+static void setResourceValue(const ResourceValue* rv, ObdData* obdData)
 {
-    lwm2m_object_t* vehicleObj = (lwm2m_object_t*)LWM2M_LIST_FIND(context->objectList,LWM2M_VEHICLE_OBJECT_ID);
-    if(vehicleObj != NULL)
+  switch(rv->resId)
+  {
+      case RES_ID_M_STATE:
+          strncpy(obdData->state, rv->value, sizeof(obdData->state));
+          break;
+      default:
+          fprintf(stderr,"error,not support resId=%d \n", rv->resId);
+          break;
+  }
+}
+
+void update_vehicle_measurement(const SensorData* sensorData, lwm2m_context_t* context)
+{
+    assert(sensorData->objId == LWM2M_VEHICLE_OBJECT_ID && sensorData->instId == 0);
+
+    lwm2m_object_t* Obj = (lwm2m_object_t*)LWM2M_LIST_FIND(context->objectList,sensorData->objId);
+    if(Obj != NULL)
     {
-        ObdData* obdData = (ObdData*)vehicleObj->userData;
-        obdData->state = meas->state;
-        obdData->rpm = meas->rpm;
-        obdData->speed = meas->speed;
+        ObdData* obdData = (ObdData*)Obj->userData;
+
+        for(int i = 0; i < sensorData->resNum; i++)
+        {
+            setResourceValue(&sensorData->resValues[i], obdData);
+        }
+        //obdData->state = sensorData->state;
+        //obdData->rpm = sensorData->rpm;
+        //obdData->speed = sensorData->speed;
         obdData->timestamp = lwm2m_gettime();
 
     }
 
-    lwm2m_uri_t urip = {LWM2M_URI_FLAG_OBJECT_ID, LWM2M_VEHICLE_OBJECT_ID, 0, 0};
+    lwm2m_uri_t urip = {LWM2M_URI_FLAG_OBJECT_ID, sensorData->objId, 0, 0};
     lwm2m_resource_value_changed(context, &urip);
 }
 

@@ -7,6 +7,7 @@
 
 
 #include <memory.h>
+#include "liblwm2m.h"
 
 #define  MAX_RESOURCE_PER_INSTANCE  20
 #define  MAX_VALUE_LENGTH_PER_RESOURCE   50
@@ -26,6 +27,13 @@ typedef struct{
     ResourceValue resValues[MAX_RESOURCE_PER_INSTANCE];
 }SensorData;
 
+
+typedef void (*FunctionUpdateMeasure)(const SensorData* , lwm2m_context_t* );
+
+typedef struct{
+    int objId;
+    FunctionUpdateMeasure  pfun;
+}ObjIdFuncMap;
 
 
 static inline void appendResourceIdValue(int resId, const char *resV, SensorData *sensorData)
