@@ -9,10 +9,16 @@
 #include <stdlib.h>
 #include <unistd.h>
 #include <errno.h>
+#include "sensorData.h"
 
 #define UNIX_IPC_NAME  "/var/lwm2mReport_ipc"   //filename must be absolute path, but file not already exist
 #define MAX_CONNECT_NUM  8     //allow max 8 process pass data to lwm2mclient,which report to lwm2mServer
 #define MAX_PACKET_SIZE 1024
+
+
+extern int convertJsonToSensorData(const char* jsonData, SensorData* sensorData);
+extern void destroySensorData(SensorData* sensorData);
+extern void saveSensorDataToLocal(const SensorData *sensorData);
 
 int createUnixSocket()
 {
@@ -53,6 +59,13 @@ void processIpcData(int fd)
     if(numBytes > 0)
     {
         fprintf(stdout, "recvfrom %d bytes: %s \n", numBytes, buffer);
+
+        static SensorData sensorData;// static to avoid stackoverflow
+        memset(&sensorData, 0, sizeof(sensorData));
+
+        if(convertJsonToSensorData(buffer, &sensorData))
+            saveSensorDataToLocal(&sensorData);
+
         fflush(stdout);
     }
     else
