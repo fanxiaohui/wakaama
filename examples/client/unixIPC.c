@@ -16,9 +16,9 @@
 #define MAX_PACKET_SIZE 1024
 
 
-extern int convertJsonToSensorData(const char* jsonData, SensorData* sensorData);
-extern void destroySensorData(SensorData* sensorData);
-extern void saveSensorDataToLocal(const SensorData *sensorData);
+extern int convertJsonToSensorData(const char* jsonData, InstanceData* sensorData);
+extern void destroySensorData(InstanceData* sensorData);
+extern void saveSensorDataToLocal(const InstanceData *sensorData);
 
 int createUnixSocket()
 {
@@ -54,7 +54,7 @@ char* receiveIpcData(int fd)
     memset(buffer, 0, sizeof(buffer));
 
     struct sockaddr_un client;
-    socklen_t addrLen = sizeof(client);
+    socklen_t addrLen = sizeof(client);//must initilize addrLen,otherwise will cause recvfrom error occasionally
     int numBytes = recvfrom(fd, buffer, MAX_PACKET_SIZE, 0, (struct sockaddr *)&client, &addrLen);
     if(numBytes > 0)
     {

@@ -98,8 +98,8 @@ extern void display_vehicle_object(lwm2m_object_t * object);
 extern void stub_updateLocationAutomatic(lwm2m_context_t* context);
 extern int createUnixSocket();
 extern char* receiveIpcData(int fd);
-extern SensorData* convertJsonToSensorData(const char * const jsonData);
-extern void saveSensorDataToLocal(const SensorData *sensorData, lwm2m_context_t* context);
+extern ObjectData* convertJsonToObjectData(const char *const jsonData);
+extern void saveSensorDataToLocal(const ObjectData *sensorData, lwm2m_context_t* context);
 
 int g_reboot = 0;
 static int g_quit = 0;
@@ -1389,7 +1389,7 @@ int main(int argc, char *argv[])
             if(FD_ISSET(fdIpc, &readfds))
             {
                 const char* jsonData = receiveIpcData(fdIpc);
-                const SensorData* sensorData = convertJsonToSensorData(jsonData);
+                const ObjectData* sensorData = convertJsonToObjectData(jsonData);
                 saveSensorDataToLocal(sensorData, lwm2mH);
 
             }

@@ -32,12 +32,10 @@
 #define RES_ID_M_TIMESTAMP  3
 
 typedef  struct{
-    float rpm;//engine speed
+    char rpm[10];//engine speed
     float speed; //vehicle speed
     unsigned long timestamp;
     char   state[20];//0-idle,1-driving,2-charging
-    bool  updated;
-    char  padding[3];
 }ObdData;
 
 static uint8_t prv_res2tlv(const ObdData* locDataP,
@@ -51,7 +49,7 @@ static uint8_t prv_res2tlv(const ObdData* locDataP,
             lwm2m_data_encode_string(locDataP->state, dataP);
             break;
         case RES_ID_M_RPM:
-            lwm2m_data_encode_float(locDataP->rpm, dataP);
+            lwm2m_data_encode_string(locDataP->rpm, dataP);
             break;
         case RES_ID_M_SPEED:
             lwm2m_data_encode_float(locDataP->speed, dataP);
@@ -116,7 +114,7 @@ void display_vehicle_object(lwm2m_object_t * object)
     fprintf(stdout, "  /%u: vehicle object:\r\n", object->objID);
     if (NULL != data)
     {
-        fprintf(stdout, "  state: %s,  rpm: %.6f, speed: %.6f, timestamp: %lu \r\n",
+        fprintf(stdout, "  state: %s,  rpm: %s, speed: %.6f, timestamp: %lu \r\n",
                 data->state,data->rpm, data->speed, data->timestamp);
     }
 #endif
@@ -135,18 +133,19 @@ static void setResourceValue(const ResourceValue* rv, ObdData* obdData)
   }
 }
 
-void update_vehicle_measurement(const SensorData* sensorData, lwm2m_context_t* context)
+void update_vehicle_measurement(const ObjectData* sensorData, lwm2m_context_t* context)
 {
-    assert(sensorData->objId == LWM2M_VEHICLE_OBJECT_ID && sensorData->instId == 0);
+    assert(sensorData->objId == LWM2M_VEHICLE_OBJECT_ID && sensorData->instNum == 1);
 
     lwm2m_object_t* Obj = (lwm2m_object_t*)LWM2M_LIST_FIND(context->objectList,sensorData->objId);
     if(Obj != NULL)
     {
         ObdData* obdData = (ObdData*)Obj->userData;
+        const InstanceData* instData = &sensorData->data[0];
 
-        for(int i = 0; i < sensorData->resNum; i++)
+        for(int i = 0; i < instData->resNum; i++)
         {
-            setResourceValue(&sensorData->resValues[i], obdData);
+            setResourceValue(&instData->resValues[i], obdData);
         }
         //obdData->state = sensorData->state;
         //obdData->rpm = sensorData->rpm;

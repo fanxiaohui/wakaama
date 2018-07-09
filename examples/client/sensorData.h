@@ -8,7 +8,9 @@
 
 #include <memory.h>
 #include "liblwm2m.h"
+#include <stdlib.h>
 
+#define  MAX_INSTANCE_PER_OBJ    12
 #define  MAX_RESOURCE_PER_INSTANCE  20
 #define  MAX_VALUE_LENGTH_PER_RESOURCE   50
 #define  elementsOf(array) (sizeof(array)/sizeof(array[0]))
@@ -21,14 +23,19 @@ typedef struct {
 
 
 typedef struct{
-    int objId;
     int instId;
     int resNum;
     ResourceValue resValues[MAX_RESOURCE_PER_INSTANCE];
-}SensorData;
+}InstanceData;
+
+typedef struct{
+    int objId;
+    int instNum;
+    InstanceData data[MAX_INSTANCE_PER_OBJ];
+}ObjectData;
 
 
-typedef void (*FunctionUpdateMeasure)(const SensorData* , lwm2m_context_t* );
+typedef void (*FunctionUpdateMeasure)(const ObjectData* , lwm2m_context_t* );
 
 typedef struct{
     int objId;
@@ -36,15 +43,15 @@ typedef struct{
 }ObjIdFuncMap;
 
 
-static inline void appendResourceIdValue(int resId, const char *resV, SensorData *sensorData)
+static inline void appendResourceIdValue(const char* resId, const char *resV, InstanceData *instData)
 {
-    int resNum = sensorData->resNum;
+    int resNum = instData->resNum;
     if(resNum < MAX_RESOURCE_PER_INSTANCE)
     {
-        sensorData->resValues[resNum].resId = resId;
-        strncpy(sensorData->resValues[resNum].value, resV, MAX_VALUE_LENGTH_PER_RESOURCE);
-        ENSURE_END_WITH_NULL_CHAR(sensorData->resValues[resNum].value);
-        sensorData->resNum += 1;
+        instData->resValues[resNum].resId = atoi(resId);//use strtol() to replace atoi()
+        strncpy(instData->resValues[resNum].value, resV, MAX_VALUE_LENGTH_PER_RESOURCE);
+        ENSURE_END_WITH_NULL_CHAR(instData->resValues[resNum].value);
+        instData->resNum += 1;
     }
 }
 

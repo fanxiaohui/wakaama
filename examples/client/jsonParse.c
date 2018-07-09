@@ -4,28 +4,12 @@
 
 #include <liblwm2m.h>
 #include <stdio.h>
+#include <internals.h>
 #include "sensorData.h"
 #include "cJSON.h"
 /*
 example:
-  {
-  "objId":3303,
-  "instId":2,
-  "resValues":[
-   {
-   "id":1,
-   "v":"100"
-   },
-   {
-   "id":2,
-   "v":"102"
-   },
-   {
-   "id":3
-   "v":"103"
-   }
-   ]
-  }
+
  *
  *
  *
@@ -33,66 +17,61 @@ example:
 
 #define FAILURE   (0)
 #define SUCCESS   (1)
+#define INVALID_ID (-1)
+#define IS_VALID_ID(x) (x != INVALID_ID)
 
-SensorData* convertJsonToSensorData(const char * const jsonData)
+
+
+
+
+ObjectData* convertJsonToObjectData(const char *const jsonData)
 {
     if(jsonData == NULL) return NULL;
 
-    static SensorData sensorData;// static to avoid stackoverflow
-    memset(&sensorData, 0, sizeof(sensorData));
-
-    const cJSON *resValue = NULL;
-    const cJSON *resValues = NULL;
+    static ObjectData objData;// static to avoid stackoverflow
+    memset(&objData, 0, sizeof(objData));
 
     int status = SUCCESS;
-    cJSON *result_json = cJSON_Parse(jsonData);
-    if (result_json == NULL)
+
+
+    cJSON *root = cJSON_Parse(jsonData);
+    if (root == NULL)
     {
         const char *error_ptr = cJSON_GetErrorPtr();
         if (error_ptr != NULL)
         {
             fprintf(stderr, "Error parse json: %s\n", error_ptr);
         }
-        status = FAILURE;
-        goto end;
+        return NULL;
     }
 
-    const cJSON * objId = cJSON_GetObjectItemCaseSensitive(result_json, "objId");
-    const cJSON* instId = cJSON_GetObjectItemCaseSensitive(result_json, "instId");
-
-    if (!cJSON_IsNumber(objId) || !cJSON_IsNumber(instId))
+    cJSON* firstLevelChild;
+    cJSON_ArrayForEach(firstLevelChild, root)
     {
-        fprintf(stderr, "error: objId and instId must be a number \n");
-        status = FAILURE;
-        goto end;
-    }
+        objData.objId = atoi(firstLevelChild->string);
 
-    sensorData.objId = objId->valueint;
-    sensorData.instId = instId->valueint;
-
-
-    resValues = cJSON_GetObjectItemCaseSensitive(result_json, "resValues");
-    cJSON_ArrayForEach(resValue, resValues)
-    {
-        cJSON *resId = cJSON_GetObjectItemCaseSensitive(resValue, "id");
-        cJSON *rvalue = cJSON_GetObjectItemCaseSensitive(resValue, "v");
-
-        if (!cJSON_IsNumber(resId) || !cJSON_IsString(rvalue))
+        cJSON* secondLevelChild;
+        cJSON_ArrayForEach(secondLevelChild, firstLevelChild)
         {
-            fprintf(stderr, "error: resId must be a number, rvalue must be string \n");
-            status = FAILURE;
-            goto end;
+            if(objData.instNum >= MAX_INSTANCE_PER_OBJ)  goto end;
+
+            InstanceData* instData = &objData.data[objData.instNum++];
+            instData->instId = atoi(secondLevelChild->string);
+
+            cJSON* thirdLevelChild;
+            cJSON_ArrayForEach(thirdLevelChild, secondLevelChild)
+            {
+                appendResourceIdValue(thirdLevelChild->string, thirdLevelChild->valuestring, instData);
+            }
+
         }
 
-
-        appendResourceIdValue(resId->valueint, rvalue->valuestring, &sensorData);
-
+        break;//currenty support only 1 object in one msg
     }
 
-
-    end:
-    cJSON_Delete(result_json);
-    return (status == SUCCESS) ? &sensorData : NULL;
+end:
+    cJSON_Delete(root);
+    return (status == SUCCESS) ? &objData : NULL;
 }
 
 
