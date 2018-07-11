@@ -12,8 +12,9 @@ Note these 3 files must be deleted before switch compile platform, and need open
 /////////////////////////////
 
 
-./lwm2mclient -4  -n 8657100077 -h 52.80.95.56 -t 30
+sudo ./lwm2mclient -4  -n 8657100077 -h 52.80.95.56 -t 30
 
+note: if not run with sudo, will encounter error : bind unix socket: Address already in use
 
 hasiId(4e038d3abb8d398bba2373815a05308d41774aa1) has following issue when integrate with impact, but is ok to integrate with leshan server, need early version(2017-10) to work with nokia-impact
 

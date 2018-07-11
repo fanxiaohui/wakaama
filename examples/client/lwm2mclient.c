@@ -93,7 +93,9 @@ extern void location_setLocationAtTime(lwm2m_object_t* locationObj,
                                        float altitude
                                        );
 extern lwm2m_object_t * create_object_vehicle(void);
+extern lwm2m_object_t * create_temperature_object(void);
 extern void free_object_vehicle(lwm2m_object_t * object);
+extern void free_object_temperature(lwm2m_object_t * object);
 extern void display_vehicle_object(lwm2m_object_t * object);
 extern void stub_updateLocationAutomatic(lwm2m_context_t* context);
 extern int createUnixSocket();
@@ -101,10 +103,11 @@ extern char* receiveIpcData(int fd);
 extern ObjectData* convertJsonToObjectData(const char *const jsonData);
 extern void saveSensorDataToLocal(const ObjectData *sensorData, lwm2m_context_t* context);
 
+
 int g_reboot = 0;
 static int g_quit = 0;
 
-#define OBJ_COUNT 9
+#define OBJ_COUNT 10
 lwm2m_object_t * objArray[OBJ_COUNT];
 
 // only backup security and server objects
@@ -1131,6 +1134,12 @@ int main(int argc, char *argv[])
         return -1;
     }
 
+    objArray[9] = create_temperature_object();
+    if (NULL == objArray[9])
+    {
+        fprintf(stderr, "Failed to create temperature object\r\n");
+        return -1;
+    }
 
     /*
      * The liblwm2m library is now initialized with the functions that will be in
@@ -1422,12 +1431,11 @@ int main(int argc, char *argv[])
     free_object_device(objArray[2]);
     free_object_firmware(objArray[3]);
     free_object_location(objArray[4]);
-    free_test_object(objArray[5]);
+    free_object_vehicle(objArray[5]);
     free_object_conn_m(objArray[6]);
     free_object_conn_s(objArray[7]);
     acl_ctrl_free_object(objArray[8]);
-    free_object_vehicle(objArray[9]);
-
+    free_object_temperature(objArray[9]);
 #ifdef MEMORY_TRACE
     if (g_quit == 1)
     {

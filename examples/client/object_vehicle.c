@@ -35,8 +35,8 @@
 
 typedef InstanceData ObdData;
 
-static uint8_t prv_res2tlv(const ObdData* locDataP,
-                           lwm2m_data_t* dataP)
+static uint8_t fetchValueById(const ObdData *locDataP,
+                              lwm2m_data_t *dataP)
 {
     //-------------------------------------------------------------------- JH --
     for(int i = 0; i<locDataP->resNum; i++)
@@ -80,7 +80,7 @@ static uint8_t prv_vehicle_read(uint16_t instanceId,
 
     for (i = 0 ; i < *numResourceId ; i++)
     {
-        result = prv_res2tlv (locDataP, (*tlvArrayP)+i);
+        result = fetchValueById(locDataP, (*tlvArrayP) + i);
         if (result != COAP_205_CONTENT) break;
     }
 
