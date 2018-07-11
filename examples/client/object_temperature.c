@@ -4,16 +4,25 @@
 
 
 #include <liblwm2m.h>
+#include <assert.h>
+#include <stdio.h>
 #include "sensorData.h"
 
 #ifdef LWM2M_CLIENT_MODE
 
+#define RES_ID_MIN_RANGE_VALUE   5519
+#define RES_ID_MAX_RANGE_VALUE   5520
 #define RES_ID_SENSOR_INTERVAL   5524
+#define RES_ID_HISTORY_VALUE     5527
+#define RES_ID_MIN_MEASURED_VALUE 5601
+#define RES_ID_MAX_MEASURED_VALUE 5602
 #define RES_ID_SENSOR_VALUE      5700
+#define RES_ID_SENSOR_UNITS      5701
 #define RES_ID_SENSOR_BATTERY    5800
 #define RES_ID_TIMESTAMP         6021
 
-#define RES_NUM                  4
+#define RES_NUM                  10 //total num of above resourceId
+
 
 
 typedef struct _prv_instance_
@@ -75,10 +84,16 @@ static uint8_t resourceValues_read(uint16_t instanceId,
 static void initialResourceIds(InstanceData* instanceData)
 {
     instanceData->resNum = RES_NUM;
-    instanceData->resValues[0].resId = RES_ID_SENSOR_VALUE;
-    instanceData->resValues[1].resId = RES_ID_SENSOR_BATTERY;
-    instanceData->resValues[2].resId = RES_ID_TIMESTAMP;
-    instanceData->resValues[3].resId = RES_ID_SENSOR_INTERVAL;
+    instanceData->resValues[0].resId = RES_ID_MIN_RANGE_VALUE;
+    instanceData->resValues[1].resId = RES_ID_MAX_RANGE_VALUE;
+    instanceData->resValues[2].resId = RES_ID_SENSOR_INTERVAL;
+    instanceData->resValues[3].resId = RES_ID_HISTORY_VALUE;
+    instanceData->resValues[4].resId = RES_ID_MIN_MEASURED_VALUE;
+    instanceData->resValues[5].resId = RES_ID_MAX_MEASURED_VALUE;
+    instanceData->resValues[6].resId = RES_ID_SENSOR_VALUE;
+    instanceData->resValues[7].resId = RES_ID_SENSOR_UNITS;
+    instanceData->resValues[8].resId = RES_ID_SENSOR_BATTERY;
+    instanceData->resValues[9].resId = RES_ID_TIMESTAMP;
 }
 
 lwm2m_object_t * create_temperature_object(void)
@@ -100,8 +115,8 @@ lwm2m_object_t * create_temperature_object(void)
                 return NULL; //TODO:  free obj
             }
             memset(instance, 0, sizeof(prv_instance_t));
-            instance->instID = i;
-            instance->userData.instId = i;
+            instance->instID = i; //once initialized, can't be changed.
+            instance->userData.instId = i;//once initialized, can't be changed.
             initialResourceIds(&instance->userData);
 
             obj->instanceList = LWM2M_LIST_ADD(obj->instanceList, instance);
@@ -136,5 +151,51 @@ void free_object_temperature(lwm2m_object_t * object)
     lwm2m_free(object);
 }
 
+
+void updateLocalResourceValue(const ResourceValue* rv, InstanceData* local)
+{
+    for(int i = 0; i< local->resNum; i++)
+    {
+      if(rv->resId == local->resValues[i].resId)
+      {
+          strcpy(local->resValues[i].value, rv->value);
+          return;
+      }
+    }
+
+    fprintf(stderr, "error: not support resid=%d \n", rv->resId);
+}
+
+void updateLocalInstanceValue(const InstanceData *input, InstanceData *local)
+{
+    assert(local->instId == input->instId);
+    for(int i = 0; i<input->resNum; i++)
+    {
+        updateLocalResourceValue(&input->resValues[i], local);
+    }
+}
+
+void update_temperature_measurement(const ObjectData* sensorData, lwm2m_context_t* context)
+{
+    assert(sensorData->objId == LWM2M_TEMPERATURE_OBJECT_ID );
+
+    lwm2m_object_t* objectP = (lwm2m_object_t*)LWM2M_LIST_FIND(context->objectList,sensorData->objId);
+    if(objectP != NULL)
+    {
+        for(int i = 0; i<sensorData->instNum; i++)
+        {
+            prv_instance_t* targetP = (prv_instance_t *) lwm2m_list_find(objectP->instanceList, sensorData->data[i].instId);
+            if(targetP)
+            {
+                updateLocalInstanceValue(&sensorData->data[i], &targetP->userData);
+            }
+            else
+            {
+                fprintf(stderr, "error:can't find instanceId=%d \n", sensorData->data[i].instId);
+                fflush(stderr);
+            }
+        }
+    }
+}
 
 #endif

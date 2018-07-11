@@ -10,7 +10,7 @@
 #include "liblwm2m.h"
 #include <stdlib.h>
 
-#define  MAX_INSTANCE_PER_OBJ    12
+#define  MAX_INSTANCE_PER_OBJ    5
 #define  MAX_RESOURCE_PER_INSTANCE  20
 #define  MAX_VALUE_LENGTH_PER_RESOURCE   50
 #define  elementsOf(array) (sizeof(array)/sizeof(array[0]))
