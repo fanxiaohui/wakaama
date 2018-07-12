@@ -205,6 +205,7 @@ uint8_t dm_handleRequest(lwm2m_context_t * contextP,
 
             if (IS_OPTION(message, COAP_OPTION_OBSERVE))
             {
+                LOG("receive_observe_request.");
                 lwm2m_data_t * dataP = NULL;
                 int size = 0;
 
@@ -249,6 +250,10 @@ uint8_t dm_handleRequest(lwm2m_context_t * contextP,
                 if (IS_OPTION(message, COAP_OPTION_ACCEPT))
                 {
                     format = utils_convertMediaType(message->accept[0]);
+                }
+                else
+                {
+                    format = LWM2M_CONTENT_JSON;
                 }
 
                 result = object_read(contextP, uriP, &format, &buffer, &length);
