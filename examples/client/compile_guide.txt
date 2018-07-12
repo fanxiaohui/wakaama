@@ -1,6 +1,6 @@
 Note these 3 files must be deleted before switch compile platform, and need open a new shell, otherwise will cause following compile error
 
-0)open a new shell , otherwise can't switch platform, i don't know why ? 
+0)source /opt/fsl-imx-x12/4.9.11-1.0.0/environment-setup-cortexa9hf-neon-poky-linux-gnueabi; to use cross-compile-tool(arm-gcc,arm-g++)
 1)rm -rf CMakeFiles ; rm CMakeCache.txt; rm Makefile; 
 2)mv CMakeLists_arm.txt CMakeLists.txt
 2)cd to examples/client; cmake ./
