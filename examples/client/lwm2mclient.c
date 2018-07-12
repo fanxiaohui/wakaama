@@ -1193,10 +1193,12 @@ int main(int argc, char *argv[])
     int fdIpc = createUnixSocket();
 
     while (0 == g_quit) {
+
         struct timeval tv;
         fd_set readfds;
 
-        if (g_reboot) {
+        if (g_reboot)
+        {
             time_t tv_sec;
 
             tv_sec = lwm2m_gettime();
@@ -1213,12 +1215,17 @@ int main(int argc, char *argv[])
             } else {
                 tv.tv_sec = reboot_time - tv_sec;
             }
-        } else if (batterylevelchanging) {
+        }
+        else if (batterylevelchanging)
+        {
             update_battery_level(lwm2mH);
             tv.tv_sec = 5;
-        } else {
+        }
+        else
+        {
             tv.tv_sec = 2;
         }
+
         tv.tv_usec = 0;
 
         FD_ZERO(&readfds);

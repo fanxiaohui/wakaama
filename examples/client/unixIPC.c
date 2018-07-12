@@ -11,7 +11,7 @@
 #include <errno.h>
 #include "sensorData.h"
 
-#define UNIX_IPC_NAME  "/var/lwm2mReport_ipc"   //filename must be absolute path, but file not already exist
+#define UNIX_IPC_NAME  "/var/run/lwm2m.sock"   //filename must be absolute path, but file not already exist
 #define MAX_CONNECT_NUM  8     //allow max 8 process pass data to lwm2mclient,which report to lwm2mServer
 #define MAX_PACKET_SIZE 1024
 
