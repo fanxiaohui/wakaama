@@ -56,5 +56,12 @@ static inline void appendResourceIdValue(const char* resId, const char *resV, In
 }
 
 
+static inline void markSensorValueChangedToTrigLaterReport(const int objId, lwm2m_context_t* context)
+{
+
+    lwm2m_uri_t urip = {LWM2M_URI_FLAG_OBJECT_ID, objId, 0, 0};
+    lwm2m_resource_value_changed(context, &urip);
+}
+
 
 #endif //LWM2MCLIENT_JSONDATA_H

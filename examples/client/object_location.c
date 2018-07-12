@@ -45,6 +45,7 @@
  */
 
 #include "liblwm2m.h"
+#include "sensorData.h"
 
 #include <stdio.h>
 #include <stdlib.h>
@@ -224,19 +225,12 @@ void location_setVelocity(lwm2m_object_t* locationObj,
   * @param altitude  the second argument.
   * @param timestamp the related timestamp. Seconds since 1970.
   */
-void location_setLocationAtTime(lwm2m_object_t* locationObj,
-                             float latitude,
-                             float longitude,
-                             float altitude
-                             )
-{
-    //-------------------------------------------------------------------- JH --
-    location_data_t* pData = locationObj->userData;
+void update_gps_measurement(const location_data_t *gpsData, lwm2m_context_t *context)
 
-    pData->latitude  = latitude;
-    pData->longitude = longitude;
-    pData->altitude  = altitude;
-    pData->timestamp = lwm2m_gettime();
+
+{
+    lwm2m_object_t* objectP = (lwm2m_object_t*)LWM2M_LIST_FIND(context->objectList,LWM2M_LOCATION_OBJECT_ID);
+    memcpy(objectP->userData, gpsData, sizeof(location_data_t));
 }
 
 /**
@@ -281,8 +275,8 @@ lwm2m_object_t * get_object_location(void)
         if (NULL != locationObj->userData)
         {
             location_data_t* data = (location_data_t*)locationObj->userData;
-            data->latitude    = 27.986065;  // Mount Everest :)
-            data->longitude   = 86.922623;
+            data->latitude    = 30.163539;  // hangzhou
+            data->longitude   = 120.09172;
             data->altitude    = 8495.0000;
             data->radius      = 0.0;
             location_setVelocity(locationObj, 0, 0, 255); // 255: speedUncertainty not supported!
@@ -307,15 +301,26 @@ void free_object_location(lwm2m_object_t * object)
 }
 
 
-void stub_updateLocationAutomatic(lwm2m_context_t* context)
+void stub_updateLocation(lwm2m_context_t *context)
 {
-    static float latitude = 27.89;
-    latitude += 1.0;
-    lwm2m_object_t *locationObj = (lwm2m_object_t *) LWM2M_LIST_FIND(context->objectList,
-                                                                     LWM2M_LOCATION_OBJECT_ID);
-    location_setLocationAtTime(locationObj, latitude, 0, 0);
-    lwm2m_uri_t latitudeUrip = {LWM2M_URI_FLAG_OBJECT_ID, LWM2M_LOCATION_OBJECT_ID, 0, 0};
-    lwm2m_resource_value_changed(context, &latitudeUrip);
+    static float latitude = 30.163539;
+    latitude += 0.1;
+    static float longitude = 120.09172;
+    longitude += 0.1;
+
+
+    location_data_t gpsData;
+    memset(&gpsData, 0, sizeof(gpsData));
+    gpsData.latitude = latitude;
+    gpsData.longitude = longitude;
+    gpsData.altitude = 30;
+    gpsData.radius = 0;
+    gpsData.speed = 80;
+    gpsData.timestamp = lwm2m_gettime();
+
+    update_gps_measurement(&gpsData, context);
+
+    markSensorValueChangedToTrigLaterReport(LWM2M_LOCATION_OBJECT_ID, context);
 }
 
 #endif  //LWM2M_CLIENT_MODE

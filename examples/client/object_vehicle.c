@@ -128,11 +128,10 @@ void update_vehicle_measurement(const ObjectData* sensorData, lwm2m_context_t* c
         {
             setResourceValue(&instData->resValues[i], obdData);
         }
-        
+
+        markSensorValueChangedToTrigLaterReport(sensorData->objId, context);
     }
 
-    lwm2m_uri_t urip = {LWM2M_URI_FLAG_OBJECT_ID, sensorData->objId, 0, 0};
-    lwm2m_resource_value_changed(context, &urip);
 }
 
 static void initialResourceIds(ObdData* obdData)
@@ -161,7 +160,7 @@ lwm2m_object_t * create_object_vehicle(void)
         vehicleObj->objID = LWM2M_VEHICLE_OBJECT_ID;
 
         // and its unique instance
-        vehicleObj->instanceList = (lwm2m_list_t *)lwm2m_malloc(sizeof(lwm2m_list_t));
+        vehicleObj->instanceList = (lwm2m_list_t *)lwm2m_malloc(sizeof(lwm2m_list_t));//TODO: for singleInstance object,instanceList is no use actually.
         if (NULL != vehicleObj->instanceList)
         {
             memset(vehicleObj->instanceList, 0, sizeof(lwm2m_list_t));
@@ -177,7 +176,7 @@ lwm2m_object_t * create_object_vehicle(void)
         // In fact the library don't need to know the resources of the object, only the server does.
         //
         vehicleObj->readFunc    = prv_vehicle_read;
-        vehicleObj->userData    = lwm2m_malloc(sizeof(ObdData));
+        vehicleObj->userData    = lwm2m_malloc(sizeof(ObdData));//for single instance object, lwm2m_object_t.userData is used to store sensor data;
 
         // initialize private data structure containing the needed variables
         if (NULL != vehicleObj->userData)

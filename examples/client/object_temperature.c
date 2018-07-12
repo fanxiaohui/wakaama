@@ -35,7 +35,7 @@ typedef struct _prv_instance_
     uint16_t instID;               // matches lwm2m_list_t::id
 
     InstanceData userData;
-} prv_instance_t;
+} prv_instance_t;//temperature support multiple-instance
 
 
 static uint8_t fetchValueById(const InstanceData *locDataP, lwm2m_data_t *dataP)
@@ -195,6 +195,8 @@ void update_temperature_measurement(const ObjectData* sensorData, lwm2m_context_
                 fflush(stderr);
             }
         }
+
+        markSensorValueChangedToTrigLaterReport(sensorData->objId, context);
     }
 }
 
