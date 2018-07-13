@@ -256,6 +256,7 @@ uint8_t dm_handleRequest(lwm2m_context_t * contextP,
                     format = LWM2M_CONTENT_JSON;
                 }
 
+                LOG_ARG("formatP(%d): %s",  format, STR_MEDIA_TYPE(format));
                 result = object_read(contextP, uriP, &format, &buffer, &length);
             }
             if (COAP_205_CONTENT == result)

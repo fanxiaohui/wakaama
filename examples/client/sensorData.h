@@ -45,6 +45,9 @@ typedef struct{
 
 static inline void appendResourceIdValue(const char* resId, const char *resV, InstanceData *instData)
 {
+    if(strlen(resV) >= MAX_VALUE_LENGTH_PER_RESOURCE)
+        fprintf(stderr,"warning:resID(%d) value exceed max length\n", atoi(resId));
+
     int resNum = instData->resNum;
     if(resNum < MAX_RESOURCE_PER_INSTANCE)
     {

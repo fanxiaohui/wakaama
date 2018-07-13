@@ -211,7 +211,7 @@ bool lwm2m_session_is_equal(void * session1, void * session2, void * userData);
  */
 
 #define LWM2M_VEHICLE_OBJECT_ID     10244
-#define LWM2M_TEMPERATURE_OBJECT_ID   3303
+#define LWM2M_TEMPERATURE_OBJECT_ID   10255 //due to impact already used 3303, so can't use 3303
 
 
 /*

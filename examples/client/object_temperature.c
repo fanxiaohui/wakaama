@@ -44,7 +44,8 @@ static uint8_t fetchValueById(const InstanceData *locDataP, lwm2m_data_t *dataP)
     {
         if(dataP->id == locDataP->resValues[i].resId)
         {
-            lwm2m_data_encode_string(locDataP->resValues[i].value, dataP);
+            //value type is stored into dataP, so able to serialize later.
+            lwm2m_data_encode_string(locDataP->resValues[i].value, dataP);//as resValue is string type, so call lwm2m_data_encode_string.
             return COAP_205_CONTENT;
         }
     }
@@ -128,7 +129,7 @@ lwm2m_object_t * create_temperature_object(void)
          * - The other one (deleteFunc) delete an instance by removing it from the instance list (and freeing the memory
          *   allocated to it)
          */
-        obj->readFunc = resourceValues_read;
+        obj->readFunc = resourceValues_read;//readFunc is called to get the value type, so able to serialize
         //obj->discoverFunc = prv_discover;
         //obj->writeFunc = prv_write;
         //obj->executeFunc = prv_exec;

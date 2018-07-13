@@ -108,7 +108,7 @@ uint8_t object_checkReadable(lwm2m_context_t * contextP,
 uint8_t object_readData(lwm2m_context_t * contextP,
                         lwm2m_uri_t * uriP,
                         int * sizeP,
-                        lwm2m_data_t ** dataP)
+                        lwm2m_data_t ** dataP)//out: include resValue & type(int,float,string)
 {
     uint8_t result;
     lwm2m_object_t * targetP;

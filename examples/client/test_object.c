@@ -156,12 +156,12 @@ static uint8_t prv_read(uint16_t instanceId,
         switch ((*dataArrayP)[i].id)
         {
         case 1:
-            lwm2m_data_encode_int(targetP->test, *dataArrayP + i);
+            lwm2m_data_encode_int(targetP->test, *dataArrayP + i);//as targetP->test is uint8_t, so call lwm2m_data_encode_int.
             break;
         case 2:
             return COAP_405_METHOD_NOT_ALLOWED;
         case 3:
-            lwm2m_data_encode_float(targetP->dec, *dataArrayP + i);
+            lwm2m_data_encode_float(targetP->dec, *dataArrayP + i);//as targetP->dec is double, so call lwm2m_data_encode_float.
             break;
         default:
             return COAP_404_NOT_FOUND;
