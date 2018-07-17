@@ -51,6 +51,8 @@
 #include <stdlib.h>
 #include <string.h>
 #include <time.h>
+#include <assert.h>
+#include <internals.h>
 
 #ifdef LWM2M_CLIENT_MODE
 
@@ -225,12 +227,68 @@ void location_setVelocity(lwm2m_object_t* locationObj,
   * @param altitude  the second argument.
   * @param timestamp the related timestamp. Seconds since 1970.
   */
-void update_gps_measurement(const location_data_t *gpsData, lwm2m_context_t *context)
+static void update_gps_measurement(const location_data_t *gpsData, lwm2m_context_t *context)
 
 
 {
     lwm2m_object_t* objectP = (lwm2m_object_t*)LWM2M_LIST_FIND(context->objectList,LWM2M_LOCATION_OBJECT_ID);
     memcpy(objectP->userData, gpsData, sizeof(location_data_t));
+}
+
+
+static void setResourceValue(const ResourceValue* rv, location_data_t* obdData)
+{
+    double tmp = 0.0;
+
+    switch(rv->resId)
+    {
+        case RES_M_LATITUDE:
+            utils_textToFloat((uint8_t *)rv->value,strlen(rv->value), &tmp);
+            obdData->latitude = tmp;
+            break;
+        case RES_O_ALTITUDE:
+            utils_textToFloat((uint8_t *)rv->value,strlen(rv->value), &tmp);
+            obdData->altitude = tmp;
+            break;
+        case RES_M_LONGITUDE:
+            utils_textToFloat((uint8_t *)rv->value,strlen(rv->value), &tmp);
+            obdData->longitude = tmp;
+            break;
+        case RES_O_RADIUS:
+            utils_textToFloat((uint8_t *)rv->value,strlen(rv->value), &tmp);
+            obdData->radius = tmp;
+            break;
+        case RES_O_SPEED:
+            utils_textToFloat((uint8_t *)rv->value,strlen(rv->value), &tmp);
+            obdData->speed = tmp;
+            break;
+        case RES_M_TIMESTAMP:
+            utils_textToInt((uint8_t*)rv->value,strlen(rv->value), &obdData->timestamp);
+            break;
+        default:
+            fprintf(stderr,"gps resId=%d not supported \n", rv->resId);
+            break;
+    }
+}
+
+void update_location_measurement(const ObjectData* sensorData, lwm2m_context_t* context)
+{
+    //first, convert ObjectData to location_data_t
+    assert(sensorData->objId == LWM2M_LOCATION_OBJECT_ID && sensorData->instNum == 1);
+
+    lwm2m_object_t* Obj = (lwm2m_object_t*)LWM2M_LIST_FIND(context->objectList,sensorData->objId);
+    if(Obj != NULL)
+    {
+        location_data_t* gpsData = (location_data_t*)Obj->userData;
+        const InstanceData* instData = &sensorData->data[0];
+
+        for(int i = 0; i < instData->resNum; i++)
+        {
+            setResourceValue(&instData->resValues[i], gpsData);
+        }
+
+        markSensorValueChangedToTrigLaterReport(sensorData->objId, context);
+    }
 }
 
 /**

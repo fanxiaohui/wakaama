@@ -133,7 +133,7 @@ void update_vehicle_measurement(const ObjectData* sensorData, lwm2m_context_t* c
         ObdData* obdData = (ObdData*)Obj->userData;
         const InstanceData* instData = &sensorData->data[0];
 
-        for(int i = 0; i < instData->resNum; i++)
+        for(int i = 0; i < instData->resNum; i++)//note:here can't directly copy sensorData->data[0] to Obj->userData, since userData's resId can't be changed after initialize
         {
             setResourceValue(&instData->resValues[i], obdData);
         }

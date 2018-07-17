@@ -97,7 +97,7 @@ extern lwm2m_object_t * create_temperature_object(void);
 extern void free_object_vehicle(lwm2m_object_t * object);
 extern void free_object_temperature(lwm2m_object_t * object);
 extern void display_vehicle_object(lwm2m_object_t * object);
-extern void stub_updateLocation(lwm2m_context_t *context);
+
 extern int createUnixSocket();
 extern char* receiveIpcData(int fd);
 extern ObjectData* convertJsonToObjectData(const char *const jsonData);
@@ -1233,9 +1233,6 @@ int main(int argc, char *argv[])
         FD_SET(fdIpc,&readfds);
         FD_SET(STDIN_FILENO, &readfds);
 
-        {//zengliang,GPS location
-            stub_updateLocation(lwm2mH);//TODO: update by IPC data
-        }
 
         /*
          * This function does two things:
