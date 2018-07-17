@@ -26,12 +26,21 @@
  */
 #ifdef LWM2M_CLIENT_MODE
 
-#define RES_ID_M_STATE      0   //0-idle,1-driving,2-charging
-#define RES_ID_M_SPEED      1   //vehicle speed
-#define RES_ID_M_RPM        2   //engine speed
-#define RES_ID_M_TIMESTAMP  3   //sample time
+#define RES_ID_V_STATE      0   //0-idle,1-driving,2-charging
+#define RES_ID_V_SPEED      1   //vehicle speed
+#define RES_ID_V_RPM        2   //engine speed
+#define RES_ID_V_TIMESTAMP  3   //sample time
+#define RES_ID_V_FAULT_NUM  4
+#define RES_ID_V_ENG_LOAD   5
+#define RES_ID_V_ENG_FUEL_RATE  6
+#define RES_ID_V_ENG_COOL_TEMPERATURE  7
+#define RES_ID_V_TOTAL_HOURS   8
+#define RES_ID_TRIP_DISTANCE  9
+#define RES_ID_BATTERY_VOLTAGE 10
+#define RES_ID_EMERGE_BRAKE  11
 
-#define RES_NUM_VEHICLE     4
+
+#define RES_NUM_VEHICLE     12
 
 typedef InstanceData ObdData;
 
@@ -138,10 +147,18 @@ static void initialResourceIds(ObdData* obdData)
 {
     obdData->instId = 0;
     obdData->resNum = RES_NUM_VEHICLE;
-    obdData->resValues[0].resId = RES_ID_M_STATE;
-    obdData->resValues[1].resId = RES_ID_M_SPEED;
-    obdData->resValues[2].resId = RES_ID_M_RPM;
-    obdData->resValues[3].resId = RES_ID_M_TIMESTAMP;
+    obdData->resValues[0].resId = RES_ID_V_STATE;
+    obdData->resValues[1].resId = RES_ID_V_SPEED;
+    obdData->resValues[2].resId = RES_ID_V_RPM;
+    obdData->resValues[3].resId = RES_ID_V_TIMESTAMP;
+    obdData->resValues[4].resId = RES_ID_V_FAULT_NUM;
+    obdData->resValues[5].resId = RES_ID_V_ENG_LOAD;
+    obdData->resValues[6].resId = RES_ID_V_ENG_FUEL_RATE;
+    obdData->resValues[7].resId = RES_ID_V_ENG_COOL_TEMPERATURE;
+    obdData->resValues[8].resId = RES_ID_V_TOTAL_HOURS;
+    obdData->resValues[9].resId = RES_ID_TRIP_DISTANCE;
+    obdData->resValues[10].resId = RES_ID_BATTERY_VOLTAGE;
+    obdData->resValues[11].resId = RES_ID_EMERGE_BRAKE;
 }
 
 

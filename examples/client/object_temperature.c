@@ -19,9 +19,11 @@
 #define RES_ID_SENSOR_VALUE      5700
 #define RES_ID_SENSOR_UNITS      5701
 #define RES_ID_SENSOR_BATTERY    5800
+#define RES_ID_SENSOR_MODEL      5906
+#define RES_ID_SERIAL_NUM        5907
 #define RES_ID_TIMESTAMP         6021
 
-#define RES_NUM                  10 //total num of above resourceId
+#define RES_NUM                  12 //total num of above resourceId
 
 
 
@@ -95,6 +97,8 @@ static void initialResourceIds(InstanceData* instanceData)
     instanceData->resValues[7].resId = RES_ID_SENSOR_UNITS;
     instanceData->resValues[8].resId = RES_ID_SENSOR_BATTERY;
     instanceData->resValues[9].resId = RES_ID_TIMESTAMP;
+    instanceData->resValues[10].resId = RES_ID_SENSOR_MODEL;
+    instanceData->resValues[11].resId = RES_ID_SERIAL_NUM;
 }
 
 lwm2m_object_t * create_temperature_object(void)

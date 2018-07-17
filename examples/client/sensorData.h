@@ -9,6 +9,7 @@
 #include <memory.h>
 #include "liblwm2m.h"
 #include <stdlib.h>
+#include <stdio.h>
 
 #define  MAX_INSTANCE_PER_OBJ    5
 #define  MAX_RESOURCE_PER_INSTANCE  20
