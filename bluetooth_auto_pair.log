@@ -1,0 +1,265 @@
+
+
+impact@impact-node:~/OBD/codeElm$ sudo ./bluetooth_auto.sh 
+try 1 times connect OBD
+spawn bluetoothctl -a
+[NEW] Controller 14:AB:C5:D9:CC:B2 impact-node [default]
+[NEW] Device 00:1D:A5:68:98:8B OBDII
+Agent registered
+[bluetooth]# scan on
+Discovery started
+[CHG] Controller 14:AB:C5:D9:CC:B2 Discovering: yes
+[NEW] Device 5F:9F:32:DE:8C:B9 5F-9F-32-DE-8C-B9
+[NEW] Device 40:6F:33:8E:2E:EF 40-6F-33-8E-2E-EF
+[NEW] Device 5D:9D:AA:46:20:F3 5D-9D-AA-46-20-F3
+[NEW] Device 7D:08:3F:D4:FA:87 7D-08-3F-D4-FA-87
+[NEW] Device FE:97:18:09:14:36 MOT-U202
+[NEW] Device FE:97:18:09:14:43 MOT-U202
+[NEW] Device 80:00:0B:58:45:5C 5CG5010H17
+[NEW] Device 48:5A:B6:EE:DE:DC CNU403920W
+[NEW] Device C8:FF:28:B6:64:11 N-5CG6150QFV
+[NEW] Device 98:5D:AD:11:E6:6A nokia-edge_026E37
+[NEW] Device 98:5D:AD:11:E6:3D nokia-edge_BE8D43
+[CHG] Device 00:1D:A5:68:98:8B RSSI: -56
+[NEW] Device A8:BE:27:CE:4F:6B Innovation’s iMac
+[bluetooth]# scan off
+[bluetooth]# trust 00:1D:A5:1D:0A:49
+Device 00:1D:A5:1D:0A:49 not available
+[CHG] Device A8:BE:27:CE:4F:6B RSSI is nil
+[CHG] Device 00:1D:A5:68:98:8B RSSI is nil
+[CHG] Device 98:5D:AD:11:E6:3D RSSI is nil
+[CHG] Device 98:5D:AD:11:E6:6A RSSI is nil
+[CHG] Device C8:FF:28:B6:64:11 RSSI is nil
+[CHG] Device 48:5A:B6:EE:DE:DC RSSI is nil
+[CHG] Device 80:00:0B:58:45:5C RSSI is nil
+[CHG] Device FE:97:18:09:14:43 RSSI is nil
+[CHG] Device FE:97:18:09:14:36 RSSI is nil
+[CHG] Device 7D:08:3F:D4:FA:87 RSSI is nil
+[CHG] Device 5D:9D:AA:46:20:F3 RSSI is nil
+[CHG] Device 40:6F:33:8E:2E:EF RSSI is nil
+[CHG] Device 5F:9F:32:DE:8C:B9 RSSI is nil
+Discovery stopped
+[CHG] Controller 14:AB:C5:D9:CC:B2 Discovering: no
+[bluetooth]# pair 00:1D:A5:1D:0A:49
+Device 00:1D:A5:1D:0A:49 not available
+[bluetooth]# 1234
+Invalid command
+[bluetooth]# quit
+Agent unregistered
+[DEL] Controller 14:AB:C5:D9:CC:B2 impact-node [default]
+bluetooth connect fail\n
+try 2 times connect OBD
+spawn bluetoothctl -a
+[bluetooth]# Connected /dev/rfcomm0 to 00:1D:A5:1D:0A:49 on channel 1
+Press CTRL-C for hangup
+[NEW] Controller 14:AB:C5:D9:CC:B2 impact-node [default]
+[NEW] Device A8:BE:27:CE:4F:6B Innovation’s iMac
+[NEW] Device 98:5D:AD:11:E6:3D nokia-edge_BE8D43
+[NEW] Device 98:5D:AD:11:E6:6A nokia-edge_026E37
+[NEW] Device C8:FF:28:B6:64:11 N-5CG6150QFV
+[NEW] Device 48:5A:B6:EE:DE:DC CNU403920W
+[NEW] Device 80:00:0B:58:45:5C 5CG5010H17
+[NEW] Device FE:97:18:09:14:43 MOT-U202
+[NEW] Device FE:97:18:09:14:36 MOT-U202
+[NEW] Device 7D:08:3F:D4:FA:87 7D-08-3F-D4-FA-87
+[NEW] Device 5D:9D:AA:46:20:F3 5D-9D-AA-46-20-F3
+[NEW] Device 40:6F:33:8E:2E:EF 40-6F-33-8E-2E-EF
+[NEW] Device 5F:9F:32:DE:8C:B9 5F-9F-32-DE-8C-B9
+[NEW] Device 00:1D:A5:68:98:8B OBDII
+Agent registered
+[bluetooth]# scan on
+Discovery started
+[CHG] Controller 14:AB:C5:D9:CC:B2 Discovering: yes
+[CHG] Device 40:6F:33:8E:2E:EF RSSI: -63
+[CHG] Device 5D:9D:AA:46:20:F3 RSSI: -80
+[CHG] Device FE:97:18:09:14:43 RSSI: -71
+[CHG] Device 5F:9F:32:DE:8C:B9 RSSI: -61
+[CHG] Device 7D:08:3F:D4:FA:87 RSSI: -91
+[NEW] Device 00:1D:A5:1D:0A:49 V-LINK
+[CHG] Device FE:97:18:09:14:36 RSSI: -69
+[NEW] Device 53:50:6D:06:DF:C0 Steel HR A0
+[CHG] Device C8:FF:28:B6:64:11 RSSI: -46
+[CHG] Device 80:00:0B:58:45:5C RSSI: -44
+[CHG] Device 48:5A:B6:EE:DE:DC RSSI: -77
+[NEW] Device 40:C6:2A:FD:C6:F7 魅蓝3s
+[CHG] Device 98:5D:AD:11:E6:6A RSSI: -58
+[CHG] Device 00:1D:A5:68:98:8B RSSI: -56
+[bluetooth]# scan off
+[bluetooth]# trust 00:1D:A5:1D:0A:49
+[CHG] Device 00:1D:A5:68:98:8B RSSI is nil
+[CHG] Device 98:5D:AD:11:E6:6A RSSI is nil
+[CHG] Device 40:C6:2A:FD:C6:F7 RSSI is nil
+[CHG] Device 48:5A:B6:EE:DE:DC RSSI is nil
+[CHG] Device 80:00:0B:58:45:5C RSSI is nil
+[CHG] Device C8:FF:28:B6:64:11 RSSI is nil
+[CHG] Device 53:50:6D:06:DF:C0 RSSI is nil
+[CHG] Device FE:97:18:09:14:36 RSSI is nil
+[CHG] Device 7D:08:3F:D4:FA:87 RSSI is nil
+[CHG] Device 5F:9F:32:DE:8C:B9 RSSI is nil
+[CHG] Device FE:97:18:09:14:43 RSSI is nil
+[CHG] Device 5D:9D:AA:46:20:F3 RSSI is nil
+[CHG] Device 40:6F:33:8E:2E:EF RSSI is nil
+Discovery stopped
+[CHG] Controller 14:AB:C5:D9:CC:B2 Discovering: no
+[CHG] Device 00:1D:A5:1D:0A:49 Trusted: yes
+Changing 00:1D:A5:1D:0A:49 trust succeeded
+[bluetooth]# pair 00:1D:A5:1D:0A:49
+Attempting to pair with 00:1D:A5:1D:0A:49
+Request PIN code
+[agent] Enter PIN code: 1234
+[CHG] Device 00:1D:A5:1D:0A:49 UUIDs: 00001101-0000-1000-8000-00805f9b34fb
+[CHG] Device 00:1D:A5:1D:0A:49 Paired: yes
+Pairing successful
+[bluetooth]# quit
+Agent unregistered
+[DEL] Controller 14:AB:C5:D9:CC:B2 impact-node [default]
+Can't connect RFCOMM socket: Device or resource busy
+bluetooth connect ok\n
+
+
+
+
+//////////////////////////////////////////////////////////////
+impact@impact-node:~/OBD/codeElm$ sudo ./bluetooth_auto.sh 
+spawn bluetoothctl -a
+[NEW] Controller 14:AB:C5:D9:CC:B2 impact-node [default]
+[NEW] Device 00:1D:A5:1D:0A:49 V-LINK
+[NEW] Device 00:1D:A5:68:98:8B OBDII
+Agent registered
+[bluetooth]# scan on
+Discovery started
+[CHG] Controller 14:AB:C5:D9:CC:B2 Discovering: yes
+[NEW] Device FE:97:18:09:14:43 MOT-U202
+[NEW] Device FE:97:18:09:14:36 MOT-U202
+[NEW] Device 80:00:0B:58:45:5C 5CG5010H17
+[NEW] Device C8:FF:28:B6:64:11 N-5CG6150QFV
+[NEW] Device 48:5A:B6:EE:DE:DC CNU403920W
+[NEW] Device 94:87:E0:B6:82:19 ferryold
+[NEW] Device A8:BE:27:CE:4F:6B Innovation’s iMac
+[CHG] Device 00:1D:A5:1D:0A:49 RSSI: -60
+[CHG] Device 00:1D:A5:68:98:8B RSSI: -55
+[NEW] Device 98:5D:AD:11:E6:6A nokia-edge_026E37
+[NEW] Device 98:5D:AD:11:E6:3D nokia-edge_BE8D43
+[bluetooth]# scan off
+[bluetooth]# trust 00:1D:A5:1D:0A:49
+[CHG] Device 98:5D:AD:11:E6:3D RSSI is nil
+[CHG] Device 98:5D:AD:11:E6:6A RSSI is nil
+[CHG] Device 00:1D:A5:68:98:8B RSSI is nil
+[CHG] Device 00:1D:A5:1D:0A:49 RSSI is nil
+[CHG] Device A8:BE:27:CE:4F:6B RSSI is nil
+[CHG] Device 94:87:E0:B6:82:19 RSSI is nil
+[CHG] Device 48:5A:B6:EE:DE:DC RSSI is nil
+[CHG] Device C8:FF:28:B6:64:11 RSSI is nil
+[CHG] Device 80:00:0B:58:45:5C RSSI is nil
+[CHG] Device FE:97:18:09:14:36 RSSI is nil
+[CHG] Device FE:97:18:09:14:43 RSSI is nil
+Discovery stopped
+[CHG] Controller 14:AB:C5:D9:CC:B2 Discovering: no
+Changing 00:1D:A5:1D:0A:49 trust succeeded
+[bluetooth]# pair 00:1D:A5:1D:0A:49
+Attempting to pair with 00:1D:A5:1D:0A:49
+Failed to pair: org.bluez.Error.AlreadyExists
+[bluetooth]# 1234
+Invalid command
+[bluetooth]# quit
+Agent unregistered
+[DEL] Controller 14:AB:C5:D9:CC:B2 impact-node [default]
+Connected /dev/rfcomm0 to 00:1D:A5:1D:0A:49 on channel 1
+Press CTRL-C for hangup
+bluetooth connect ok\n
+
+//////////////////////////////////////////////
+impact@impact-node:~/OBD$ ./bluetoothctl_auto.sh 00:1D:A5:1D:0A:49
+spawn bluetoothctl -a
+[NEW] Controller 14:AB:C5:D9:CC:B2 impact-node [default]
+[NEW] Device 00:1D:A5:1D:0A:49 V-LINK
+[NEW] Device 00:1D:A5:68:98:8B OBDII
+Agent registered
+[bluetooth]# remove 00:1D:A5:1D:0A:49
+[DEL] Device 00:1D:A5:1D:0A:49 V-LINK
+Device has been removed
+[bluetooth]# scan on
+Discovery started
+[CHG] Controller 14:AB:C5:D9:CC:B2 Discovering: yes
+[NEW] Device 4A:3C:D3:5E:B4:01 4A-3C-D3-5E-B4-01
+[NEW] Device FE:97:18:09:14:43 MOT-U202
+[NEW] Device 5D:E6:64:F1:AB:2D 5D-E6-64-F1-AB-2D
+[NEW] Device FE:97:18:09:14:36 MOT-U202
+[NEW] Device 49:DC:3C:10:D9:3B 49-DC-3C-10-D9-3B
+[NEW] Device 00:1D:A5:1D:0A:49 V-LINK
+[NEW] Device 80:00:0B:58:45:5C 5CG5010H17
+[NEW] Device C8:FF:28:B6:64:11 N-5CG6150QFV
+[CHG] Device 00:1D:A5:68:98:8B RSSI: -61
+[NEW] Device B8:76:3F:D6:B3:CD CNU3139RFM
+[NEW] Device A8:BE:27:CE:4F:6B Innovation’s iMac
+[NEW] Device 98:5D:AD:11:E6:3D nokia-edge_BE8D43
+[NEW] Device 98:5D:AD:11:EA:BE 98-5D-AD-11-EA-BE
+[bluetooth]# scan off
+[bluetooth]# trust 00:1D:A5:1D:0A:49
+[CHG] Device 98:5D:AD:11:EA:BE RSSI is nil
+[CHG] Device 98:5D:AD:11:E6:3D RSSI is nil
+[CHG] Device A8:BE:27:CE:4F:6B RSSI is nil
+[CHG] Device B8:76:3F:D6:B3:CD RSSI is nil
+[CHG] Device 00:1D:A5:68:98:8B RSSI is nil
+[CHG] Device C8:FF:28:B6:64:11 RSSI is nil
+[CHG] Device 80:00:0B:58:45:5C RSSI is nil
+[CHG] Device 00:1D:A5:1D:0A:49 RSSI is nil
+[CHG] Device 49:DC:3C:10:D9:3B RSSI is nil
+[CHG] Device FE:97:18:09:14:36 RSSI is nil
+[CHG] Device 5D:E6:64:F1:AB:2D RSSI is nil
+[CHG] Device FE:97:18:09:14:43 RSSI is nil
+[CHG] Device 4A:3C:D3:5E:B4:01 RSSI is nil
+Discovery stopped
+[CHG] Controller 14:AB:C5:D9:CC:B2 Discovering: no
+[CHG] Device 00:1D:A5:1D:0A:49 Trusted: yes
+Changing 00:1D:A5:1D:0A:49 trust succeeded
+[bluetooth]# pair 00:1D:A5:1D:0A:49
+Attempting to pair with 00:1D:A5:1D:0A:49
+[CHG] Device 00:1D:A5:1D:0A:49 Connected: yes
+Request PIN code
+[agent] Enter PIN code: 1234
+[CHG] Device 00:1D:A5:1D:0A:49 UUIDs: 00001101-0000-1000-8000-00805f9b34fb
+[CHG] Device 00:1D:A5:1D:0A:49 Paired: yes
+Pairing successful
+[V-LINK]# quit
+Agent unregistered
+[DEL] Controller 14:AB:C5:D9:CC:B2 impact-node [default]
+
+/////////////////////////////////////////////////////////////////////////////////////
+
+impact@impact-node:~/OBD$ ./bluetoothctl_auto.sh 00:1D:A5:1D:0A:49
+spawn bluetoothctl -a
+[NEW] Controller 14:AB:C5:D9:CC:B2 impact-node [default]
+[NEW] Device 00:1D:A5:68:98:8B OBDII
+Agent registered
+[bluetooth]# scan on
+Discovery started
+[CHG] Controller 14:AB:C5:D9:CC:B2 Discovering: yes
+[NEW] Device 5E:AD:CA:85:1F:22 5E-AD-CA-85-1F-22
+[NEW] Device 40:6F:33:8E:2E:EF 40-6F-33-8E-2E-EF
+[NEW] Device 62:F6:07:CF:A5:4B 62-F6-07-CF-A5-4B
+[NEW] Device FE:97:18:09:14:36 MOT-U202
+[NEW] Device 75:8A:AB:48:24:EE 75-8A-AB-48-24-EE
+[NEW] Device FE:97:18:09:14:43 MOT-U202
+[bluetooth]# scan off
+[bluetooth]# trust 00:1D:A5:1D:0A:49
+Device 00:1D:A5:1D:0A:49 not available                       fail, not found.
+[CHG] Device FE:97:18:09:14:43 RSSI is nil
+[CHG] Device 75:8A:AB:48:24:EE RSSI is nil
+[CHG] Device FE:97:18:09:14:36 RSSI is nil
+[CHG] Device 62:F6:07:CF:A5:4B RSSI is nil
+[CHG] Device 40:6F:33:8E:2E:EF RSSI is nil
+[CHG] Device 5E:AD:CA:85:1F:22 RSSI is nil
+Discovery stopped
+[CHG] Controller 14:AB:C5:D9:CC:B2 Discovering: no
+[bluetooth]# pair 00:1D:A5:1D:0A:49
+Device 00:1D:A5:1D:0A:49 not available
+[bluetooth]# 1234
+Invalid command
+[bluetooth]# quit
+Agent unregistered
+[DEL] Controller 14:AB:C5:D9:CC:B2 impact-node [default]
+
+
+
+
