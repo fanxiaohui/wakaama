@@ -20,16 +20,20 @@ send "scan on\r"
 sleep 10
 
 send "scan off\r"
-expect "Controller"
+expect "Controller"  
 
-send "trust $address\r"
+
+send "trust $address\r"  
 sleep 2
 
 send "pair $address\r"
-sleep 2
-#default pin code 1234
-send "1234\r"
-expect "successful"
+expect {
+"PIN code" {
+ send "1234\r"
+ }
+"not available"
+}
+
 
 sleep 3
 
