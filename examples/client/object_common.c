@@ -13,7 +13,8 @@
 
 static const ResourceIDList g_resouceIdList[] =
 {
-        {LWM2M_AIR_QUALITY_PM_25, pm25_resIdList, elementsOf(pm25_resIdList)},
+        {LWM2M_AIR_QUALITY_PM_25_OBJECT_ID, pm25_resIdList,     elementsOf(pm25_resIdList)},
+        {LWM2M_HUMIDITY_OBJECT_ID,          humidity_resIdList, elementsOf(humidity_resIdList)},
 };
 
 

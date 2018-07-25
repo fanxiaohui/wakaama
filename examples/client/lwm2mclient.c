@@ -108,7 +108,7 @@ extern void saveSensorDataToLocal(const ObjectData *sensorData, lwm2m_context_t*
 int g_reboot = 0;
 static int g_quit = 0;
 
-#define OBJ_COUNT 11
+#define OBJ_COUNT 12
 lwm2m_object_t * objArray[OBJ_COUNT];
 
 // only backup security and server objects
@@ -1142,8 +1142,15 @@ int main(int argc, char *argv[])
         return -1;
     }
 
-    objArray[10] = create_object_with_uniqInstance(LWM2M_AIR_QUALITY_PM_25);
+    objArray[10] = create_object_with_uniqInstance(LWM2M_AIR_QUALITY_PM_25_OBJECT_ID);
     if (NULL == objArray[10])
+    {
+        fprintf(stderr, "Failed to create PM25 object\r\n");
+        return -1;
+    }
+
+    objArray[11] = create_object_with_uniqInstance(LWM2M_HUMIDITY_OBJECT_ID);
+    if (NULL == objArray[11])
     {
         fprintf(stderr, "Failed to create PM25 object\r\n");
         return -1;

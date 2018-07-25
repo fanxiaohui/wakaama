@@ -12,6 +12,7 @@ extern void free_object(lwm2m_object_t * object);
 extern void update_Object_measurement(const ObjectData* sensorData, lwm2m_context_t* context);
 
 
+
 typedef struct {
     const int  objId;
     const int* resId;
@@ -20,5 +21,7 @@ typedef struct {
 
 
 extern const int pm25_resIdList[2];
+extern const int humidity_resIdList[3];
+
 
 #endif //LWM2MCLIENT_OBJECT_COMMON_H

@@ -34,10 +34,11 @@ void saveSensorDataToLocal(const ObjectData *sensorData, lwm2m_context_t* contex
 {
     static ObjIdFuncMap map[] =
     {
-        {LWM2M_VEHICLE_OBJECT_ID, update_vehicle_measurement},
-        {LWM2M_TEMPERATURE_OBJECT_ID, update_temperature_measurement},
-        {LWM2M_LOCATION_OBJECT_ID, update_location_measurement},
-        {LWM2M_AIR_QUALITY_PM_25, update_Object_measurement},
+        {LWM2M_VEHICLE_OBJECT_ID,           update_vehicle_measurement},
+        {LWM2M_TEMPERATURE_OBJECT_ID,       update_temperature_measurement},
+        {LWM2M_LOCATION_OBJECT_ID,          update_location_measurement},
+        {LWM2M_AIR_QUALITY_PM_25_OBJECT_ID, update_Object_measurement},
+        {LWM2M_HUMIDITY_OBJECT_ID,          update_Object_measurement},
 
     };
 
