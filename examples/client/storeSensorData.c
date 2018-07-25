@@ -5,6 +5,7 @@
 #include <stdio.h>
 #include <liblwm2m.h>
 #include "sensorData.h"
+#include "object_common.h"
 
 extern void update_vehicle_measurement(const ObjectData* sensorData, lwm2m_context_t* context);
 extern void update_temperature_measurement(const ObjectData* sensorData, lwm2m_context_t* context);
@@ -36,6 +37,7 @@ void saveSensorDataToLocal(const ObjectData *sensorData, lwm2m_context_t* contex
         {LWM2M_VEHICLE_OBJECT_ID, update_vehicle_measurement},
         {LWM2M_TEMPERATURE_OBJECT_ID, update_temperature_measurement},
         {LWM2M_LOCATION_OBJECT_ID, update_location_measurement},
+        {LWM2M_AIR_QUALITY_PM_25, update_Object_measurement},
 
     };
 

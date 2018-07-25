@@ -82,6 +82,7 @@
 #include <liblwm2m.h>
 #include <sys/shm.h>
 #include "sensorData.h"
+#include "object_common.h"
 
 #define MAX_PACKET_SIZE 1024
 #define DEFAULT_SERVER_IPV6 "[::1]"
@@ -107,7 +108,7 @@ extern void saveSensorDataToLocal(const ObjectData *sensorData, lwm2m_context_t*
 int g_reboot = 0;
 static int g_quit = 0;
 
-#define OBJ_COUNT 10
+#define OBJ_COUNT 11
 lwm2m_object_t * objArray[OBJ_COUNT];
 
 // only backup security and server objects
@@ -1141,6 +1142,13 @@ int main(int argc, char *argv[])
         return -1;
     }
 
+    objArray[10] = create_object_with_uniqInstance(LWM2M_AIR_QUALITY_PM_25);
+    if (NULL == objArray[10])
+    {
+        fprintf(stderr, "Failed to create PM25 object\r\n");
+        return -1;
+    }
+
     /*
      * The liblwm2m library is now initialized with the functions that will be in
      * charge of communication
@@ -1440,6 +1448,7 @@ int main(int argc, char *argv[])
     free_object_conn_s(objArray[7]);
     acl_ctrl_free_object(objArray[8]);
     free_object_temperature(objArray[9]);
+    free_object(objArray[10]);
 #ifdef MEMORY_TRACE
     if (g_quit == 1)
     {
