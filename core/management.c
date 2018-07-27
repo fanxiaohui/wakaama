@@ -326,6 +326,7 @@ uint8_t dm_handleRequest(lwm2m_context_t * contextP,
             }
             else if (LWM2M_URI_IS_SET_INSTANCE(uriP))
             {
+                LOG_ARG("bufferLen: %d, buffer:%s ", message->payload_len, message->payload);
                 result = object_write(contextP, uriP, format, message->payload, message->payload_len);
             }
             else

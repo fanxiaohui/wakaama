@@ -28,7 +28,7 @@
 /*
  * resources:
  * 0 package                   write
- * 1 package url               write
+ * 1 package url               write,read
  * 2 update                    exec
  * 3 state                     read
  * 5 update result             read
@@ -44,6 +44,9 @@
 #include <stdlib.h>
 #include <string.h>
 #include <ctype.h>
+#include <liblwm2m.h>
+#include <assert.h>
+#include <internals.h>
 
 // ---- private object "Firmware" specific defines ----
 // Resource Id's:
@@ -60,10 +63,28 @@
 #define LWM2M_FIRMWARE_PROTOCOL_NUM     4
 #define LWM2M_FIRMWARE_PROTOCOL_NULL    ((uint8_t)-1)
 
+#define DELIVER_METHOD_PULL_ONLY    0   //client fetch by url
+#define DELIVER_METHOD_PUSH_ONLY    1   //lwm2mserver transfer file to client
+#define DELIVER_METHOD_PUSH_PULL    2
+
+#define FIRMWARE_UPDATE_PROTOCOL_COAP  0
+#define FIRMWARE_UPDATE_PROTOCOL_COAPS  1
+#define FIRMWARE_UPDATE_PROTOCOL_HTTP11  2
+#define FIRMWARE_UPDATE_PROTOCOL_HTTPS11  3
+
+
+#define STATE_IDLE          0   //before downloading or after succesfull update
+#define STATE_DOWNLOADING   1   //after receive url from server
+#define STATE_DOWNLOADED    2   //after downloaded finished, how about download failed ?
+#define STATE_UPDATING      3  //after receive update cmd from server
+
+#define  MAX_URL_LENGTH   256
+
 typedef struct
 {
     uint8_t state;
     uint8_t result;
+    char pkg_url[MAX_URL_LENGTH]; //max 256 char length
     char pkg_name[256];
     char pkg_version[256];
     uint8_t protocol_support[LWM2M_FIRMWARE_PROTOCOL_NUM];
@@ -90,13 +111,14 @@ static uint8_t prv_firmware_read(uint16_t instanceId,
     {
         *dataArrayP = lwm2m_data_new(3);
         if (*dataArrayP == NULL) return COAP_500_INTERNAL_SERVER_ERROR;
-        *numDataP = 6;
+        *numDataP = 7;
         (*dataArrayP)[0].id = 3;
         (*dataArrayP)[1].id = 5;
         (*dataArrayP)[2].id = 6;
         (*dataArrayP)[3].id = 7;
         (*dataArrayP)[4].id = 8;
         (*dataArrayP)[5].id = 9;
+        (*dataArrayP)[6].id = RES_M_PACKAGE_URI;
     }
 
     i = 0;
@@ -105,7 +127,6 @@ static uint8_t prv_firmware_read(uint16_t instanceId,
         switch ((*dataArrayP)[i].id)
         {
         case RES_M_PACKAGE:
-        case RES_M_PACKAGE_URI:
         case RES_M_UPDATE:
             result = COAP_405_METHOD_NOT_ALLOWED;
             break;
@@ -120,7 +141,10 @@ static uint8_t prv_firmware_read(uint16_t instanceId,
             lwm2m_data_encode_int(data->result, *dataArrayP + i);
             result = COAP_205_CONTENT;
             break;
-
+        case RES_M_PACKAGE_URI:
+            lwm2m_data_encode_string(data->pkg_url, *dataArrayP + i);
+            result = COAP_205_CONTENT;
+            break;
         case RES_O_PKG_NAME:
             lwm2m_data_encode_string(data->pkg_name, *dataArrayP + i);
             result = COAP_205_CONTENT;
@@ -190,8 +214,10 @@ static uint8_t prv_firmware_write(uint16_t instanceId,
         return COAP_404_NOT_FOUND;
     }
 
-    i = 0;
+    if(dataArray == NULL) return COAP_500_INTERNAL_SERVER_ERROR;
 
+    i = 0;
+    int length = 0;
     do
     {
         switch (dataArray[i].id)
@@ -203,6 +229,10 @@ static uint8_t prv_firmware_write(uint16_t instanceId,
 
         case RES_M_PACKAGE_URI:
             // URL for download the firmware
+            length = (dataArray->value.asBuffer.length < MAX_URL_LENGTH) ? dataArray->value.asBuffer.length : MAX_URL_LENGTH;
+            strncpy(data->pkg_url, dataArray->value.asBuffer.buffer,length);
+            LOG_ARG("pkgurl=%s \n", data->pkg_url);
+            data->state = STATE_DOWNLOADING;
             result = COAP_204_CHANGED;
             break;
 
@@ -236,16 +266,16 @@ static uint8_t prv_firmware_execute(uint16_t instanceId,
     switch (resourceId)
     {
     case RES_M_UPDATE:
-        if (data->state == 1)
+        if (data->state == STATE_DOWNLOADED)
         {
-            fprintf(stdout, "\n\t FIRMWARE UPDATE\r\n\n");
-            // trigger your firmware download and update logic
-            data->state = 2;
+            LOG("\n\t Begin FIRMWARE UPDATE\r\n\n");
+            data->state = STATE_UPDATING;
             return COAP_204_CHANGED;
         }
         else
         {
-            // firmware update already running
+
+            LOG_ARG("\n\t wrong operation,currState=%d \r\n\n", data->state);
             return COAP_400_BAD_REQUEST;
         }
     default:
@@ -317,19 +347,19 @@ lwm2m_object_t * get_object_firmware(void)
         {
             firmware_data_t *data = (firmware_data_t*)(firmwareObj->userData);
 
-            data->state = 1;
+            data->state = STATE_IDLE;
             data->result = 0;
-            strcpy(data->pkg_name, "lwm2mclient");
+            strcpy(data->pkg_name, "newfirmware");
             strcpy(data->pkg_version, "1.0");
 
             /* Only support CoAP based protocols */
-            data->protocol_support[0] = 0;
-            data->protocol_support[1] = 1;
+            data->protocol_support[0] = FIRMWARE_UPDATE_PROTOCOL_HTTP11;
+            data->protocol_support[1] = FIRMWARE_UPDATE_PROTOCOL_HTTPS11;
             data->protocol_support[2] = LWM2M_FIRMWARE_PROTOCOL_NULL;
             data->protocol_support[3] = LWM2M_FIRMWARE_PROTOCOL_NULL;
 
-           /* Only support push method */
-           data->delivery_method = 1;
+
+           data->delivery_method = DELIVER_METHOD_PULL_ONLY;
         }
         else
         {

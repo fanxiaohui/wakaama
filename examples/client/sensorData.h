@@ -17,6 +17,28 @@
 #define  elementsOf(array) (sizeof(array)/sizeof(array[0]))
 #define  ENSURE_END_WITH_NULL_CHAR(array) {array[elementsOf(array)-1] = '\0';}
 
+/*  these struct is used to encode data when report to lwm2m server
+
+typedef struct{
+    int  resId;
+    char dataType; //'s'=string, 'i'=int, 'f'= float
+
+}Lwm2mResEncodeType;
+
+
+
+typedef struct{
+
+    int ojbId;
+    int resNum;
+    Lwm2mResEncodeType types[MAX_RESOURCE_PER_INSTANCE];
+
+}Lwm2mObjDataType;
+
+Lwm2mObjDataType lwm2m_data_type_map[] = {};
+
+*/
+
 typedef struct {
     int resId;
     char value[MAX_VALUE_LENGTH_PER_RESOURCE];

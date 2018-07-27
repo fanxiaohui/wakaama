@@ -219,6 +219,7 @@ uint8_t object_write(lwm2m_context_t * contextP,
     int size = 0;
 
     LOG_URI(uriP);
+    LOG_ARG("bufferLen: %d, buffer:%s ", length, buffer);
     targetP = (lwm2m_object_t *)LWM2M_LIST_FIND(contextP->objectList, uriP->objectId);
     if (NULL == targetP)
     {
@@ -231,7 +232,7 @@ uint8_t object_write(lwm2m_context_t * contextP,
     else
     {
         size = lwm2m_data_parse(uriP, buffer, length, format, &dataP);
-        if (size == 0)
+        if (size == 0 ||  dataP == NULL )
         {
             result = COAP_406_NOT_ACCEPTABLE;
         }

@@ -1314,6 +1314,7 @@ int main(int argc, char *argv[])
         else if (result > 0)
         {
             uint8_t buffer[MAX_PACKET_SIZE];
+            memset(buffer, 0, sizeof(buffer));//must initialize,otherwise will be random value, this is  a bug found in test.
             int numBytes;
 
             /*

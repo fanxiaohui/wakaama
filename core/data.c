@@ -517,14 +517,14 @@ void lwm2m_data_encode_instances(lwm2m_data_t * subDataP,
 }
 
 int lwm2m_data_parse(lwm2m_uri_t * uriP,
-                     uint8_t * buffer,
-                     size_t bufferLen,
+                     uint8_t * buffer,  //input
+                     size_t bufferLen,   //input
                      lwm2m_media_type_t format,
-                     lwm2m_data_t ** dataP)
+                     lwm2m_data_t ** dataP)  //output
 {
     int res;
 
-    LOG_ARG("format: %s, bufferLen: %d", STR_MEDIA_TYPE(format), bufferLen);
+    LOG_ARG("format: %s, bufferLen: %d, buffer:%s ", STR_MEDIA_TYPE(format), bufferLen, buffer);
     LOG_URI(uriP);
     switch (format)
     {
@@ -553,7 +553,7 @@ int lwm2m_data_parse(lwm2m_uri_t * uriP,
         {
             lwm2m_data_free(1, *dataP);
             *dataP = NULL;
-    }
+        }
         return res;
 
 #ifdef LWM2M_OLD_CONTENT_FORMAT_SUPPORT

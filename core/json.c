@@ -771,6 +771,8 @@ int json_parse(lwm2m_uri_t * uriP,
     recordArray = NULL;
     parsedP = NULL;
 
+
+
     index = prv_skipSpace(buffer, bufferLen);
     if (index == bufferLen) return -1;
 
@@ -1026,7 +1028,7 @@ error:
     {
         lwm2m_free(recordArray);
     }
-    return -1;
+    return 0;
 }
 
 static int prv_serializeValue(lwm2m_data_t * tlvP,
