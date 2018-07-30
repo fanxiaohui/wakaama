@@ -39,6 +39,7 @@
  */
 
 #include "liblwm2m.h"
+#include "sensorData.h"
 
 #include <stdio.h>
 #include <stdlib.h>
@@ -60,6 +61,10 @@
 #define RES_O_UPDATE_PROTOCOL           8
 #define RES_M_UPDATE_METHOD             9
 
+
+
+const static int g_readableResId[7] = {RES_M_PACKAGE_URI,RES_M_STATE,RES_M_UPDATE_RESULT,RES_O_PKG_NAME,RES_O_PKG_VERSION,RES_O_UPDATE_PROTOCOL,RES_M_UPDATE_METHOD};
+
 #define LWM2M_FIRMWARE_PROTOCOL_NUM     4
 #define LWM2M_FIRMWARE_PROTOCOL_NULL    ((uint8_t)-1)
 
@@ -78,7 +83,19 @@
 #define STATE_DOWNLOADED    2   //after downloaded finished, how about download failed ?
 #define STATE_UPDATING      3  //after receive update cmd from server
 
-#define  MAX_URL_LENGTH   256
+#define UPDATE_RESULT_INITIAL   0
+#define UPDATE_RESULT_SUCCESFULL   1
+#define UPDATE_RESULT_NOT_ENOUGH_FLASH_SPACE   2
+#define UPDATE_RESULT_NOT_ENOUGH_RAM   3
+#define UPDATE_RESULT_CONNECTION_LOST_DURING_DOWNLOADING  4
+#define UPDATE_RESULT_INTEGRRITY_CHECK_FAIL  5
+#define UPDATE_RESULT_UNSUPPORT_PACKAGE_TYPE  6
+#define UPDATE_RESULT_INVALID_URL    7
+#define UPDATE_RESULT_FIRMWARE_UPDATE_FAILED  8
+#define UPDATE_RESULT_UNSUPPORT_PROTOCOL   9
+
+
+#define  MAX_URL_LENGTH   256 //maybe include other info, such as md5sum of new package
 
 typedef struct
 {
@@ -96,7 +113,7 @@ static uint8_t prv_firmware_read(uint16_t instanceId,
                                  lwm2m_data_t ** dataArrayP,
                                  lwm2m_object_t * objectP)
 {
-    int i;
+
     uint8_t result;
     firmware_data_t * data = (firmware_data_t*)(objectP->userData);
 
@@ -109,19 +126,15 @@ static uint8_t prv_firmware_read(uint16_t instanceId,
     // is the server asking for the full object ?
     if (*numDataP == 0)
     {
-        *dataArrayP = lwm2m_data_new(3);
+        *numDataP = elementsOf(g_readableResId);
+        *dataArrayP = lwm2m_data_new(*numDataP);
         if (*dataArrayP == NULL) return COAP_500_INTERNAL_SERVER_ERROR;
-        *numDataP = 7;
-        (*dataArrayP)[0].id = 3;
-        (*dataArrayP)[1].id = 5;
-        (*dataArrayP)[2].id = 6;
-        (*dataArrayP)[3].id = 7;
-        (*dataArrayP)[4].id = 8;
-        (*dataArrayP)[5].id = 9;
-        (*dataArrayP)[6].id = RES_M_PACKAGE_URI;
+        for(int i = 0; i<*numDataP; i++)
+        (*dataArrayP)[i].id = g_readableResId[i];
+
     }
 
-    i = 0;
+    int i = 0;
     do
     {
         switch ((*dataArrayP)[i].id)
@@ -199,6 +212,11 @@ static uint8_t prv_firmware_read(uint16_t instanceId,
     return result;
 }
 
+static int checkUrlScheme(const char* url)
+{
+    //if url invalid, data->result = UPDATE_RESULT_INVALID_URL;
+}
+
 static uint8_t prv_firmware_write(uint16_t instanceId,
                                   int numData,
                                   lwm2m_data_t * dataArray,
@@ -232,6 +250,7 @@ static uint8_t prv_firmware_write(uint16_t instanceId,
             length = (dataArray->value.asBuffer.length < MAX_URL_LENGTH) ? dataArray->value.asBuffer.length : MAX_URL_LENGTH;
             strncpy(data->pkg_url, dataArray->value.asBuffer.buffer,length);
             LOG_ARG("pkgurl=%s \n", data->pkg_url);
+            //checkUrlScheme();
             data->state = STATE_DOWNLOADING;
             result = COAP_204_CHANGED;
             break;
@@ -275,7 +294,7 @@ static uint8_t prv_firmware_execute(uint16_t instanceId,
         else
         {
 
-            LOG_ARG("\n\t wrong operation,currState=%d \r\n\n", data->state);
+            LOG_ARG("\n\t can't excute update ,currState=%d \r\n\n", data->state);
             return COAP_400_BAD_REQUEST;
         }
     default:
@@ -348,7 +367,7 @@ lwm2m_object_t * get_object_firmware(void)
             firmware_data_t *data = (firmware_data_t*)(firmwareObj->userData);
 
             data->state = STATE_IDLE;
-            data->result = 0;
+            data->result = UPDATE_RESULT_INITIAL;
             strcpy(data->pkg_name, "newfirmware");
             strcpy(data->pkg_version, "1.0");
 
