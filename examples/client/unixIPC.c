@@ -11,7 +11,8 @@
 #include <errno.h>
 #include "sensorData.h"
 
-#define UNIX_IPC_NAME  "/var/run/lwm2m.sock"   //filename must be absolute path, but file not already exist
+#define LWM2M_SENSOR_REPORT_SOCK  "/var/run/lwm2m.sock"   //filename must be absolute path, but file not already exist
+#define FIRMWARE_UPDATE_SOCK  "/var/run/firmwareUpdate.sock"
 #define MAX_CONNECT_NUM  8     //allow max 8 process pass data to lwm2mclient,which report to lwm2mServer
 #define MAX_PACKET_SIZE 1024
 
@@ -29,11 +30,11 @@ int createUnixSocket()
         exit(EXIT_FAILURE);
     }
 
-    unlink(UNIX_IPC_NAME);
+    unlink(LWM2M_SENSOR_REPORT_SOCK);
 
     struct sockaddr_un server;
     server.sun_family = AF_UNIX;
-    strcpy(server.sun_path, UNIX_IPC_NAME);
+    strcpy(server.sun_path, LWM2M_SENSOR_REPORT_SOCK);
 
     if (bind(fd, (struct sockaddr *) &server, sizeof(server)))
     {
@@ -68,4 +69,23 @@ char* receiveIpcData(int fd)
     }
 
     return (numBytes > 0) ? buffer : NULL;
+}
+
+
+void send_Dgram_FirmwareUpdate(const int ipcfd, const char* buffer)
+{
+    struct sockaddr_un peer;
+    memset(&peer, 0, sizeof(peer));
+    peer.sun_family = AF_UNIX;
+    strcpy(peer.sun_path, FIRMWARE_UPDATE_SOCK);
+
+    //even if peer not run, this program still ok.
+    int numBytes = sendto(ipcfd, buffer, strlen(buffer), 0, (struct sockaddr *)&peer, sizeof(struct sockaddr_un));
+
+    if(numBytes != strlen(buffer))
+    {
+        printf("send_Dgram_FirmwareUpdate error=%d : %s \n",errno,  strerror(errno));
+    }
+    else
+        printf("send_Dgram_FirmwareUpdate ok.\n");
 }

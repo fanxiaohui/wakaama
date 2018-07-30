@@ -107,6 +107,7 @@ extern void saveSensorDataToLocal(const ObjectData *sensorData, lwm2m_context_t*
 
 int g_reboot = 0;
 static int g_quit = 0;
+int g_fdIpc = -1;
 
 #define OBJ_COUNT 12
 lwm2m_object_t * objArray[OBJ_COUNT];
@@ -1205,7 +1206,7 @@ int main(int argc, char *argv[])
 
 
 
-    int fdIpc = createUnixSocket();
+    g_fdIpc = createUnixSocket();
 
     while (0 == g_quit) {
 
@@ -1245,7 +1246,7 @@ int main(int argc, char *argv[])
 
         FD_ZERO(&readfds);
         FD_SET(data.sock, &readfds);
-        FD_SET(fdIpc,&readfds);
+        FD_SET(g_fdIpc,&readfds);
         FD_SET(STDIN_FILENO, &readfds);
 
 
@@ -1415,10 +1416,10 @@ int main(int argc, char *argv[])
                 }
             }
 
-            if(FD_ISSET(fdIpc, &readfds))
+            if(FD_ISSET(g_fdIpc, &readfds))
             {
-                const char* jsonData = receiveIpcData(fdIpc);
-                const ObjectData* sensorData = convertJsonToObjectData(jsonData);
+                const char* rawData = receiveIpcData(g_fdIpc);//TODO: process depend on peer(firmwareupdate, sensor)
+                const ObjectData* sensorData = convertJsonToObjectData(rawData);
                 saveSensorDataToLocal(sensorData, lwm2mH);
 
             }

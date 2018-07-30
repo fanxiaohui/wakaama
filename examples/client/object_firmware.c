@@ -80,7 +80,7 @@ const static int g_readableResId[7] = {RES_M_PACKAGE_URI,RES_M_STATE,RES_M_UPDAT
 
 #define STATE_IDLE          0   //before downloading or after succesfull update
 #define STATE_DOWNLOADING   1   //after receive url from server
-#define STATE_DOWNLOADED    2   //after downloaded finished, how about download failed ?
+#define STATE_DOWNLOAD_FINISHED    2   //after downloaded finished, how about download failed ?
 #define STATE_UPDATING      3  //after receive update cmd from server
 
 #define UPDATE_RESULT_INITIAL   0
@@ -96,6 +96,9 @@ const static int g_readableResId[7] = {RES_M_PACKAGE_URI,RES_M_STATE,RES_M_UPDAT
 
 
 #define  MAX_URL_LENGTH   256 //maybe include other info, such as md5sum of new package
+
+extern int g_fdIpc;
+extern void send_Dgram_FirmwareUpdate(const int ipcfd, const char* buffer);
 
 typedef struct
 {
@@ -215,6 +218,17 @@ static uint8_t prv_firmware_read(uint16_t instanceId,
 static int checkUrlScheme(const char* url)
 {
     //if url invalid, data->result = UPDATE_RESULT_INVALID_URL;
+    static const char* sample = "http://x.x.x.x/";
+    const int minlen = strlen(sample);
+
+    if(strlen(url) > minlen)
+    {
+        if(strstr(url, "http") != NULL)
+            return 1;
+
+    }
+
+    return 0;
 }
 
 static uint8_t prv_firmware_write(uint16_t instanceId,
@@ -249,10 +263,15 @@ static uint8_t prv_firmware_write(uint16_t instanceId,
             // URL for download the firmware
             length = (dataArray->value.asBuffer.length < MAX_URL_LENGTH) ? dataArray->value.asBuffer.length : MAX_URL_LENGTH;
             strncpy(data->pkg_url, dataArray->value.asBuffer.buffer,length);
+            ENSURE_END_WITH_NULL_CHAR(data->pkg_url);
             LOG_ARG("pkgurl=%s \n", data->pkg_url);
-            //checkUrlScheme();
-            data->state = STATE_DOWNLOADING;
-            result = COAP_204_CHANGED;
+            if(checkUrlScheme(data->pkg_url)) {
+                data->state = STATE_DOWNLOADING;
+                result = COAP_204_CHANGED;
+                send_Dgram_FirmwareUpdate(g_fdIpc, data->pkg_url);
+            }else{
+                result = COAP_400_BAD_REQUEST;
+            }
             break;
 
         default:
@@ -285,7 +304,7 @@ static uint8_t prv_firmware_execute(uint16_t instanceId,
     switch (resourceId)
     {
     case RES_M_UPDATE:
-        if (data->state == STATE_DOWNLOADED)
+        if (data->state == STATE_DOWNLOAD_FINISHED)
         {
             LOG("\n\t Begin FIRMWARE UPDATE\r\n\n");
             data->state = STATE_UPDATING;
