@@ -311,9 +311,10 @@ static uint8_t prv_firmware_write(uint16_t instanceId,
                     data->result = UPDATE_RESULT_INITIAL;
                     result = COAP_204_CHANGED;
                     send_Dgram_FirmwareUpdate(g_fdIpc, data->pkg_url);
-                } else if (data->pkg_url[0] == '\0') {  //TODO:
+                } else if (data->pkg_url[0] == '\0') {  //empty string
                     data->state = STATE_IDLE;
                     data->result = UPDATE_RESULT_INITIAL;
+                    result = COAP_204_CHANGED;
                 } else {
                     LOG_ARG("invalid URL:%s",dataArray->value.asBuffer.buffer);
                     result = COAP_400_BAD_REQUEST;
