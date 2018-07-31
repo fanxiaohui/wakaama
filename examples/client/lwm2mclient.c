@@ -81,6 +81,7 @@
 #include <signal.h>
 #include <liblwm2m.h>
 #include <sys/shm.h>
+#include <sys/un.h>
 #include "sensorData.h"
 #include "object_common.h"
 
@@ -100,10 +101,11 @@ extern void free_object_temperature(lwm2m_object_t * object);
 extern void display_vehicle_object(lwm2m_object_t * object);
 
 extern int createUnixSocket();
-extern char* receiveIpcData(int fd);
+extern char* receiveIpcData(int fd, struct sockaddr_un* peer);
 extern ObjectData* convertJsonToObjectData(const char *const jsonData);
 extern void saveSensorDataToLocal(const ObjectData *sensorData, lwm2m_context_t* context);
-
+extern int fromFirmwareProcess(const struct sockaddr_un* peer);
+extern void update_firmwareState(const char* cmdResp, lwm2m_context_t* context);
 
 int g_reboot = 0;
 static int g_quit = 0;
@@ -1418,9 +1420,16 @@ int main(int argc, char *argv[])
 
             if(FD_ISSET(g_fdIpc, &readfds))
             {
-                const char* rawData = receiveIpcData(g_fdIpc);//TODO: process depend on peer(firmwareupdate, sensor)
-                const ObjectData* sensorData = convertJsonToObjectData(rawData);
-                saveSensorDataToLocal(sensorData, lwm2mH);
+                struct sockaddr_un peer;
+                memset(&peer, 0, sizeof(peer));
+                const char* rawData = receiveIpcData(g_fdIpc, &peer);//TODO: process depend on peer(firmwareupdate, sensor)
+                if(fromFirmwareProcess(&peer))
+                {
+                    update_firmwareState(rawData, lwm2mH);
+                }else {
+                    const ObjectData *sensorData = convertJsonToObjectData(rawData);
+                    saveSensorDataToLocal(sensorData, lwm2mH);
+                }
 
             }
         }

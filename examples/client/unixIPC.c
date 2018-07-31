@@ -49,14 +49,14 @@ int createUnixSocket()
 }
 
 
-char* receiveIpcData(int fd)
+char* receiveIpcData(int fd, struct sockaddr_un* peer)
 {
     static char buffer[MAX_PACKET_SIZE];
     memset(buffer, 0, sizeof(buffer));
 
-    struct sockaddr_un client;
-    socklen_t addrLen = sizeof(client);//must initilize addrLen,otherwise will cause recvfrom error occasionally
-    int numBytes = recvfrom(fd, buffer, MAX_PACKET_SIZE, 0, (struct sockaddr *)&client, &addrLen);
+    //struct sockaddr_un peer;
+    socklen_t addrLen = sizeof(struct sockaddr_un);//must initilize addrLen,otherwise will cause recvfrom error occasionally
+    int numBytes = recvfrom(fd, buffer, MAX_PACKET_SIZE, 0, (struct sockaddr *)peer, &addrLen);
     if(numBytes > 0)
     {
         fprintf(stdout, "recvfrom %d bytes: %s \n", numBytes, buffer);
@@ -88,4 +88,10 @@ void send_Dgram_FirmwareUpdate(const int ipcfd, const char* buffer)
     }
     else
         printf("send_Dgram_FirmwareUpdate ok.\n");
+}
+
+
+int fromFirmwareProcess(const struct sockaddr_un* peer)
+{
+    return (strcmp(peer->sun_path,FIRMWARE_UPDATE_SOCK) == 0);
 }

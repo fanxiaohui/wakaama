@@ -123,9 +123,9 @@ static int prv_textSerialize(lwm2m_data_t * dataP,
 
 static int prv_setBuffer(lwm2m_data_t * dataP,
                          uint8_t * buffer,
-                         size_t bufferLen)
+                         size_t bufferLen)//Note: if bufferLen == 0, but dataP->value.asBuffer.buffer != NULL;
 {
-    dataP->value.asBuffer.buffer = (uint8_t *)lwm2m_malloc(bufferLen);
+    dataP->value.asBuffer.buffer = (uint8_t *)lwm2m_malloc(bufferLen);//if bufferLen==0, return a not null point in x86.how about on arm
     if (dataP->value.asBuffer.buffer == NULL)
     {
         return 0;
