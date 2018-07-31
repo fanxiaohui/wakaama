@@ -84,10 +84,12 @@ void send_Dgram_FirmwareUpdate(const int ipcfd, const char* buffer)
 
     if(numBytes != strlen(buffer))
     {
-        printf("send_Dgram_FirmwareUpdate error=%d : %s \n",errno,  strerror(errno));
+        fprintf(stdout, "send_Dgram_FirmwareUpdate error=%d : %s \n",errno,  strerror(errno));
     }
-    else
-        printf("send_Dgram_FirmwareUpdate ok.\n");
+    else {
+        fprintf(stdout, "send_Dgram_FirmwareUpdate ok.\n");
+    }
+    fflush(stdout);
 }
 
 

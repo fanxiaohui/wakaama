@@ -14,6 +14,7 @@ extern void update_location_measurement(const ObjectData* sensorData, lwm2m_cont
 
 void printSensorData(const ObjectData *sensorData)
 {
+#ifdef WITH_LOGS
     fprintf(stdout,"objId=%d \n", sensorData->objId);
     for(int i = 0; i< sensorData->instNum; i++)
     {
@@ -26,6 +27,7 @@ void printSensorData(const ObjectData *sensorData)
         }
     }
     fflush(stdout);
+#endif
 }
 
 

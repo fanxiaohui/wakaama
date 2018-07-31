@@ -828,6 +828,39 @@ void print_usage(void)
     fprintf(stdout, "\r\n");
 }
 
+void print_lwm2mState(const int state)
+{
+    static int printFreqency = 0;
+    //fprintf(stdout, " -> State: ");
+    switch (state)
+    {
+        case STATE_INITIAL:
+            fprintf(stdout, " -> State: STATE_INITIAL\r\n");
+            break;
+        case STATE_BOOTSTRAP_REQUIRED:
+            fprintf(stdout, " -> State: STATE_BOOTSTRAP_REQUIRED\r\n");
+            break;
+        case STATE_BOOTSTRAPPING:
+            fprintf(stdout, " -> State: STATE_BOOTSTRAPPING\r\n");
+            break;
+        case STATE_REGISTER_REQUIRED:
+            fprintf(stdout, " -> State: STATE_REGISTER_REQUIRED\r\n");
+            break;
+        case STATE_REGISTERING:
+            fprintf(stdout, " -> State: STATE_REGISTERING\r\n");
+            break;
+        case STATE_READY:
+            if(++printFreqency >= 30) {
+                fprintf(stdout, " -> State: STATE_READY\r\n");
+                printFreqency = 0;
+            }
+            break;
+        default:
+            fprintf(stdout, " -> State: Unknown...\r\n");
+            break;
+    }
+}
+
 int main(int argc, char *argv[])
 {
     client_data_t data;
@@ -1260,31 +1293,9 @@ int main(int argc, char *argv[])
          */
 
         result = lwm2m_step(lwm2mH, &(tv.tv_sec));
-        fprintf(stdout, " -> State: ");
-        switch (lwm2mH->state)
-        {
-        case STATE_INITIAL:
-            fprintf(stdout, "STATE_INITIAL\r\n");
-            break;
-        case STATE_BOOTSTRAP_REQUIRED:
-            fprintf(stdout, "STATE_BOOTSTRAP_REQUIRED\r\n");
-            break;
-        case STATE_BOOTSTRAPPING:
-            fprintf(stdout, "STATE_BOOTSTRAPPING\r\n");
-            break;
-        case STATE_REGISTER_REQUIRED:
-            fprintf(stdout, "STATE_REGISTER_REQUIRED\r\n");
-            break;
-        case STATE_REGISTERING:
-            fprintf(stdout, "STATE_REGISTERING\r\n");
-            break;
-        case STATE_READY:
-            fprintf(stdout, "STATE_READY\r\n");
-            break;
-        default:
-            fprintf(stdout, "Unknown...\r\n");
-            break;
-        }
+
+        print_lwm2mState(lwm2mH->state);
+
         if (result != 0)
         {
             fprintf(stderr, "lwm2m_step() failed: 0x%X\r\n", result);
@@ -1305,7 +1316,11 @@ int main(int argc, char *argv[])
          * This part will set up an interruption until an event happen on SDTIN or the socket until "tv" timed out (set
          * with the precedent function)
          */
+
+
         result = select(FD_SETSIZE, &readfds, NULL, NULL, &tv);//zengliang: not use FD_SETSIZE to save cpu
+
+
 
         if (result < 0)
         {

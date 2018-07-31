@@ -166,7 +166,8 @@ int connection_send(connection_t *connP,
     int nbSent;
     size_t offset;
 
-#ifdef WITH_LOGS
+#ifdef HELPFUL_LOGS
+//#error "Connection.c"
     char s[INET6_ADDRSTRLEN];
     in_port_t port;
 

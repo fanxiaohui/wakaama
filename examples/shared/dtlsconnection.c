@@ -128,7 +128,9 @@ int send_data(dtls_connection_t *connP,
     int nbSent;
     size_t offset;
 
-#ifdef WITH_LOGS
+
+#ifdef HELPFUL_LOGS
+//#error "dtlsconnection.c"
     char s[INET6_ADDRSTRLEN];
     in_port_t port;
 
@@ -147,9 +149,10 @@ int send_data(dtls_connection_t *connP,
         port = saddr->sin6_port;
     }
 
-    fprintf(stderr, "Sending %d bytes to [%s]:%hu\r\n", length, s, ntohs(port));
+    fprintf(stdout, "Sending %d bytes to [%s]:%hu\r\n", length, s, ntohs(port));
 
-    output_buffer(stderr, buffer, length, 0);
+    output_buffer(stdout, buffer, length, 0);
+    fflush(stdout);
 #endif
 
     offset = 0;
