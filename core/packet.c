@@ -440,7 +440,7 @@ uint8_t message_send(lwm2m_context_t * contextP,
     if (pktBuffer != NULL)
     {
         pktBufferLen = coap_serialize_message(message, pktBuffer);
-        LOG_ARG("coap_serialize_message() returned %d", pktBufferLen);
+        fprintf(stdout, "coap_serialize_message() bytes= %d \n", (int)pktBufferLen);
         if (0 != pktBufferLen)
         {
             result = lwm2m_buffer_send(sessionH, pktBuffer, pktBufferLen, contextP->userData);

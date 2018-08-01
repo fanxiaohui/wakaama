@@ -205,7 +205,7 @@ uint8_t dm_handleRequest(lwm2m_context_t * contextP,
 
             if (IS_OPTION(message, COAP_OPTION_OBSERVE))
             {
-                LOG("receive_observe_request.");
+                fprintf(stdout, "receive_observe_request.");
                 lwm2m_data_t * dataP = NULL;
                 int size = 0;
 
@@ -232,7 +232,8 @@ uint8_t dm_handleRequest(lwm2m_context_t * contextP,
                         else
                         {
                             length = (size_t)res;
-                            LOG_ARG("Observe Request[/%d/%d/%d]: %.*s\n", uriP->objectId, uriP->instanceId, uriP->resourceId, length, buffer);
+                            //LOG_ARG("Observe Request[/%d/%d/%d]: %.*s\n", uriP->objectId, uriP->instanceId, uriP->resourceId, length, buffer);
+                            fprintf(stdout,"Observe Request[/%d/%d/%d]: %.*s\n", uriP->objectId, uriP->instanceId, uriP->resourceId, (int)length, buffer);
                         }
                     }
                     lwm2m_data_free(size, dataP);
