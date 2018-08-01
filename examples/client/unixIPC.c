@@ -56,7 +56,7 @@ char* receiveIpcData(int fd, struct sockaddr_un* peer)
 
     //struct sockaddr_un peer;
     socklen_t addrLen = sizeof(struct sockaddr_un);//must initilize addrLen,otherwise will cause recvfrom error occasionally
-    int numBytes = recvfrom(fd, buffer, MAX_PACKET_SIZE, 0, (struct sockaddr *)peer, &addrLen);
+    int numBytes = recvfrom(fd, buffer, MAX_PACKET_SIZE-1, 0, (struct sockaddr *)peer, &addrLen);
     if(numBytes > 0)
     {
         fprintf(stdout, "recvfrom %d bytes: %s \n", numBytes, buffer);
