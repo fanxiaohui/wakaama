@@ -850,7 +850,7 @@ void print_lwm2mState(const int state)
             fprintf(stdout, " -> State: STATE_REGISTERING\r\n");
             break;
         case STATE_READY:
-            if(++printFreqency >= 30) {
+            if(++printFreqency >= 120) {
                 fprintf(stdout, " -> State: STATE_READY\r\n");
                 printFreqency = 0;
             }
@@ -1422,15 +1422,7 @@ int main(int argc, char *argv[])
                      */
                     handle_command(commands, (char*)buffer);
                 }
-                if (g_quit == 0)
-                {
-                    fprintf(stdout, "\r\n> ");
-                    fflush(stdout);
-                }
-                else
-                {
-                    fprintf(stdout, "\r\n");
-                }
+
             }
 
             if(FD_ISSET(g_fdIpc, &readfds))
