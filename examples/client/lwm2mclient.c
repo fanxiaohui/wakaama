@@ -850,10 +850,6 @@ void print_lwm2mState(const int state)
             fprintf(stdout, " -> State: STATE_REGISTERING\r\n");
             break;
         case STATE_READY:
-            if(++printFreqency >= 120) {
-                fprintf(stdout, " -> State: STATE_READY\r\n");
-                printFreqency = 0;
-            }
             break;
         default:
             fprintf(stdout, " -> State: Unknown...\r\n");

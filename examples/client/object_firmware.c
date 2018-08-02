@@ -305,7 +305,7 @@ static uint8_t prv_firmware_write(uint16_t instanceId,
                                                                              : MAX_URL_LENGTH;
                 strncpy(data->pkg_url, dataArray->value.asBuffer.buffer, length);//if length == 0, strncpy do nothing.
                 ENSURE_END_WITH_NULL_CHAR(data->pkg_url);
-                LOG_ARG("pkgurl=%s \n", data->pkg_url);
+                fprintf(stdout,"pkgurl=%s \n", data->pkg_url);
                 if (checkUrlScheme(data->pkg_url)) {
                     data->state = STATE_DOWNLOADING;
                     data->result = UPDATE_RESULT_INITIAL;
@@ -354,7 +354,7 @@ static uint8_t prv_firmware_execute(uint16_t instanceId,
     case RES_M_UPDATE:
         if (data->state == STATE_DOWNLOAD_FINISHED)
         {
-            LOG("\n\t Begin FIRMWARE UPDATE\r\n\n");
+            fprintf(stdout,"\n\t Begin FIRMWARE UPDATE\r\n\n");
             data->state = STATE_UPDATING;
             data->result = UPDATE_RESULT_INITIAL;
             send_Dgram_FirmwareUpdate(g_fdIpc, "UPDATE");//TODO: update with paras,eg:date ?
@@ -363,7 +363,7 @@ static uint8_t prv_firmware_execute(uint16_t instanceId,
         else
         {
 
-            LOG_ARG("\n\t can't excute update ,currState=%d \r\n\n", data->state);
+            fprintf(stdout,"\n\t can't excute update ,currState=%d \r\n\n", data->state);
             return COAP_400_BAD_REQUEST;
         }
     default:
