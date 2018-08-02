@@ -113,7 +113,7 @@ typedef struct
 
 void update_firmwareState(const char* cmdResp, lwm2m_context_t* context)//update state when receive resp from firmwareUpdateProcess
 {
-    LOG_ARG("cmdResp: %s ",cmdResp);
+    fprintf(stdout,"cmdResp: %s ",cmdResp);
     lwm2m_object_t* objectP = (lwm2m_object_t*)LWM2M_LIST_FIND(context->objectList, LWM2M_FIRMWARE_UPDATE_OBJECT_ID);
     if(objectP) {
         firmware_data_t *data = (firmware_data_t *) (objectP->userData);
@@ -126,7 +126,7 @@ void update_firmwareState(const char* cmdResp, lwm2m_context_t* context)//update
                 }else if(strcmp(cmdResp,"DL_FAIL") == 0){
                     data->state = STATE_IDLE;//TODO:confirm with impact
                 }else{
-                    LOG("wrong resp");
+                    fprintf(stderr,"wrong resp");
                 }
 
                 break;
@@ -137,15 +137,16 @@ void update_firmwareState(const char* cmdResp, lwm2m_context_t* context)//update
                 }else if(strcmp(cmdResp,"UP_FAIL") == 0){
                     data->result = UPDATE_RESULT_FIRMWARE_UPDATE_FAILED;
                 }else{
-                    LOG("wrong resp");
+                    fprintf(stderr,"wrong resp");
                 }
                 break;
             default:
-                LOG("wrong resp");
+                fprintf(stdout, "wrong resp");
                 break;
         }
 
-        LOG_ARG("oldState =%d,  newState=%d ",oldState, data->state);
+        fprintf(stdout,"oldState =%d,  newState=%d ",oldState, data->state);
+        fflush(stdout);
     }
 }
 

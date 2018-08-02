@@ -857,6 +857,24 @@ void print_lwm2mState(const int state)
     }
 }
 
+int getMaxfd(const int* fdList, int num){
+
+    int max = 0;
+
+    if(fdList != NULL && num > 0){
+        max = fdList[0];
+        for(int i = 0; i < num ; i++)
+        {
+            if(fdList[i] > max)
+                max = fdList[i];
+        }
+
+    }
+
+    return max;
+}
+
+
 int main(int argc, char *argv[])
 {
     client_data_t data;
@@ -1239,6 +1257,9 @@ int main(int argc, char *argv[])
 
     g_fdIpc = createUnixSocket();
 
+    int fdList[] = {data.sock, g_fdIpc, STDIN_FILENO};//be consistent with select
+    int maxFd = getMaxfd(fdList, elementsOf(fdList));
+
     while (0 == g_quit) {
 
         struct timeval tv;
@@ -1314,7 +1335,7 @@ int main(int argc, char *argv[])
          */
 
 
-        result = select(FD_SETSIZE, &readfds, NULL, NULL, &tv);//zengliang: not use FD_SETSIZE to save cpu
+        result = select(maxFd+1, &readfds, NULL, NULL, &tv);//zengliang: not use FD_SETSIZE to save cpu
 
 
 
