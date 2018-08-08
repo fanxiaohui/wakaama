@@ -146,6 +146,7 @@ static uint8_t obdAddr_write(uint16_t instanceId,
 			}
 		}else{
 			fprintf(stdout, "empty obd address \n");
+			result = COAP_400_BAD_REQUEST;
 		}
 		break;
 
