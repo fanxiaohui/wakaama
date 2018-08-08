@@ -47,7 +47,7 @@
 
 typedef InstanceData ObdData;
 
-
+extern int writeFile(const char* filename,  const char* data);
 
 static uint8_t fetchValueById(const ObdData *locDataP,
                               lwm2m_data_t *dataP)
@@ -133,8 +133,12 @@ static uint8_t obdAddr_write(uint16_t instanceId,
 
 				fprintf(stdout,"obdBle addr=%s \n", data->resValues[RES_ID_OBD_BLE_ADDRESS].value);
 
-				send_Dgram(g_fdIpc, OBD_REPORT_SOCK , data->resValues[RES_ID_OBD_BLE_ADDRESS].value);
-				result = COAP_204_CHANGED;
+				//send_Dgram(g_fdIpc, OBD_DAEMON_SOCK , data->resValues[RES_ID_OBD_BLE_ADDRESS].value);
+				//write obd address to file
+				if(writeFile(OBD_BLUE_ADDR, data->resValues[RES_ID_OBD_BLE_ADDRESS].value))
+					result = COAP_204_CHANGED;
+				else
+					result = COAP_500_INTERNAL_SERVER_ERROR;
 			}
 			else {
 				fprintf(stdout, "invalid obd address:%s",dataArray->value.asBuffer.buffer);
