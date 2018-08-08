@@ -317,7 +317,7 @@ static uint8_t prv_firmware_write(uint16_t instanceId,
                     data->result = UPDATE_RESULT_INITIAL;
                     result = COAP_204_CHANGED;
                 } else {
-                    LOG_ARG("invalid URL:%s",dataArray->value.asBuffer.buffer);
+                	fprintf(stdout,"invalid URL:%s",dataArray->value.asBuffer.buffer);
                     result = COAP_400_BAD_REQUEST;
                 }
             }

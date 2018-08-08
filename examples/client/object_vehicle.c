@@ -8,6 +8,7 @@
 #include <string.h>
 #include <assert.h>
 #include "sensorData.h"
+#include "unixIPC.h"
 
 /*
  *  Object     |      | Multiple  |     | Description                   |
@@ -38,11 +39,15 @@
 #define RES_ID_TRIP_DISTANCE  9
 #define RES_ID_BATTERY_VOLTAGE 10
 #define RES_ID_EMERGE_BRAKE  11
+#define RES_ID_OBD_BLE_ADDRESS   12
 
 
-#define RES_NUM_VEHICLE     12
+#define RES_NUM_VEHICLE     13
+#define OBD_BLE_ADDRESS_LEN  17 //XX:XX:XX:XX:XX:XX
 
 typedef InstanceData ObdData;
+
+
 
 static uint8_t fetchValueById(const ObdData *locDataP,
                               lwm2m_data_t *dataP)
@@ -76,7 +81,7 @@ static uint8_t prv_vehicle_read(uint16_t instanceId,
 
     if (*numResourceId == 0)     // full object, readable resources!
     {
-        *numResourceId  = RES_NUM_VEHICLE;
+        *numResourceId  = RES_NUM_VEHICLE;//all resId is readble
         *tlvArrayP = lwm2m_data_new(*numResourceId);
         if (*tlvArrayP == NULL) return COAP_500_INTERNAL_SERVER_ERROR;
 
@@ -95,6 +100,60 @@ static uint8_t prv_vehicle_read(uint16_t instanceId,
 
     return result;
 }
+
+static uint8_t obdAddr_write(uint16_t instanceId,
+                                  int numData,
+                                  lwm2m_data_t * dataArray,
+                                  lwm2m_object_t * objectP)
+{
+
+    uint8_t result = COAP_500_INTERNAL_SERVER_ERROR;
+    ObdData * data = (ObdData*)(objectP->userData);
+
+    // this is a single instance object
+    if (instanceId != 0 || numData != 1)
+    {
+        return COAP_404_NOT_FOUND;
+    }
+
+    if(dataArray == NULL) return COAP_500_INTERNAL_SERVER_ERROR;
+
+
+    int length = 0;
+    switch (dataArray[0].id)
+	{
+	case RES_ID_OBD_BLE_ADDRESS:
+
+		if(dataArray->value.asBuffer.buffer) {
+
+			if (dataArray->value.asBuffer.length >= OBD_BLE_ADDRESS_LEN) {
+				memset(data->resValues[RES_ID_OBD_BLE_ADDRESS].value,  0,  MAX_VALUE_LENGTH_PER_RESOURCE);
+				strncpy(data->resValues[RES_ID_OBD_BLE_ADDRESS].value, dataArray->value.asBuffer.buffer, OBD_BLE_ADDRESS_LEN);
+				data->resValues[RES_ID_OBD_BLE_ADDRESS].value[OBD_BLE_ADDRESS_LEN] = '\0';
+
+				fprintf(stdout,"obdBle addr=%s \n", data->resValues[RES_ID_OBD_BLE_ADDRESS].value);
+
+				send_Dgram(g_fdIpc, OBD_REPORT_SOCK , data->resValues[RES_ID_OBD_BLE_ADDRESS].value);
+				result = COAP_204_CHANGED;
+			}
+			else {
+				fprintf(stdout, "invalid obd address:%s",dataArray->value.asBuffer.buffer);
+				result = COAP_400_BAD_REQUEST;
+			}
+		}else{
+			fprintf(stdout, "empty obd address \n");
+		}
+		break;
+
+	default:
+		result = COAP_405_METHOD_NOT_ALLOWED;
+	}
+
+
+
+    return result;
+}
+
 
 void display_vehicle_object(lwm2m_object_t * object)
 {
@@ -159,6 +218,7 @@ static void initialResourceIds(ObdData* obdData)
     obdData->resValues[9].resId = RES_ID_TRIP_DISTANCE;
     obdData->resValues[10].resId = RES_ID_BATTERY_VOLTAGE;
     obdData->resValues[11].resId = RES_ID_EMERGE_BRAKE;
+    obdData->resValues[12].resId = RES_ID_OBD_BLE_ADDRESS;
 }
 
 
@@ -192,6 +252,7 @@ lwm2m_object_t * create_object_vehicle(void)
         // Those function will be called when a read query is made by the server.
         // In fact the library don't need to know the resources of the object, only the server does.
         //
+        vehicleObj->writeFunc   =  obdAddr_write;
         vehicleObj->readFunc    = prv_vehicle_read;
         vehicleObj->userData    = lwm2m_malloc(sizeof(ObdData));//for single instance object, lwm2m_object_t.userData is used to store sensor data;
 
