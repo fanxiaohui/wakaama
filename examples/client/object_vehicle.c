@@ -135,7 +135,7 @@ static uint8_t obdAddr_write(uint16_t instanceId,
 
 				//send_Dgram(g_fdIpc, OBD_DAEMON_SOCK , data->resValues[RES_ID_OBD_BLE_ADDRESS].value);
 				//write obd address to file
-				if(writeFile(OBD_BLUE_ADDR, data->resValues[RES_ID_OBD_BLE_ADDRESS].value))
+				if(writeFile(OBD_BLUE_ADDR_FILE, data->resValues[RES_ID_OBD_BLE_ADDRESS].value))
 					result = COAP_204_CHANGED;
 				else
 					result = COAP_500_INTERNAL_SERVER_ERROR;

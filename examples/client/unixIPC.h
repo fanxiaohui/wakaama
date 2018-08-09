@@ -12,7 +12,7 @@
 #define FIRMWARE_UPDATE_SOCK      "/var/run/firmwareUpdate.sock" //semd download and upgrade cmd to firmware process
 #define OBD_REPORT_SOCK           "/var/run/obdreport.sock"  //obd report data to lwm2mclient via this sock
 //#define OBD_DAEMON_SOCK          "/var/run/obddaemon.sock"   //
-#define OBD_BLUE_ADDR             "/appstore/lwm2m/obdAddr.txt"
+#define OBD_BLUE_ADDR_FILE             "/appstore/lwm2m/obdAddr.txt" //be used by shell script bluetooth_auto.sh
 
 
 extern int g_fdIpc;
