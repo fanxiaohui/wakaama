@@ -7,6 +7,7 @@
 #include <assert.h>
 #include <stdio.h>
 #include "sensorData.h"
+#include "unixIPC.h"
 
 #ifdef LWM2M_CLIENT_MODE
 
@@ -25,6 +26,7 @@
 
 #define RES_NUM                  12 //total num of above resourceId
 
+#define MAX_MEASURE_PERIOD     3600 //second
 
 
 typedef struct _prv_instance_
@@ -101,6 +103,88 @@ static void initialResourceIds(InstanceData* instanceData)
     instanceData->resValues[11].resId = RES_ID_SERIAL_NUM;
 }
 
+
+static void updateLocalResourceValue(const ResourceValue* rv, InstanceData* local)
+{
+    for(int i = 0; i< local->resNum; i++)
+    {
+      if(rv->resId == local->resValues[i].resId)
+      {
+          strcpy(local->resValues[i].value, rv->value);
+          return;
+      }
+    }
+
+    fprintf(stderr, "error: not support resid=%d \n", rv->resId);
+}
+
+static uint8_t parameter_config(uint16_t instanceId,
+                                  int numData,
+                                  lwm2m_data_t * dataArray,
+                                  lwm2m_object_t * objectP)
+{
+
+    uint8_t result;
+    prv_instance_t *  targetP = (prv_instance_t *)lwm2m_list_find(objectP->instanceList, instanceId);
+
+    // this is a single instance object
+    if (instanceId >= MAX_INSTANCE_PER_OBJ)
+    {
+    	fprintf(stdout, "instanceId %d is too large \n", instanceId);
+        return COAP_404_NOT_FOUND;
+    }
+
+    if(targetP == NULL) return COAP_500_INTERNAL_SERVER_ERROR;
+
+    int i = 0;
+    int length = 0;
+    int64_t period = 0;
+    do
+    {
+        switch (dataArray[i].id)
+        {
+        case RES_ID_SENSOR_INTERVAL:
+
+
+			if (1 == lwm2m_data_decode_int(dataArray + i, &period))
+			{
+
+				fprintf(stdout,"new Period=%d \n", (int)period);
+				if (0 < period && period <= MAX_MEASURE_PERIOD) {
+
+					ResourceValue rv;
+					memset(&rv, 0, sizeof(rv));
+					rv.resId = RES_ID_SENSOR_INTERVAL;
+					sprintf(rv.value, "%d", (int)period);
+
+					updateLocalResourceValue(&rv, &targetP->userData);
+
+					char* jsondata = encode_json(LWM2M_TEMPERATURE_OBJECT_ID, instanceId, &rv, WRITE_MODE);
+					send_Dgram(g_fdIpc, LWM2M_KURA_SOCK, jsondata);
+					result = COAP_204_CHANGED;
+
+				} else {
+					fprintf(stdout,"invalid interval:%d \n",(int)period);
+					result = COAP_400_BAD_REQUEST;
+				}
+			}else
+			{
+				fprintf(stdout,"decode error for temperature interval.\n");
+				result = COAP_400_BAD_REQUEST;
+			}
+
+            break;
+
+        default:
+            result = COAP_405_METHOD_NOT_ALLOWED;
+        }
+
+        i++;
+    } while (i < numData && result == COAP_204_CHANGED);
+
+    return result;
+}
+
 lwm2m_object_t * create_temperature_object(void)
 {
 
@@ -135,7 +219,7 @@ lwm2m_object_t * create_temperature_object(void)
          */
         obj->readFunc = resourceValues_read;//readFunc is called to get the value type, so able to serialize
         //obj->discoverFunc = prv_discover;
-        //obj->writeFunc = prv_write;
+        obj->writeFunc = parameter_config;
         //obj->executeFunc = prv_exec;
         //obj->createFunc = prv_create;
         //obj->deleteFunc = prv_delete;
@@ -157,19 +241,7 @@ void free_object_temperature(lwm2m_object_t * object)
 }
 
 
-void updateLocalResourceValue(const ResourceValue* rv, InstanceData* local)
-{
-    for(int i = 0; i< local->resNum; i++)
-    {
-      if(rv->resId == local->resValues[i].resId)
-      {
-          strcpy(local->resValues[i].value, rv->value);
-          return;
-      }
-    }
 
-    fprintf(stderr, "error: not support resid=%d \n", rv->resId);
-}
 
 void updateLocalInstanceValue(const InstanceData *input, InstanceData *local)
 {

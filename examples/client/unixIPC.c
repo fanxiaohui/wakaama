@@ -117,3 +117,30 @@ int fromFirmwareProcess(const struct sockaddr_un* peer)
 {
     return (strcmp(peer->sun_path,FIRMWARE_UPDATE_SOCK) == 0);
 }
+
+
+char* encode_json(const int objId, const int instId, const ResourceValue* rv, const char* mode)
+{
+	static char buff[200];
+	memset(buff, 0, sizeof(buff));
+
+	fprintf(stdout,"before encode:%d/%d/%d : %s \n",objId, instId, rv->resId,rv->value);
+	//eg: {"10255":{"0":{"5524":"600","M":"W"}}}
+	int len = 0;
+	len += sprintf(buff+len,"{\"%d\":{\"%d\":{\"%d\":\"%s\",\"M\":\"%s\"}}}", objId, instId, rv->resId, rv->value,mode);
+	buff[len] = 0;
+	fprintf(stdout,"after encode:%s \n",buff);
+	return buff;
+}
+
+
+
+
+
+
+
+
+
+
+
+
