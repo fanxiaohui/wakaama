@@ -1,0 +1,13 @@
+
+1.LwM2M Technical Summary(Png and Pdf),  Client Simulator/DevKit,    LwM2M Issues in GitHub,  
+
+https://github.com/OpenMobileAlliance/OMA_LwM2M_for_Developers/wiki
+
+
+2.Leshan Project that contains java source code for LwM2M Client/Server.
+  Wakaama Project that contains C source code for LwM2M Client/Server.
+  
+3.Eclipse Sandbox - Leshan Server :  https://github.com/eclipse/leshan#test-server-sandbox  
+
+
+
