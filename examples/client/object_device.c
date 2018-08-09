@@ -63,22 +63,25 @@
 #include <string.h>
 #include <ctype.h>
 #include <time.h>
+#include "sensorData.h"
 
+extern int utils_textToInt(uint8_t * buffer,int length,int64_t * dataP);
 
-#define PRV_MANUFACTURER      "Open Mobile Alliance"
-#define PRV_MODEL_NUMBER      "Lightweight M2M Client"
-#define PRV_SERIAL_NUMBER     "8657100077"
+#define PRV_MANUFACTURER      "NSB HZ"
+#define PRV_MODEL_NUMBER      "SensorGateway"
+//#define PRV_SERIAL_NUMBER     "8657100077"
 #define PRV_FIRMWARE_VERSION  "1.0"
-#define PRV_POWER_SOURCE_1    1
-#define PRV_POWER_SOURCE_2    5
-#define PRV_POWER_VOLTAGE_1   3800
-#define PRV_POWER_VOLTAGE_2   5000
-#define PRV_POWER_CURRENT_1   125
-#define PRV_POWER_CURRENT_2   900
+#define PRV_POWER_SOURCE_1    0 //DC power
+#define PRV_POWER_SOURCE_2    1 //internal battery
+#define PRV_POWER_VOLTAGE_1   12000 //mv
+#define PRV_POWER_VOLTAGE_2   12000 //mv
+#define PRV_POWER_CURRENT_1   5000  //mA
+#define PRV_POWER_CURRENT_2   5000  //mA
 #define PRV_BATTERY_LEVEL     100
-#define PRV_MEMORY_FREE       15
+#define PRV_MEMORY_FREE       100000    //KB
+#define PRV_MEMORY_TOTAL      1000000//KB
 #define PRV_ERROR_CODE        0
-#define PRV_TIME_ZONE         "Europe/Berlin"
+#define PRV_TIME_ZONE         "ASIA/BeiJing"
 #define PRV_BINDING_MODE      "U"
 
 #define PRV_OFFSET_MAXLEN   7 //+HH:MM\0 at max
@@ -109,14 +112,20 @@
 #define RES_O_BATTERY_STATUS        20
 #define RES_O_MEMORY_TOTAL          21
 
+#define SERIAL_NUM_LEN              30
+#define VERSION_LEN        16
 
 typedef struct
 {
     int64_t free_memory;
+    int64_t total_memory;
     int64_t error;
     int64_t time;
     uint8_t battery_level;
     char time_offset[PRV_OFFSET_MAXLEN];
+    char serialNum[SERIAL_NUM_LEN];
+    char hardwareVersion[VERSION_LEN];
+    char softwareVersion[VERSION_LEN];
 } device_data_t;
 
 
@@ -161,8 +170,8 @@ static int prv_check_time_offset(char * buffer,
     return 1;
 }
 
-static uint8_t prv_set_value(lwm2m_data_t * dataP,
-                             device_data_t * devDataP)
+static uint8_t prv_set_value(lwm2m_data_t * dataP,   //out
+                             device_data_t * devDataP) //in
 {
     // a simple switch structure is used to respond at the specified resource asked
     switch (dataP->id)
@@ -176,7 +185,7 @@ static uint8_t prv_set_value(lwm2m_data_t * dataP,
         return COAP_205_CONTENT;
 
     case RES_O_SERIAL_NUMBER:
-        lwm2m_data_encode_string(PRV_SERIAL_NUMBER, dataP);
+        lwm2m_data_encode_string(devDataP->serialNum, dataP);
         return COAP_205_CONTENT;
 
     case RES_O_FIRMWARE_VERSION:
@@ -192,48 +201,57 @@ static uint8_t prv_set_value(lwm2m_data_t * dataP,
     case RES_O_AVL_POWER_SOURCES: 
     {
         lwm2m_data_t * subTlvP;
-
+#if 1
+        subTlvP = lwm2m_data_new(1);
+        subTlvP[0].id = 0;
+        lwm2m_data_encode_int(PRV_POWER_SOURCE_1, subTlvP);
+        lwm2m_data_encode_instances(subTlvP, 1, dataP);
+#else
         subTlvP = lwm2m_data_new(2);
-
         subTlvP[0].id = 0;
         lwm2m_data_encode_int(PRV_POWER_SOURCE_1, subTlvP);
         subTlvP[1].id = 1;
         lwm2m_data_encode_int(PRV_POWER_SOURCE_2, subTlvP + 1);
-
         lwm2m_data_encode_instances(subTlvP, 2, dataP);
-
+#endif
         return COAP_205_CONTENT;
     }
 
     case RES_O_POWER_SOURCE_VOLTAGE:
     {
         lwm2m_data_t * subTlvP;
-
+#if 1
+        subTlvP = lwm2m_data_new(1);
+        subTlvP[0].id = 0;
+        lwm2m_data_encode_int(PRV_POWER_VOLTAGE_1, subTlvP);
+        lwm2m_data_encode_instances(subTlvP, 1, dataP);
+#else
         subTlvP = lwm2m_data_new(2);
-
         subTlvP[0].id = 0;
         lwm2m_data_encode_int(PRV_POWER_VOLTAGE_1, subTlvP);
         subTlvP[1].id = 1;
         lwm2m_data_encode_int(PRV_POWER_VOLTAGE_2, subTlvP + 1);
-
         lwm2m_data_encode_instances(subTlvP, 2, dataP);
-
+#endif
         return COAP_205_CONTENT;
     }
 
     case RES_O_POWER_SOURCE_CURRENT:
     {
         lwm2m_data_t * subTlvP;
-
+#if 1
+        subTlvP = lwm2m_data_new(1);
+        subTlvP[0].id = 0;
+        lwm2m_data_encode_int(PRV_POWER_CURRENT_1, &subTlvP[0]);
+        lwm2m_data_encode_instances(subTlvP, 1, dataP);
+#else
         subTlvP = lwm2m_data_new(2);
-
         subTlvP[0].id = 0;
         lwm2m_data_encode_int(PRV_POWER_CURRENT_1, &subTlvP[0]);
         subTlvP[1].id = 1;
         lwm2m_data_encode_int(PRV_POWER_CURRENT_2, &subTlvP[1]);
- 
         lwm2m_data_encode_instances(subTlvP, 2, dataP);
-
+#endif
         return COAP_205_CONTENT;
     }
 
@@ -244,6 +262,10 @@ static uint8_t prv_set_value(lwm2m_data_t * dataP,
     case RES_O_MEMORY_FREE:
         lwm2m_data_encode_int(devDataP->free_memory, dataP);
         return COAP_205_CONTENT;
+
+    case RES_O_MEMORY_TOTAL:
+    	lwm2m_data_encode_int(devDataP->total_memory, dataP);
+    	return COAP_205_CONTENT;
 
     case RES_M_ERROR_CODE:
     {
@@ -262,7 +284,7 @@ static uint8_t prv_set_value(lwm2m_data_t * dataP,
         return COAP_405_METHOD_NOT_ALLOWED;
 
     case RES_O_CURRENT_TIME:
-        lwm2m_data_encode_int(time(NULL) + devDataP->time, dataP);
+        lwm2m_data_encode_int(devDataP->time, dataP);
         return COAP_205_CONTENT;
 
     case RES_O_UTC_OFFSET:
@@ -277,6 +299,19 @@ static uint8_t prv_set_value(lwm2m_data_t * dataP,
         lwm2m_data_encode_string(PRV_BINDING_MODE, dataP);
         return COAP_205_CONTENT;
 
+    case RES_O_HARDWARE_VERSION:
+    	lwm2m_data_encode_string(devDataP->hardwareVersion, dataP);
+    	return COAP_205_CONTENT;
+
+    case RES_O_SOFTWARE_VERSION:
+    	lwm2m_data_encode_string(devDataP->softwareVersion, dataP);
+    	return COAP_205_CONTENT;
+    case RES_O_DEVICE_TYPE:
+    	lwm2m_data_encode_string("MobileGateWay", dataP);
+    	return COAP_205_CONTENT;
+    case RES_O_BATTERY_STATUS:
+    	lwm2m_data_encode_int(0, dataP);
+    	return COAP_205_CONTENT;
     default:
         return COAP_404_NOT_FOUND;
     }
@@ -310,13 +345,19 @@ static uint8_t prv_device_read(uint16_t instanceId,
                 RES_O_POWER_SOURCE_VOLTAGE,
                 RES_O_POWER_SOURCE_CURRENT,
                 RES_O_BATTERY_LEVEL,
+				RES_O_MEMORY_TOTAL,
                 RES_O_MEMORY_FREE,
                 RES_M_ERROR_CODE,
                 //E: RES_O_RESET_ERROR_CODE,
                 RES_O_CURRENT_TIME,
                 RES_O_UTC_OFFSET,
                 RES_O_TIMEZONE,
-                RES_M_BINDING_MODES
+                RES_M_BINDING_MODES,
+				RES_O_DEVICE_TYPE,
+				RES_O_HARDWARE_VERSION,
+				RES_O_SOFTWARE_VERSION,
+				RES_O_BATTERY_STATUS
+
         };
         int nbRes = sizeof(resList)/sizeof(uint16_t);
 
@@ -369,13 +410,16 @@ static uint8_t prv_device_discover(uint16_t instanceId,
             RES_O_POWER_SOURCE_VOLTAGE,
             RES_O_POWER_SOURCE_CURRENT,
             RES_O_BATTERY_LEVEL,
+			RES_O_MEMORY_TOTAL,
             RES_O_MEMORY_FREE,
             RES_M_ERROR_CODE,
             RES_O_RESET_ERROR_CODE,
             RES_O_CURRENT_TIME,
             RES_O_UTC_OFFSET,
             RES_O_TIMEZONE,
-            RES_M_BINDING_MODES
+            RES_M_BINDING_MODES,
+			RES_O_HARDWARE_VERSION,
+			RES_O_SOFTWARE_VERSION
         };
         int nbRes = sizeof(resList) / sizeof(uint16_t);
 
@@ -403,6 +447,7 @@ static uint8_t prv_device_discover(uint16_t instanceId,
             case RES_O_POWER_SOURCE_VOLTAGE:
             case RES_O_POWER_SOURCE_CURRENT:
             case RES_O_BATTERY_LEVEL:
+            case RES_O_MEMORY_TOTAL:
             case RES_O_MEMORY_FREE:
             case RES_M_ERROR_CODE:
             case RES_O_RESET_ERROR_CODE:
@@ -410,6 +455,8 @@ static uint8_t prv_device_discover(uint16_t instanceId,
             case RES_O_UTC_OFFSET:
             case RES_O_TIMEZONE:
             case RES_M_BINDING_MODES:
+            case RES_O_HARDWARE_VERSION:
+            case RES_O_SOFTWARE_VERSION:
                 break;
             default:
                 result = COAP_404_NOT_FOUND;
@@ -423,7 +470,7 @@ static uint8_t prv_device_discover(uint16_t instanceId,
 static uint8_t prv_device_write(uint16_t instanceId,
                                 int numData,
                                 lwm2m_data_t * dataArray,
-                                lwm2m_object_t * objectP)
+                                lwm2m_object_t * objectP) //write info from  lwm2m server
 {
     int i;
     uint8_t result;
@@ -479,6 +526,57 @@ static uint8_t prv_device_write(uint16_t instanceId,
 
     return result;
 }
+
+static void setResourceValue(const ResourceValue* rv, device_data_t* devData)
+{
+
+
+    switch(rv->resId)
+    {
+        case RES_O_SERIAL_NUMBER:
+        	strncpy(devData->serialNum, rv->value, SERIAL_NUM_LEN-1);
+            break;
+        case RES_O_HARDWARE_VERSION:
+        	strncpy(devData->hardwareVersion, rv->value, VERSION_LEN-1);
+            break;
+        case RES_O_SOFTWARE_VERSION:
+        	strncpy(devData->softwareVersion, rv->value, VERSION_LEN-1);
+            break;
+        case RES_O_MEMORY_TOTAL:
+        	utils_textToInt((uint8_t*)rv->value,strlen(rv->value), &devData->total_memory);
+            break;
+        case RES_O_MEMORY_FREE:
+        	utils_textToInt((uint8_t*)rv->value,strlen(rv->value), &devData->free_memory);
+            break;
+        case RES_O_CURRENT_TIME:
+            utils_textToInt((uint8_t*)rv->value,strlen(rv->value), &devData->time);
+            break;
+        default:
+            fprintf(stderr,"device resId=%d not supported \n", rv->resId);
+            break;
+    }
+}
+
+void update_Device_measurement(const ObjectData* sensorData, lwm2m_context_t* context)//update info from kura
+{
+	//assert(sensorData->objId == LWM2M_DEVICE_OBJECT_ID && sensorData->instNum == 1);
+
+	lwm2m_object_t* Obj = (lwm2m_object_t*)LWM2M_LIST_FIND(context->objectList,sensorData->objId);
+	if(Obj != NULL)
+	{
+		device_data_t* deviceData = (device_data_t*)Obj->userData;
+		const InstanceData* instData = &sensorData->data[0];
+
+		for(int i = 0; i < instData->resNum; i++)//note:here can't directly copy sensorData->data[0] to Obj->userData, since userData's resId can't be changed after initialize
+		{
+			setResourceValue(&instData->resValues[i], deviceData);
+		}
+
+		markSensorValueChangedToTrigLaterReport(sensorData->objId, context);
+	}
+
+}
+
 
 static uint8_t prv_device_execute(uint16_t instanceId,
                                   uint16_t resourceId,
@@ -577,9 +675,13 @@ lwm2m_object_t * get_object_device()
         {
             ((device_data_t*)deviceObj->userData)->battery_level = PRV_BATTERY_LEVEL;
             ((device_data_t*)deviceObj->userData)->free_memory   = PRV_MEMORY_FREE;
+            ((device_data_t*)deviceObj->userData)->total_memory   = PRV_MEMORY_TOTAL;
             ((device_data_t*)deviceObj->userData)->error = PRV_ERROR_CODE;
-            ((device_data_t*)deviceObj->userData)->time  = 1367491215;
-            strcpy(((device_data_t*)deviceObj->userData)->time_offset, "+01:00");
+            ((device_data_t*)deviceObj->userData)->time  = lwm2m_gettime();
+            strcpy(((device_data_t*)deviceObj->userData)->time_offset, "+08:00");
+            strcpy(((device_data_t*)deviceObj->userData)->serialNum, "NSB12345678");
+            strcpy(((device_data_t*)deviceObj->userData)->hardwareVersion, "2.0");
+            strcpy(((device_data_t*)deviceObj->userData)->softwareVersion, "2018");
         }
         else
         {
@@ -663,3 +765,4 @@ uint8_t device_change(lwm2m_data_t * dataArray,
     
     return result;
 }
+

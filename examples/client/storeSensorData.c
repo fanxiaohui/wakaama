@@ -10,7 +10,7 @@
 extern void update_vehicle_measurement(const ObjectData* sensorData, lwm2m_context_t* context);
 extern void update_temperature_measurement(const ObjectData* sensorData, lwm2m_context_t* context);
 extern void update_location_measurement(const ObjectData* sensorData, lwm2m_context_t* context);
-
+extern void update_Device_measurement(const ObjectData* sensorData, lwm2m_context_t* context);
 
 void printSensorData(const ObjectData *sensorData)
 {
@@ -41,6 +41,7 @@ void saveSensorDataToLocal(const ObjectData *sensorData, lwm2m_context_t* contex
         {LWM2M_LOCATION_OBJECT_ID,          update_location_measurement},
         {LWM2M_AIR_QUALITY_PM_25_OBJECT_ID, update_Object_measurement},
         {LWM2M_HUMIDITY_OBJECT_ID,          update_Object_measurement},
+		{LWM2M_DEVICE_OBJECT_ID,            update_Device_measurement},
 
     };
 

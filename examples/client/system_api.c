@@ -57,7 +57,7 @@ void init_value_change(lwm2m_context_t * lwm2m)
 
 void system_reboot()
 {
-    exit(1);
+    exit(1);//as lwm2mclient is a daemon service, it will auto restart after stop.
 }
 
 #endif
