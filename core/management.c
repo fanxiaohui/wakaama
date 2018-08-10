@@ -159,6 +159,7 @@ static int prv_readAttributes(multi_option_t * query,
     return 0;
 }
 
+extern void forwardReadRequestToSensor(lwm2m_uri_t * uriP);
 uint8_t dm_handleRequest(lwm2m_context_t * contextP,
                          lwm2m_uri_t * uriP,
                          lwm2m_server_t * serverP,
@@ -194,10 +195,10 @@ uint8_t dm_handleRequest(lwm2m_context_t * contextP,
     }
 
     // TODO: check ACL
-
+    int isReadRequest = 0;
     switch (message->code)
     {
-    case COAP_GET:
+    case COAP_GET: //read/observe/discover request
         {
             uint8_t * buffer = NULL;
             size_t length = 0;
@@ -208,7 +209,7 @@ uint8_t dm_handleRequest(lwm2m_context_t * contextP,
                 fprintf(stdout, "receive_observe_request.");
                 lwm2m_data_t * dataP = NULL;
                 int size = 0;
-
+                isReadRequest = 1;
                 result = object_readData(contextP, uriP, &size, &dataP);
                 if (COAP_205_CONTENT == result)
                 {
@@ -244,7 +245,7 @@ uint8_t dm_handleRequest(lwm2m_context_t * contextP,
                   && message->accept[0] == APPLICATION_LINK_FORMAT)
             {
                 format = LWM2M_CONTENT_LINK;
-                result = object_discover(contextP, uriP, serverP, &buffer, &length);
+                result = object_discover(contextP, uriP, serverP, &buffer, &length);//return all the available resource id
             }
             else
             {
@@ -257,8 +258,10 @@ uint8_t dm_handleRequest(lwm2m_context_t * contextP,
                     format = LWM2M_CONTENT_JSON;
                 }
 
-                LOG_ARG("formatP(%d): %s",  format, STR_MEDIA_TYPE(format));
+                //fprintf(stdout,"dm_handleRequest formatP(%d): %s",  format, STR_MEDIA_TYPE(format));
+                fprintf(stdout,"dm_handleRequest formatP(%d) ",  format);
                 result = object_read(contextP, uriP, &format, &buffer, &length);
+                isReadRequest = 1;
             }
             if (COAP_205_CONTENT == result)
             {
@@ -310,7 +313,7 @@ uint8_t dm_handleRequest(lwm2m_context_t * contextP,
         }
         break;
 
-    case COAP_PUT:
+    case COAP_PUT://modify observe parameter or write value
         {
             if (IS_OPTION(message, COAP_OPTION_URI_QUERY))
             {
@@ -357,6 +360,10 @@ uint8_t dm_handleRequest(lwm2m_context_t * contextP,
     default:
         result = COAP_400_BAD_REQUEST;
         break;
+    }
+
+    if(isReadRequest){
+    	forwardReadRequestToSensor(uriP);//TODO: add flag, so when receive resp from sensor, send to lwm2m server immediately;
     }
 
     return result;

@@ -11,6 +11,7 @@
 #include <errno.h>
 #include "sensorData.h"
 #include "unixIPC.h"
+#include "liblwm2m.h"
 
 
 #define MAX_CONNECT_NUM  8     //allow max 8 process pass data to lwm2mclient,which report to lwm2mServer
@@ -119,23 +120,43 @@ int fromFirmwareProcess(const struct sockaddr_un* peer)
 }
 
 
-char* encode_json(const int objId, const int instId, const ResourceValue* rv, const char* mode)
+
+
+
+
+void forwardReadRequestToSensor(lwm2m_uri_t * uriP)
 {
-	static char buff[200];
-	memset(buff, 0, sizeof(buff));
+	//{"3":{}}   or  {"3":{"1":{}}}   or  {"10255":{"0":{"5524":"","M":"W"}}}
+  static char buff[100];
+  //memset(buff, 0, sizeof(buff));
 
-	fprintf(stdout,"before encode:%d/%d/%d : %s \n",objId, instId, rv->resId,rv->value);
-	//eg: {"10255":{"0":{"5524":"600","M":"W"}}}
-	int len = 0;
-	len += sprintf(buff+len,"{\"%d\":{\"%d\":{\"%d\":\"%s\",\"M\":\"%s\"}}}", objId, instId, rv->resId, rv->value,mode);
-	buff[len] = 0;
-	fprintf(stdout,"after encode:%s \n",buff);
-	return buff;
+  if(uriP)
+  {
+	  int objId = uriP->objectId;
+	  int len = 0;
+	  len += sprintf(buff+len, "{\"%d\":{", objId);
+
+	  if (LWM2M_URI_IS_SET_INSTANCE(uriP))
+	  {
+		  int instId = uriP->instanceId;
+		  len += sprintf(buff+len, "\"%d\":{", instId);
+
+		  if (LWM2M_URI_IS_SET_RESOURCE(uriP))
+		  {
+			  int resId = uriP->resourceId;
+			  len += sprintf(buff+len, "\"%d\":\"\",\"M\":\"R\"", resId);
+		  }
+		  len += sprintf(buff+len, "}");
+	  }
+
+	  len += sprintf(buff+len, "}}");
+
+	  buff[len] = 0;
+
+	  fprintf(stdout,"forwardReadRequestToSensor :%s \n",buff);
+	  send_Dgram(g_fdIpc, LWM2M_KURA_SOCK, buff);//kura need identify the objId
+  }
 }
-
-
-
-
 
 
 

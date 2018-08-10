@@ -136,7 +136,7 @@ static uint8_t prv_res2tlv(lwm2m_data_t* dataP,
   * @param tlvArrayP    in/out, TLV data sequence with initialized resource ID to read
   * @param objectP      in,     private location data structure
   */
-static uint8_t prv_location_read(uint16_t objInstId,
+static uint8_t prv_location_read(uint16_t instId,
                                  int*  numDataP,
                                  lwm2m_data_t** tlvArrayP,
                                  lwm2m_object_t*  objectP)
@@ -147,7 +147,7 @@ static uint8_t prv_location_read(uint16_t objInstId,
     location_data_t* locDataP = (location_data_t*)(objectP->userData);
 
     // defined as single instance object!
-    if (objInstId != 0) return COAP_404_NOT_FOUND;
+    if (instId != 0) return COAP_404_NOT_FOUND;
 
     if (*numDataP == 0)     // full object, readable resources!
     {
