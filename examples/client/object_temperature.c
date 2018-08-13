@@ -24,7 +24,7 @@
 #define RES_ID_SERIAL_NUM        5907
 #define RES_ID_TIMESTAMP         6021
 
-#define RES_NUM                  12 //total num of above resourceId
+//#define RES_TEMPERATURE_NUM                  12 //total num of above resourceId
 
 #define MAX_MEASURE_PERIOD     3600 //second
 
@@ -49,7 +49,8 @@ static uint8_t fetchValueById(const InstanceData *locDataP, lwm2m_data_t *dataP)
         if(dataP->id == locDataP->resValues[i].resId)
         {
             //value type is stored into dataP, so able to serialize later.
-            lwm2m_data_encode_string(locDataP->resValues[i].value, dataP);//as resValue is string type, so call lwm2m_data_encode_string.
+            //lwm2m_data_encode_string(locDataP->resValues[i].value, dataP);//as resValue is string type, so call lwm2m_data_encode_string.
+        	lwm2m_data_encode_common(LWM2M_TEMPERATURE_OBJECT_ID, dataP->id, locDataP->resValues[i].value, dataP);
             return COAP_205_CONTENT;
         }
     }
@@ -69,10 +70,10 @@ static uint8_t resourceValues_read(uint16_t instanceId,
 
     if (*numDataP == 0)
     {
-        *numDataP = RES_NUM;
-        *dataArrayP = lwm2m_data_new(RES_NUM);
+        *numDataP = RES_NUM_TEMPERATURE;
+        *dataArrayP = lwm2m_data_new(RES_NUM_TEMPERATURE);
         if (*dataArrayP == NULL) return COAP_500_INTERNAL_SERVER_ERROR;
-        for(int i = 0; i<RES_NUM; i++ ) {
+        for(int i = 0; i<RES_NUM_TEMPERATURE; i++ ) {
             (*dataArrayP)[i].id = targetP->userData.resValues[i].resId;
         }
     }
@@ -88,7 +89,7 @@ static uint8_t resourceValues_read(uint16_t instanceId,
 
 static void initialResourceIds(InstanceData* instanceData)
 {
-    instanceData->resNum = RES_NUM;
+    instanceData->resNum = RES_NUM_TEMPERATURE;
     instanceData->resValues[0].resId = RES_ID_MIN_RANGE_VALUE;
     instanceData->resValues[1].resId = RES_ID_MAX_RANGE_VALUE;
     instanceData->resValues[2].resId = RES_ID_SENSOR_INTERVAL;

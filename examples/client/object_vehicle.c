@@ -42,7 +42,7 @@
 #define RES_ID_OBD_BLE_ADDRESS   12
 
 
-#define RES_NUM_VEHICLE     13
+//#define RES_NUM_VEHICLE     13
 #define OBD_BLE_ADDRESS_LEN  17 //XX:XX:XX:XX:XX:XX
 
 typedef InstanceData ObdData;

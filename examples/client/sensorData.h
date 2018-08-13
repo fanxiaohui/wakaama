@@ -17,15 +17,17 @@
 #define  elementsOf(array) (sizeof(array)/sizeof(array[0]))
 #define  ENSURE_END_WITH_NULL_CHAR(array) {array[elementsOf(array)-1] = '\0';}
 
+#define RES_NUM_VEHICLE       13 //be consistent with object_vehicle.c
+#define RES_NUM_TEMPERATURE   12 //total num of above resourceId
+
 #define true   1
 #define false  0
 
-/*  these struct is used to encode data when report to lwm2m server
+/////////////  these struct is used to encode data when report to lwm2m server
 
 typedef struct{
     int  resId;
     char dataType; //'s'=string, 'i'=int, 'f'= float
-
 }Lwm2mResEncodeType;
 
 
@@ -38,9 +40,9 @@ typedef struct{
 
 }Lwm2mObjDataType;
 
-Lwm2mObjDataType lwm2m_data_type_map[] = {};
+extern void lwm2m_data_encode_common(const int objId,const int resId,const char* value, lwm2m_data_t *dataP);
+///////////////////
 
-*/
 
 typedef struct{
 	int  objId;

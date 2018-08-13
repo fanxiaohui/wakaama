@@ -27,7 +27,9 @@ SET(SOURCES
     ${CMAKE_CURRENT_LIST_DIR}/object_connectivity_stat.c
     ${CMAKE_CURRENT_LIST_DIR}/object_access_control.c
     ${CMAKE_CURRENT_LIST_DIR}/test_object.c
-        object_vehicle.c unixIPC.c jsonParse.c sensorData.h cJSON.c cJSON.h storeSensorData.c object_temperature.c object_pm25.c object_common.c object_common.h object_humidity.c utils.c)
+        object_vehicle.c unixIPC.c jsonParse.c sensorData.h cJSON.c cJSON.h 
+        storeSensorData.c object_temperature.c object_pm25.c object_common.c 
+        object_common.h object_humidity.c utils.c data_convert.c)
 
 add_executable(${PROJECT_NAME} ${SOURCES} ${WAKAAMA_SOURCES} ${SHARED_SOURCES})
 
