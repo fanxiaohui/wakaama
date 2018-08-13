@@ -159,7 +159,7 @@ static int prv_readAttributes(multi_option_t * query,
     return 0;
 }
 
-extern void forwardReadRequestToSensor(lwm2m_uri_t * uriP);
+extern void forwardReadRequestToSensor(const lwm2m_uri_t * uriP, const void*);
 uint8_t dm_handleRequest(lwm2m_context_t * contextP,
                          lwm2m_uri_t * uriP,
                          lwm2m_server_t * serverP,
@@ -363,7 +363,7 @@ uint8_t dm_handleRequest(lwm2m_context_t * contextP,
     }
 
     if(isReadRequest){
-    	forwardReadRequestToSensor(uriP);//TODO: add flag, so when receive resp from sensor, send to lwm2m server immediately;
+    	forwardReadRequestToSensor(uriP, serverP->sessionH);//TODO: add flag, so when receive resp from sensor, send to lwm2m server immediately;
     }
 
     return result;

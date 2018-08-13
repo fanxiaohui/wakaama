@@ -252,6 +252,7 @@ void lwm2m_list_free(lwm2m_list_t * head);
  */
 
 #define LWM2M_MAX_ID   ((uint16_t)0xFFFF)
+#define INVALID_LWM2MID     LWM2M_MAX_ID
 
 #define LWM2M_URI_FLAG_OBJECT_ID    (uint8_t)0x04
 #define LWM2M_URI_FLAG_INSTANCE_ID  (uint8_t)0x02

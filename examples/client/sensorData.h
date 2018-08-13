@@ -17,6 +17,9 @@
 #define  elementsOf(array) (sizeof(array)/sizeof(array[0]))
 #define  ENSURE_END_WITH_NULL_CHAR(array) {array[elementsOf(array)-1] = '\0';}
 
+#define true   1
+#define false  0
+
 /*  these struct is used to encode data when report to lwm2m server
 
 typedef struct{
@@ -38,6 +41,11 @@ typedef struct{
 Lwm2mObjDataType lwm2m_data_type_map[] = {};
 
 */
+
+typedef struct{
+	int  objId;
+	bool recvReadRequest;
+}ReadRequestRecord; //trig by read request, when receive data, immediately report to server without consider the pmin/pmax;
 
 typedef struct {
     int resId;

@@ -124,39 +124,7 @@ int fromFirmwareProcess(const struct sockaddr_un* peer)
 
 
 
-void forwardReadRequestToSensor(lwm2m_uri_t * uriP)
-{
-	//{"3":{}}   or  {"3":{"1":{}}}   or  {"10255":{"0":{"5524":"","M":"W"}}}
-  static char buff[100];
-  //memset(buff, 0, sizeof(buff));
 
-  if(uriP)
-  {
-	  int objId = uriP->objectId;
-	  int len = 0;
-	  len += sprintf(buff+len, "{\"%d\":{", objId);
-
-	  if (LWM2M_URI_IS_SET_INSTANCE(uriP))
-	  {
-		  int instId = uriP->instanceId;
-		  len += sprintf(buff+len, "\"%d\":{", instId);
-
-		  if (LWM2M_URI_IS_SET_RESOURCE(uriP))
-		  {
-			  int resId = uriP->resourceId;
-			  len += sprintf(buff+len, "\"%d\":\"\",\"M\":\"R\"", resId);
-		  }
-		  len += sprintf(buff+len, "}");
-	  }
-
-	  len += sprintf(buff+len, "}}");
-
-	  buff[len] = 0;
-
-	  fprintf(stdout,"forwardReadRequestToSensor :%s \n",buff);
-	  send_Dgram(g_fdIpc, LWM2M_KURA_SOCK, buff);//kura need identify the objId
-  }
-}
 
 
 
