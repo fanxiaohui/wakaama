@@ -108,7 +108,7 @@ void saveSensorDataToLocal(const ObjectData *sensorData, lwm2m_context_t* contex
         if(sensorData->objId == map[i].objId)
         {
             map[i].pfun(sensorData, context);//save to local first, then send to server
-            sendToLwm2mServerIfHasGotReadRequest(context, sensorData->objId);//send immediately, just for experimental,need full test
+            sendToLwm2mServerIfHasGotReadRequest(context, sensorData->objId);//fetch data from local
             return ;
         }
     }
@@ -121,7 +121,8 @@ void saveSensorDataToLocal(const ObjectData *sensorData, lwm2m_context_t* contex
 static void storeInfoOnReadRequestBegin(const lwm2m_uri_t * uriP, const void* sessionH)
 {
 	SET_READ_REQUEST(uriP->objectId);//so will report to server immediately
-	g_readUri = *uriP;//need local cache, since uriP will be freed.
+	//need local cache, since uriP will be freed.
+	g_readUri = *uriP;//TODO: save uriP per object, rather than global;
 	g_sessionH = sessionH;
 }
 
@@ -182,12 +183,12 @@ void sendToLwm2mServerIfHasGotReadRequest(lwm2m_context_t* contextP, const int o
 		size_t length = 0;
 		lwm2m_media_type_t format = LWM2M_CONTENT_JSON;
 
-		uint8_t result = object_read(contextP, &g_readUri, &format, &buffer, &length);
+		uint8_t result = object_read(contextP, &g_readUri, &format, &buffer, &length);//read data from local, encode in json format
 		if (COAP_205_CONTENT != result)	return;
 
 		coap_packet_t message[1];
 
-		coap_init_message(message, COAP_TYPE_NON, COAP_205_CONTENT, 0);
+		coap_init_message(message, COAP_TYPE_NON, COAP_205_CONTENT, 0);//lwm2m based on coap
 		coap_set_header_content_type(message, format);
 		coap_set_payload(message, buffer, length);
 
@@ -197,7 +198,7 @@ void sendToLwm2mServerIfHasGotReadRequest(lwm2m_context_t* contextP, const int o
         if (buffer != NULL) lwm2m_free(buffer);
         clearInfoOnReadRequestEnd(objId);
 
-	   	fprintf(stdout, "sendDueToReadRequest:%d \n",objId);
+	   	fprintf(stdout, "sendDataToReadRequest:%d \n",objId);
 	}
 
 }

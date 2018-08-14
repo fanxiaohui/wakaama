@@ -623,7 +623,7 @@ typedef struct _lwm2m_observed_
     struct _lwm2m_observed_ * next;
 
     lwm2m_uri_t uri;
-    lwm2m_watcher_t * watcherList;
+    lwm2m_watcher_t * watcherList;//watch by different server
 } lwm2m_observed_t;
 
 #ifdef LWM2M_CLIENT_MODE

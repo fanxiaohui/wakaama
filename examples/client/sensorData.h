@@ -40,7 +40,7 @@ typedef struct{
 
 }Lwm2mObjDataType;
 
-extern void lwm2m_data_encode_common(const int objId,const int resId,const char* value, lwm2m_data_t *dataP);
+extern bool lwm2m_data_encode_common(const int objId,const int resId,const char* value, lwm2m_data_t *dataP);
 ///////////////////
 
 

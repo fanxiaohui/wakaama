@@ -27,18 +27,18 @@
  */
 #ifdef LWM2M_CLIENT_MODE
 
-#define RES_ID_V_STATE      0   //0-idle,1-driving,2-charging
+#define RES_ID_V_STATE      0   //0-stop,1-driving,2-charging
 #define RES_ID_V_SPEED      1   //vehicle speed
 #define RES_ID_V_RPM        2   //engine speed
 #define RES_ID_V_TIMESTAMP  3   //sample time
-#define RES_ID_V_FAULT_NUM  4
+#define RES_ID_V_FAULT_NUM  4   //fault ,dtc
 #define RES_ID_V_ENG_LOAD   5
 #define RES_ID_V_ENG_FUEL_RATE  6
 #define RES_ID_V_ENG_COOL_TEMPERATURE  7
 #define RES_ID_V_TOTAL_HOURS   8
 #define RES_ID_TRIP_DISTANCE  9
 #define RES_ID_BATTERY_VOLTAGE 10
-#define RES_ID_EMERGE_BRAKE  11
+#define RES_ID_EMERGE_BRAKE  11    //brake
 #define RES_ID_OBD_BLE_ADDRESS   12
 
 
@@ -57,7 +57,8 @@ static uint8_t fetchValueById(const ObdData *locDataP,
     {
         if(dataP->id == locDataP->resValues[i].resId)
         {
-            lwm2m_data_encode_string(locDataP->resValues[i].value, dataP);
+            //lwm2m_data_encode_string(locDataP->resValues[i].value, dataP);
+        	lwm2m_data_encode_common(LWM2M_VEHICLE_OBJECT_ID, dataP->id,locDataP->resValues[i].value, dataP);
             return COAP_205_CONTENT;
         }
 
