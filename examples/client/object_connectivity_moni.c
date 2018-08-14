@@ -225,7 +225,10 @@ static uint8_t prv_read(uint16_t instanceId,
                 RES_O_APN,
                 RES_O_CELL_ID,
                 RES_O_SMNC,
-                RES_O_SMCC
+                RES_O_SMCC,
+				RES_O_IMEI,
+				RES_O_IMSI,
+				RES_O_ICCID
         };
         int nbRes = sizeof(resList) / sizeof(uint16_t);
 
