@@ -56,6 +56,9 @@
 #define RES_O_CELL_ID                   8
 #define RES_O_SMNC                      9
 #define RES_O_SMCC                      10
+#define RES_O_IMEI                      11 //added
+#define RES_O_IMSI                      12//added
+#define RES_O_ICCID                     13//added
 
 #define VALUE_NETWORK_BEARER_GSM    0   //GSM see 
 #define VALUE_AVL_NETWORK_BEARER_1  0   //GSM
@@ -77,6 +80,7 @@
 #define VALUE_SMCC                      86
 
 #define IP_ARRESS_LEN    16
+#define IMEI_MAX_LEN  30
 
 typedef struct
 {
@@ -86,6 +90,10 @@ typedef struct
     int signalStrength;
     int linkQuality;
     int linkUtilization;
+    char imei[IMEI_MAX_LEN];
+    char imsi[IMEI_MAX_LEN];
+    char iccid[IMEI_MAX_LEN];
+
 } conn_m_data_t;
 
 static uint8_t prv_read_value(lwm2m_data_t * dataP,
@@ -172,6 +180,18 @@ static uint8_t prv_read_value(lwm2m_data_t * dataP,
         lwm2m_data_encode_int(VALUE_SMCC, dataP);
         return COAP_205_CONTENT ;
 
+    case RES_O_IMEI:
+    	lwm2m_data_encode_string(connDataP->imei, dataP);
+    	return COAP_205_CONTENT ;
+
+    case RES_O_IMSI:
+    	lwm2m_data_encode_string(connDataP->imsi, dataP);
+    	return COAP_205_CONTENT ;
+
+    case RES_O_ICCID:
+    	lwm2m_data_encode_string(connDataP->imsi, dataP);
+    	return COAP_205_CONTENT ;
+
     default:
         return COAP_404_NOT_FOUND ;
     }
@@ -239,7 +259,15 @@ static void setResourceValue(const ResourceValue* rv, conn_m_data_t* monitorData
         case RES_M_IP_ADDRESSES:
         	strncpy(monitorData->ipAddresses[0], rv->value, IP_ARRESS_LEN-1);
             break;
-
+        case RES_O_IMEI:
+        	strncpy(monitorData->imei, rv->value, IMEI_MAX_LEN-1);
+        	break;
+        case RES_O_IMSI:
+        	strncpy(monitorData->imsi, rv->value, IMEI_MAX_LEN-1);
+        	break;
+        case RES_O_ICCID:
+        	strncpy(monitorData->iccid, rv->value, IMEI_MAX_LEN-1);
+        	break;
         default:
             fprintf(stderr,"connect_monitor resId=%d not supported \n", rv->resId);
             break;
