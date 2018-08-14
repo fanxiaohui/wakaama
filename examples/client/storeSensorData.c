@@ -13,6 +13,7 @@ extern void update_vehicle_measurement(const ObjectData* sensorData, lwm2m_conte
 extern void update_temperature_measurement(const ObjectData* sensorData, lwm2m_context_t* context);
 extern void update_location_measurement(const ObjectData* sensorData, lwm2m_context_t* context);
 extern void update_Device_measurement(const ObjectData* sensorData, lwm2m_context_t* context);
+extern void update_Connect_Monitor_measurement(const ObjectData* sensorData, lwm2m_context_t* context);
 extern void send_Dgram(const int ipcfd, const char* peerSock, const char* data);
 extern void sendToLwm2mServerIfHasGotReadRequest(lwm2m_context_t* contextP, const int objId);
 extern uint8_t object_read(lwm2m_context_t * contextP, lwm2m_uri_t * uriP, lwm2m_media_type_t * formatP, uint8_t ** bufferP, size_t * lengthP);
@@ -95,6 +96,7 @@ void saveSensorDataToLocal(const ObjectData *sensorData, lwm2m_context_t* contex
         {LWM2M_AIR_QUALITY_PM_25_OBJECT_ID, update_Object_measurement},
         {LWM2M_HUMIDITY_OBJECT_ID,          update_Object_measurement},
 		{LWM2M_DEVICE_OBJECT_ID,            update_Device_measurement},
+		{LWM2M_CONN_MONITOR_OBJECT_ID,      update_Connect_Monitor_measurement},
 
     };
 

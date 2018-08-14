@@ -19,6 +19,8 @@
 
 #define RES_NUM_VEHICLE       13 //be consistent with object_vehicle.c
 #define RES_NUM_TEMPERATURE   12 //total num of above resourceId
+#define RES_NUM_PM25          2
+
 
 #define true   1
 #define false  0

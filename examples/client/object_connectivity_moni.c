@@ -42,6 +42,7 @@
 #include <stdlib.h>
 #include <string.h>
 #include <ctype.h>
+#include "sensorData.h"
 
 // Resource Id's:
 #define RES_M_NETWORK_BEARER            0
@@ -62,30 +63,32 @@
 #define VALUE_AVL_NETWORK_BEARER_3  41  //Ethernet
 #define VALUE_AVL_NETWORK_BEARER_4  42  //DSL
 #define VALUE_AVL_NETWORK_BEARER_5  43  //PLC
-#define VALUE_IP_ADDRESS_1              "192.168.178.101"
-#define VALUE_IP_ADDRESS_2              "192.168.178.102"
-#define VALUE_ROUTER_IP_ADDRESS_1       "192.168.178.001"
-#define VALUE_ROUTER_IP_ADDRESS_2       "192.168.178.002"
-#define VALUE_APN_1                     "web.vodafone.de"
-#define VALUE_APN_2                     "cda.vodafone.de"
+#define VALUE_IP_ADDRESS_1              "0.0.0.0"
+#define VALUE_IP_ADDRESS_2              "0.0.0.0"
+#define VALUE_ROUTER_IP_ADDRESS_1       "0.0.0.0"
+#define VALUE_ROUTER_IP_ADDRESS_2       "0.0.0.0"
+#define VALUE_APN_1                     "cn"
+#define VALUE_APN_2                     "cn"
 #define VALUE_CELL_ID                   69696969
 #define VALUE_RADIO_SIGNAL_STRENGTH     80                  //dBm
 #define VALUE_LINK_QUALITY              98     
 #define VALUE_LINK_UTILIZATION          666
-#define VALUE_SMNC                      33
-#define VALUE_SMCC                      44
+#define VALUE_SMNC                      460
+#define VALUE_SMCC                      86
+
+#define IP_ARRESS_LEN    16
 
 typedef struct
 {
-    char ipAddresses[2][16];        // limited to 2!
-    char routerIpAddresses[2][16];  // limited to 2!
+    char ipAddresses[2][IP_ARRESS_LEN];        // limited to 2!
+    char routerIpAddresses[2][IP_ARRESS_LEN];  // limited to 2!
     long cellId;
     int signalStrength;
     int linkQuality;
     int linkUtilization;
 } conn_m_data_t;
 
-static uint8_t prv_set_value(lwm2m_data_t * dataP,
+static uint8_t prv_read_value(lwm2m_data_t * dataP,
                              conn_m_data_t * connDataP)
 {
     switch (dataP->id)
@@ -219,11 +222,45 @@ static uint8_t prv_read(uint16_t instanceId,
     i = 0;
     do
     {
-        result = prv_set_value((*dataArrayP) + i, (conn_m_data_t*) (objectP->userData));
+        result = prv_read_value((*dataArrayP) + i, (conn_m_data_t*) (objectP->userData));
         i++;
     } while (i < *numDataP && result == COAP_205_CONTENT );
 
     return result;
+}
+
+static void setResourceValue(const ResourceValue* rv, conn_m_data_t* monitorData)
+{
+    switch(rv->resId)
+    {
+        case RES_M_RADIO_SIGNAL_STRENGTH:
+        	sscanf(rv->value,"%d", &monitorData->signalStrength);
+            break;
+        case RES_M_IP_ADDRESSES:
+        	strncpy(monitorData->ipAddresses[0], rv->value, IP_ARRESS_LEN-1);
+            break;
+
+        default:
+            fprintf(stderr,"connect_monitor resId=%d not supported \n", rv->resId);
+            break;
+    }
+}
+
+void update_Connect_Monitor_measurement(const ObjectData* sensorData, lwm2m_context_t* context)
+{
+	lwm2m_object_t* Obj = (lwm2m_object_t*)LWM2M_LIST_FIND(context->objectList,sensorData->objId);
+	if(Obj != NULL)
+	{
+		conn_m_data_t* monitorData = (conn_m_data_t*)Obj->userData;
+		const InstanceData* instData = &sensorData->data[0];
+
+		for(int i = 0; i < instData->resNum; i++)//note:here can't directly copy sensorData->data[0] to Obj->userData, since userData's resId can't be changed after initialize
+		{
+			setResourceValue(&instData->resValues[i], monitorData);
+		}
+
+		markSensorValueChangedToTrigLaterReport(sensorData->objId, context);
+	}
 }
 
 lwm2m_object_t * get_object_conn_m(void)

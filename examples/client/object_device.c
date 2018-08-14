@@ -114,6 +114,7 @@ extern int utils_textToInt(uint8_t * buffer,int length,int64_t * dataP);
 
 #define SERIAL_NUM_LEN              30
 #define VERSION_LEN        16
+#define TIMEZONE_LEN        24
 
 typedef struct
 {
@@ -123,6 +124,7 @@ typedef struct
     int64_t time;
     uint8_t battery_level;
     char time_offset[PRV_OFFSET_MAXLEN];
+    char timeZone[TIMEZONE_LEN];
     char serialNum[SERIAL_NUM_LEN];
     char hardwareVersion[VERSION_LEN];
     char softwareVersion[VERSION_LEN];
@@ -170,7 +172,7 @@ static int prv_check_time_offset(char * buffer,
     return 1;
 }
 
-static uint8_t prv_set_value(lwm2m_data_t * dataP,   //out
+static uint8_t prv_read_value(lwm2m_data_t * dataP,   //out
                              device_data_t * devDataP) //in
 {
     // a simple switch structure is used to respond at the specified resource asked
@@ -373,7 +375,7 @@ static uint8_t prv_device_read(uint16_t instanceId,
     i = 0;
     do
     {
-        result = prv_set_value((*dataArrayP) + i, (device_data_t*)(objectP->userData));
+        result = prv_read_value((*dataArrayP) + i, (device_data_t*)(objectP->userData));
         i++;
     } while (i < *numDataP && result == COAP_205_CONTENT);
 
@@ -513,8 +515,13 @@ static uint8_t prv_device_write(uint16_t instanceId,
             break;
 
         case RES_O_TIMEZONE:
-            //ToDo IANA TZ Format
-            result = COAP_501_NOT_IMPLEMENTED;
+        	if(dataArray[i].value.asBuffer.length < TIMEZONE_LEN){
+        		strncpy(((device_data_t*)(objectP->userData))->timeZone, (char*)dataArray[i].value.asBuffer.buffer, dataArray[i].value.asBuffer.length);
+        		((device_data_t*)(objectP->userData))->timeZone[dataArray[i].value.asBuffer.length] = 0;
+        		result = COAP_204_CHANGED;
+        	}else{
+        		result = COAP_400_BAD_REQUEST;
+        	}
             break;
             
         default:
@@ -543,13 +550,16 @@ static void setResourceValue(const ResourceValue* rv, device_data_t* devData)
         	strncpy(devData->softwareVersion, rv->value, VERSION_LEN-1);
             break;
         case RES_O_MEMORY_TOTAL:
-        	utils_textToInt((uint8_t*)rv->value,strlen(rv->value), &devData->total_memory);
+        	//utils_textToInt((uint8_t*)rv->value,strlen(rv->value), &devData->total_memory);
+        	sscanf(rv->value,"%ld", &devData->total_memory);
             break;
         case RES_O_MEMORY_FREE:
-        	utils_textToInt((uint8_t*)rv->value,strlen(rv->value), &devData->free_memory);
+        	//utils_textToInt((uint8_t*)rv->value,strlen(rv->value), &devData->free_memory);
+        	sscanf(rv->value,"%ld", &devData->free_memory);
             break;
         case RES_O_CURRENT_TIME:
-            utils_textToInt((uint8_t*)rv->value,strlen(rv->value), &devData->time);
+            //utils_textToInt((uint8_t*)rv->value,strlen(rv->value), &devData->time);
+        	sscanf(rv->value,"%ld", &devData->time);
             break;
         default:
             fprintf(stderr,"device resId=%d not supported \n", rv->resId);

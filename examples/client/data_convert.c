@@ -2,10 +2,12 @@
 #include "sensorData.h"
 #include <errno.h>
 
+//need add data type for self defined object
 Lwm2mObjDataType lwm2m_data_type_map[] =
 {
   {LWM2M_VEHICLE_OBJECT_ID,     RES_NUM_VEHICLE,    {{0,'i'},{1,'f'},{2,'f'},{3,'i'},{4,'i'},{5,'f'},{6,'f'},{7,'f'},{8,'f'},{9,'f'},{10,'f'},{11,'i'},{12,'s'}} },
   {LWM2M_TEMPERATURE_OBJECT_ID, RES_NUM_TEMPERATURE,{{5519,'f'},{5520,'f'},{5524,'i'},{5527,'s'},{5601,'f'},{5602,'f'},{5700,'f'},{5701,'s'},{5800,'f'},{5906,'s'},{5907,'s'},{6021,'i'}} },
+  {LWM2M_AIR_QUALITY_PM_25_OBJECT_ID, RES_NUM_PM25, {{0,'i'},{1,'i'}}},
 };
 
 static bool data_encode(const char* value,const char type,  lwm2m_data_t *dataP)
