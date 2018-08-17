@@ -528,6 +528,7 @@ void observe_step(lwm2m_context_t * contextP,
                 break;
             }
         }
+        //client could report to multiple server(watcherList) using distinct pmin/pmax.
         for (watcherP = targetP->watcherList ; watcherP != NULL ; watcherP = watcherP->next)
         {
             if (watcherP->active == true)

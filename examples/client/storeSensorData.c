@@ -124,8 +124,8 @@ static void storeInfoOnReadRequestBegin(const lwm2m_uri_t * uriP, const void* se
 {
 	SET_READ_REQUEST(uriP->objectId);//so will report to server immediately
 	//need local cache, since uriP will be freed.
-	g_readUri = *uriP;//TODO: save uriP per object, rather than global;
-	g_sessionH = sessionH;
+	g_readUri = *uriP;//TODO: save uriP per request, rather than global;
+	g_sessionH = sessionH;//TODO: client may report to multiple server, so need save sessionH per request.
 }
 
 static void clearInfoOnReadRequestEnd(const int objId)//after send needed data  to server

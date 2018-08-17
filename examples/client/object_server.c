@@ -46,7 +46,7 @@ typedef struct _server_instance_
     uint16_t    instanceId;            // matches lwm2m_list_t::id
     uint16_t    shortServerId;
     uint32_t    lifetime;
-    uint32_t    defaultMinPeriod;
+    uint32_t    defaultMinPeriod;//not use actually.
     uint32_t    defaultMaxPeriod;
     uint32_t    disableTimeout;
     bool        storing;
@@ -480,7 +480,7 @@ lwm2m_object_t * get_server_object(int serverId,
         serverObj->readFunc = prv_server_read;
         serverObj->discoverFunc = prv_server_discover;
         serverObj->writeFunc = prv_server_write;
-        serverObj->createFunc = prv_server_create;
+        serverObj->createFunc = prv_server_create; // client could report to multiple server using distinct pmin/pmax.
         serverObj->deleteFunc = prv_server_delete;
         serverObj->executeFunc = prv_server_execute;
     }
