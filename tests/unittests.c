@@ -22,8 +22,14 @@
 #include "CUnit/Basic.h"
 
 #include "tests.h"
+#include "liblwm2m.h"
 
-// stub function
+// stub function to solve link error(undefined reference)
+void forwardReadRequestToSensor(const lwm2m_uri_t * uri, const void* session)
+{
+
+}
+
 void * lwm2m_connect_server(uint16_t secObjInstID,
                             void * userData)
 {
