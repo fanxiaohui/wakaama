@@ -5,6 +5,9 @@ project (lwm2munittests)
 include(${CMAKE_CURRENT_LIST_DIR}/../core/wakaama.cmake)
 include(${CMAKE_CURRENT_LIST_DIR}/../examples/shared/shared.cmake)
 
+
+set(CMAKE_C_FLAGS "${CMAKE_C_FLAGS} -g")
+
 add_definitions(-DLWM2M_CLIENT_MODE -DLWM2M_SUPPORT_JSON)
 add_definitions(${SHARED_DEFINITIONS} ${WAKAAMA_DEFINITIONS})
 # Enable all warnings for this test build  
