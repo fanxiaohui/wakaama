@@ -10,17 +10,27 @@ run unit test guide:
 
 5)make ; will Built target lwm2munittests
 
-6)make test;  will run tests
-
+6)./lwm2munittests;  run tests with detail output
 
 ////////////////log:
 
-impact@impact-node:~/lwm2m/wakaama/tests$ make test
-Running tests...
-Test project /home/impact/lwm2m/wakaama/tests
-    Start 1: test_all
-1/1 Test #1: test_all .........................   Passed    0.00 sec
+Suite: Suite_TLV_JSON
+  Test: test of test_1() ...passed
+  Test: test of test_2() ...passed
+  Test: test of test_3() ...passed
+  Test: test of test_4() ...passed
+  Test: test of test_5() ...passed
+  Test: test of test_6() ...passed
+  Test: test of test_7() ...passed
+  Test: test of test_8() ...passed
+  Test: test of test_10() ...passed
+  Test: test of test_11() ...passed
+  Test: test of test_12() ...passed
 
-100% tests passed, 0 tests failed out of 1
+Run Summary:    Type  Total    Ran Passed Failed Inactive
+              suites      1      1    n/a      0        0
+               tests     11     11     11      0        0
+             asserts     15     15     15      0      n/a
+
 
 

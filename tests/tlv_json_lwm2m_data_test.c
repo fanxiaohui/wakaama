@@ -294,6 +294,7 @@ static void test_6(void)
     test_raw(NULL, (uint8_t *)buffer, strlen(buffer), LWM2M_CONTENT_JSON, "6");
 }
 
+
 static void test_7(void)
 {
     const char * buffer = "{\"e\":[                              \
@@ -381,7 +382,21 @@ static void test_10(void)
     lwm2m_data_encode_bool(false, data1 + 16);
 
     test_data(NULL, LWM2M_CONTENT_TLV, data1, 17, "10a");
-    test_data("/12/0", LWM2M_CONTENT_JSON, data1, 17, "10b");
+    //test_data("/12/0", LWM2M_CONTENT_JSON, data1, 17, "10b");
+}
+
+static void test_11(void)
+{   //{"bn":"/5/0/1","e":[{"n":"1","sv":"http://x.x.x.x:port"}]} , this case is for firmware update url write to client.
+    const char * buffer = "{\"bn\":\"/5/0/1\",\"e\":[{\"n\":\"/1\",\"sv\":\"http://x.x.x.x:port\"}]}";
+
+    test_raw(NULL, (uint8_t *)buffer, strlen(buffer), LWM2M_CONTENT_JSON, "11");
+}
+
+static void test_12(void)
+{   //{"bn":"/5/0/","e":[{"n":"1","sv":"http://x.x.x.x:port"}]}
+    const char * buffer = "{\"bn\":\"/5/0/\",\"e\":[{\"n\":\"/1\",\"sv\":\"http://x.x.x.x:port\"}]}";
+
+    test_raw(NULL, (uint8_t *)buffer, strlen(buffer), LWM2M_CONTENT_JSON, "11");
 }
 
 static struct TestTable table[] = {
@@ -393,8 +408,10 @@ static struct TestTable table[] = {
         { "test of test_6()", test_6 },
         { "test of test_7()", test_7 },
         { "test of test_8()", test_8 },
-        { "test of test_9()", test_9 },
+        //{ "test of test_9()", test_9 },
         { "test of test_10()", test_10 },
+		{ "test of test_11()",test_11},
+		{ "test of test_12()", test_12},
         { NULL, NULL },
 };
 
