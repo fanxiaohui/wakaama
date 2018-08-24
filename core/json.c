@@ -59,6 +59,7 @@
 #define JSON_FOOTER             "]}"
 #define JSON_FOOTER_SIZE        2
 
+#define MIN_VALUE_LEN           2  //in most case it should be 3, but when integrate with leshan server, we found the value of "n" is empty, when write url to /5/0/1
 
 #define _GO_TO_NEXT_CHAR(I,B,L)         \
     {                                   \
@@ -239,7 +240,7 @@ static int prv_split(uint8_t * buffer,
 }
 
 static int prv_countItems(uint8_t * buffer,
-                          size_t bufferLen)
+                          size_t bufferLen)//{} is an item
 {
     int count;
     size_t index;
@@ -288,7 +289,7 @@ error:
 
 static int prv_parseItem(uint8_t * buffer,
                          size_t bufferLen,
-                         _record_t * recordP)
+                         _record_t * recordP)//{"n":"1","sv":"http"} is an Item
 {
     size_t index;
 
@@ -306,24 +307,26 @@ static int prv_parseItem(uint8_t * buffer,
         int valueLen;
         int next;
 
-        next = prv_split(buffer+index, bufferLen-index, &tokenStart, &tokenLen, &valueStart, &valueLen);
+        next = prv_split(buffer+index, bufferLen-index, &tokenStart, &tokenLen, &valueStart, &valueLen);//split k:v within { } by ,
         if (next < 0) return -1;
 
-        switch (tokenLen)
+        switch (tokenLen)//token is  "n","v", "sv"
         {
         case 1:
         {
             switch (buffer[index+tokenStart])
             {
-            case 'n':
+            case 'n': //"n":"resourceId"
             {
                 int i;
                 int j;
 
                 if (recordP->ids[0] != LWM2M_MAX_ID) return -1;
 
-                // Check for " around URI
-                if (valueLen < 3
+                // Check value for 'n', if value is empty "", valueLen=2,
+                //here is the root cause why client parse failed when integrate with leshan server if write package_url to client
+                //as server send payload like:  {"bn":"/5/0/1","e":[{"n":"","sv":"http"}]} , value of "n" is "", this case should also be accepted since resourceId is included in "bn".
+                if (valueLen < MIN_VALUE_LEN
                  || buffer[index+valueStart] != '"'
                  || buffer[index+valueStart+valueLen-1] != '"')
                 {
@@ -365,7 +368,7 @@ static int prv_parseItem(uint8_t * buffer,
             }
             break;
 
-            case 'v':
+            case 'v'://"v":100
                 if (recordP->type != _TYPE_UNSET) return -1;
                 recordP->type = _TYPE_FLOAT;
                 recordP->value = buffer + index + valueStart;
@@ -600,7 +603,7 @@ static int prv_convertRecord(lwm2m_uri_t * uriP,
                 parentP->value.asChildren.array = lwm2m_data_new(1);
                 if (NULL == parentP->value.asChildren.array) goto error;
                 parentP = parentP->value.asChildren.array;
-                parentP->type = LWM2M_TYPE_INTEGER;
+                parentP->type = LWM2M_TYPE_MULTIPLE_RESOURCE;
                 parentP->id = uriP->resourceId;
                 rootLevel = URI_DEPTH_RESOURCE_INSTANCE;
             }
@@ -753,7 +756,7 @@ static int prv_dataStrip(int size,
 }
 
 int json_parse(lwm2m_uri_t * uriP,
-               uint8_t * buffer,
+               uint8_t * buffer,    //buffer: {"bn":"/5/0/1","e":[{"n":"1","sv":"http"}]}
                size_t bufferLen,
                lwm2m_data_t ** dataP)
 {
@@ -786,7 +789,7 @@ int json_parse(lwm2m_uri_t * uriP,
         if (index++ >= bufferLen) goto error;
         switch (buffer[index])
         {
-        case 'e':
+        case 'e':   //"e":[{"n":"1","sv":"http"}]
         {
             int recordIndex;
 
@@ -801,7 +804,7 @@ int json_parse(lwm2m_uri_t * uriP,
             _GO_TO_NEXT_CHAR(index, buffer, bufferLen);
             if (buffer[index] != '[') goto error;
             _GO_TO_NEXT_CHAR(index, buffer, bufferLen);
-            count = prv_countItems(buffer + index, bufferLen - index);
+            count = prv_countItems(buffer + index, bufferLen - index);//return num of {} in []
             if (count <= 0) goto error;
             recordArray = (_record_t*)lwm2m_malloc(count * sizeof(_record_t));
             if (recordArray == NULL) goto error;
@@ -814,7 +817,7 @@ int json_parse(lwm2m_uri_t * uriP,
                 if (buffer[index] != '{') goto error;
                 itemLen = 0;
                 while (buffer[index + itemLen] != '}') itemLen++;
-                if (0 != prv_parseItem(buffer + index + 1, itemLen - 1, recordArray + recordIndex))
+                if (0 != prv_parseItem(buffer + index + 1, itemLen - 1, recordArray + recordIndex))//parse {"n":"1","sv":"http"}
                 {
                     goto error;
                 }
@@ -837,7 +840,7 @@ int json_parse(lwm2m_uri_t * uriP,
         }
         break;
 
-        case 'b':
+        case 'b': //"bn":"/5/0/1"
             if (bufferLen-index < JSON_MIN_BX_LEN) goto error;
             index++;
             switch (buffer[index])
@@ -895,7 +898,7 @@ int json_parse(lwm2m_uri_t * uriP,
 
     if (buffer[index] != '}') goto error;
 
-    if (eFound == true)
+    if (eFound == true)//found "e"
     {
         lwm2m_uri_t baseURI;
         lwm2m_uri_t * baseUriP;
@@ -907,13 +910,13 @@ int json_parse(lwm2m_uri_t * uriP,
         {
             baseUriP = uriP;
         }
-        else
+        else //"bn" exist
         {
             int res;
 
             // we ignore the request URI and use the bn one.
 
-            // Check for " around URI
+            // bnLen = strlen("/5/0/1") = 8  if buffer like:   "bn":"/5/0/1"
             if (bnLen < 3
              || buffer[bnStart] != '"'
              || buffer[bnStart+bnLen-1] != '"')
@@ -923,14 +926,14 @@ int json_parse(lwm2m_uri_t * uriP,
             bnStart += 1;
             bnLen -= 2;
 
-            if (bnLen == 1)
+            if (bnLen == 1) //"bn":"/"
             {
                 if (buffer[bnStart] != '/') goto error;
                 baseUriP = NULL;
             }
-            else
+            else  //"bn":"/5/0/1"
             {
-                res = lwm2m_stringToUri((char *)buffer + bnStart, bnLen, &baseURI);
+                res = lwm2m_stringToUri((char *)buffer + bnStart, bnLen, &baseURI);//baseURI = lwm2m_uri_t{7,5,0,1}
                 if (res < 0 || res != bnLen) goto error;
                 baseUriP = &baseURI;
             }
@@ -997,7 +1000,7 @@ int json_parse(lwm2m_uri_t * uriP,
                 }
             }
         }
-        else
+        else //for case "bn":"/5/0/1"
         {
             resultP = parsedP;
             size = count;

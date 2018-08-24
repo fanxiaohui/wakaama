@@ -385,18 +385,30 @@ static void test_10(void)
     //test_data("/12/0", LWM2M_CONTENT_JSON, data1, 17, "10b");
 }
 
-static void test_11(void)
-{   //{"bn":"/5/0/1","e":[{"n":"1","sv":"http://x.x.x.x:port"}]} , this case is for firmware update url write to client.
-    const char * buffer = "{\"bn\":\"/5/0/1\",\"e\":[{\"n\":\"/1\",\"sv\":\"http://x.x.x.x:port\"}]}";
 
-    test_raw(NULL, (uint8_t *)buffer, strlen(buffer), LWM2M_CONTENT_JSON, "11");
-}
-
-static void test_12(void)
+static void test_11(void) //if leshan server send this data ,than write package_url ok.
 {   //{"bn":"/5/0/","e":[{"n":"1","sv":"http://x.x.x.x:port"}]}
     const char * buffer = "{\"bn\":\"/5/0/\",\"e\":[{\"n\":\"/1\",\"sv\":\"http://x.x.x.x:port\"}]}";
 
     test_raw(NULL, (uint8_t *)buffer, strlen(buffer), LWM2M_CONTENT_JSON, "11");
+}
+
+static void test_12(void)//if leshan server send this data ,than write package_url fail , even if json parse ok.
+{   //{"bn":"/5/0/1","e":[{"n":"1","sv":"http://x.x.x.x:port"}]} , this case is for firmware update url write to client.
+    const char * buffer = "{\"bn\":\"/5/0/1\",\"e\":[{\"n\":\"/1\",\"sv\":\"http://x.x.x.x:port\"}]}";
+
+    test_raw(NULL, (uint8_t *)buffer, strlen(buffer), LWM2M_CONTENT_JSON, "12");
+}
+
+static void test_13(void) //from leshan server msg, write package_url fail , even if json parse ok.
+{   //{"bn":"/5/0/1","e":[{"n":"","sv":"http://x.x.x.x:port"}]} , this case is for firmware update url write to client.
+
+	//empty value for "n" , although this case passed by modify prv_parseItem() to allow empty value,
+	//but still suggest to make server sending data like test_11(), otherwise need more work;
+
+    const char * buffer = "{\"bn\":\"/5/0/1\",\"e\":[{\"n\":\"\",\"sv\":\"http://52.80.95.56:8038/edgeTest.txt\"}]}";
+
+    test_raw(NULL, (uint8_t *)buffer, strlen(buffer), LWM2M_CONTENT_JSON, "13");
 }
 
 static struct TestTable table[] = {
@@ -412,6 +424,7 @@ static struct TestTable table[] = {
         { "test of test_10()", test_10 },
 		{ "test of test_11()",test_11},
 		{ "test of test_12()", test_12},
+		{ "test of test_13()", test_13},
         { NULL, NULL },
 };
 

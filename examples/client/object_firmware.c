@@ -276,7 +276,7 @@ static uint8_t prv_firmware_write(uint16_t instanceId,
                                   lwm2m_object_t * objectP)
 {
 
-    uint8_t result;
+    uint8_t result = COAP_500_INTERNAL_SERVER_ERROR;
     firmware_data_t * data = (firmware_data_t*)(objectP->userData);
 
     // this is a single instance object
@@ -300,7 +300,7 @@ static uint8_t prv_firmware_write(uint16_t instanceId,
 
         case RES_M_PACKAGE_URI:
             // URL for download the firmware
-            if(dataArray->value.asBuffer.buffer) {
+            if(dataArray->type ==LWM2M_TYPE_STRING  && dataArray->value.asBuffer.buffer) {
                 memset(data->pkg_url,0,sizeof(data->pkg_url));
                 length = (dataArray->value.asBuffer.length < MAX_URL_LENGTH) ? dataArray->value.asBuffer.length
                                                                              : MAX_URL_LENGTH;
@@ -320,6 +320,9 @@ static uint8_t prv_firmware_write(uint16_t instanceId,
                 	fprintf(stdout,"invalid URL:%s",dataArray->value.asBuffer.buffer);
                     result = COAP_400_BAD_REQUEST;
                 }
+            }else{
+            	fprintf(stderr, "wrong parse type(%d) for URL \n", dataArray->type);
+            	result = COAP_400_BAD_REQUEST;
             }
             break;
 
