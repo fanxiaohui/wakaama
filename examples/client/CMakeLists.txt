@@ -2,11 +2,11 @@ cmake_minimum_required (VERSION 3.0)
 
 project (lwm2mclient)
 
-option(DTLS "Enable DTLS" OFF)
+option(DTLS "Enable DTLS" ON)
 
 set(CMAKE_C_STANDARD 99)
 
-set(CMAKE_C_FLAGS "${CMAKE_C_FLAGS} -pg")
+#set(CMAKE_C_FLAGS "${CMAKE_C_FLAGS} -pg")
 
 include(${CMAKE_CURRENT_LIST_DIR}/../../core/wakaama.cmake)
 include(${CMAKE_CURRENT_LIST_DIR}/../shared/shared.cmake)
