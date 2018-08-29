@@ -1,0 +1,176 @@
+concept: security object id(=0) support multiple instances, each instance map to an server, so one client could save multiple server info(bootstrap server + lwm2m server), 
+bs server not support DTLS, only lwm2m server support DTLS, when client connect to bs server, bs will send the DTLS info(security mode,key) to client, then client use DTLS to connect lwm2m server,
+so bs server need a database  to store the DTLS info; bootstrap_server.ini is used to store DTLS info for demo, client will save DTLS info to security object(=0); if bs server send more than one lwm2m server info to client, then client need select a server to connect depend on it's DTLS capability.
+coaps=dtls, coap=no-dtls;
+PSK=pre-shared key, lwm2m_server and client share the same {public_key,private_key} for security, client got key info from bs_server, lwm2m_server store key to database ;
+
+
+Below use wakaama and Leshan for demo bootstrap&DTLS :
+ 
+0):prepare work to support DTLS
+install autoconf; cd wakaama/examples/shared/tinydtls; git submodule init ; git submodule update; modify CMakeLists.txt  DTLS = ON; cmake ./  ;  make ;
+
+1):add dtls info to file
+add following info to file wakaama/examples/bootstrap_server/bootstrap_server.ini :
+
+***********
+#integrate with leshan,public identity="edge"(65646765)
+[Server]
+id=4
+uri=coaps://localhost:5684
+bootstrap=no
+lifetime=300
+security=PSK
+public=65646765
+secret=112233445566778899
+
+#integrate with leshan
+[Endpoint]
+Name=impact
+Delete=/
+Server=4
+**********
+
+2): start bootstrap server:
+./bootstrap_server -f ./bootstrap_server.ini  -l 5685 -4
+
+
+1): start leshan server
+
+ java -jar leshan-server-demo-1.0.0-SNAPSHOT-jar-with-dependencies.jar -slp 5684 -wp 8888
+
+
+
+2): configure DTLS info on server(to generate security.data): a)open  http://127.0.0.1:8888/#/security , b) click "add new client security configuration", c)fill following info,these info must be consistent with bootstrap_server.ini 
+
+*****
+client Endpoint:impact, 
+SecurityMode: PSK
+Identity: edge
+Key:  112233445566778899
+*******
+
+3): start client (in this case, DTLS info is given by cmdline args; in real product, the DLTS info is achieved from bs server)
+
+./lwm2mclient -b -p 5685 -4 -n "impact"
+
+
+
+
+
+
+
+////////////////////////////bootstrap server log
+
+impact@impact-node:~/lwm2m/TrunkLwm2m/wakaama/examples/bootstrap_server$ ./bootstrap_server -f ./bootstrap_server.ini  -l 5685 -4
+LWM2M Bootstrap Server now listening on port 5685.
+
+> 21 bytes received from [127.0.0.1]:56830
+44 02 5E 6C  6C 5E C8 3B  B2 62 73 49  65 70 3D 69   D.^ll^.;.bsIep=i
+6D 70 61 63  74                                      mpact
+
+Bootstrap request from "impact"
+Sending DELETE / to "impact" OK.
+8 bytes received from [127.0.0.1]:56830
+64 42 3F 05  05 3F C8 3B   dB?..?.;
+
+ Received status 2.02 (COAP_202_DELETED) for URI / from endpoint impact.
+Sending WRITE /0/4 to "impact" OK.
+8 bytes received from [127.0.0.1]:56830
+64 44 3F 06  06 3F C8 3B   dD?..?.;
+
+ Received status 2.04 (COAP_204_CHANGED) for URI /0/4 from endpoint impact.
+Sending WRITE /1/4 to "impact" OK.
+8 bytes received from [127.0.0.1]:56830
+64 44 3F 07  07 3F C8 3B   dD?..?.;
+
+ Received status 2.04 (COAP_204_CHANGED) for URI /1/4 from endpoint impact.
+
+Sending BOOTSTRAP FINISH  to "impact" OK.
+
+
+/////////////////////////////////////////////// leshan lwm2m server
+impact@impact-node:~/lwm2m/bootstrapLwm2m$ java -jar leshan-server-demo-1.0.0-SNAPSHOT-jar-with-dependencies.jar -slp 5684 -wp 8888
+2018-08-29 12:33:43,794 INFO LeshanServer - LWM2M server started at coap://0.0.0.0/0.0.0.0:5683 coaps://0.0.0.0/0.0.0.0:5684
+2018-08-29 12:33:43,900 INFO LeshanServerDemo - Web server started at http://127.0.0.1:8888/.
+
+
+
+////////////////////////////////////////////// lwm2m client log(first connect to bootstrap server, then redirect to lwm2m server, DTLS communication)
+^Cimpact@impact-node:~/lwm2m/TrunkLwm2m/wakaama/examples/client$ ./lwm2mclient -b -p 5685 -4 -n "impact"
+Trying to bind LWM2M Client to port 56830
+LWM2M Client "impact" started on port 56830
+>  -> State: STATE_BOOTSTRAPPING
+ -> State: STATE_BOOTSTRAPPING
+8 bytes received from [127.0.0.1]:5685
+64 44 5E 6C  6C 5E C8 3B   dD^ll^.;
+ -> State: STATE_BOOTSTRAPPING
+8 bytes received from [127.0.0.1]:5685
+44 04 3F 05  05 3F C8 3B   D.?..?.;
+ -> State: STATE_BOOTSTRAPPING
+68 bytes received from [127.0.0.1]:5685
+44 03 3F 06  06 3F C8 3B  B1 30 01 34  12 2D 16 FF   D.?..?.;.0.4.-..
+C8 00 16 63  6F 61 70 73  3A 2F 2F 6C  6F 63 61 6C   ...coaps://local
+68 6F 73 74  3A 35 36 38  34 C1 01 00  C1 0A 04 C1   host:5684.......
+02 00 C4 03  65 64 67 65  C8 05 09 11  22 33 44 55   ....edge...."3DU
+66 77 88 99                                          fw..
+ -> State: STATE_BOOTSTRAPPING
+29 bytes received from [127.0.0.1]:5685
+44 03 3F 07  07 3F C8 3B  B1 31 01 34  12 2D 16 FF   D.?..?.;.1.4.-..
+C1 00 04 C2  01 01 2C C1  06 00 C1 07  55            ......,.....U
+ -> State: STATE_BOOTSTRAPPING
+11 bytes received from [127.0.0.1]:5685
+44 02 3F 08  08 3F C8 3B  B2 62 73  D.?..?.;.bs
+ -> State: STATE_BOOTSTRAPPING
+ -> State: STATE_REGISTERING
+60 bytes received from [127.0.0.1]:5684
+16 FE FD 00  00 00 00 00  00 00 00 00  2F 03 00 00   ............/...
+23 00 00 00  00 00 00 00  23 FE FD 20  88 25 E3 8D   #.......#.. .%..
+48 FA 77 BE  42 A3 54 3E  1D C3 DC 6B  03 08 20 8D   H.w.B.T>...k.. .
+87 36 5F 53  D0 6B 7C E5  50 C4 8F 0E                .6_S.k|.P...
+ -> State: STATE_REGISTERING
+120 bytes received from [127.0.0.1]:5684
+16 FE FD 00  00 00 00 00  00 00 01 00  52 02 00 00   ............R...
+46 00 01 00  00 00 00 00  46 FE FD 5B  86 3B C8 02   F.......F..[.;..
+A6 A9 44 76  DA F5 47 36  1F 94 43 32  C0 B5 50 3B   ..Dv..G6..C2..P;
+9D B8 07 ED  02 26 A6 1A  F1 1A 74 20  5B 86 3B C8   .....&....t [.;.
+37 E1 A5 E6  8D CB 25 A9  02 EC 96 82  A9 B4 75 85   7.....%.......u.
+FC 7A 98 1F  CB 80 5D 5B  37 E9 D9 27  C0 A8 00 16   .z....][7..'....
+FE FD 00 00  00 00 00 00  00 02 00 0C  0E 00 00 00   ................
+00 02 00 00  00 00 00 00                             ........
+ -> State: STATE_REGISTERING
+67 bytes received from [127.0.0.1]:5684
+14 FE FD 00  00 00 00 00  00 00 03 00  01 01 16 FE   ................
+FD 00 01 00  00 00 00 00  00 00 28 00  01 00 00 00   ..........(.....
+00 00 00 66  B9 AB 24 32  F6 E1 8C 00  94 10 5D BF   ...f..$2......].
+D1 BE 39 22  3C AE C0 69  3E A4 57 42  1E AA 25 4B   ..9"<..i>.WB..%K
+E1 70 97                                             .p.
+decrypt_verify(): found 24 bytes cleartext
+ -> State: STATE_REGISTERING
+ -> State: STATE_REGISTERING
+51 bytes received from [127.0.0.1]:5684
+17 FE FD 00  01 00 00 00  00 00 01 00  26 00 01 00   ............&...
+00 00 00 00  01 1D 1E A2  09 36 E7 1A  FD 1D 6C 68   .........6....lh
+A5 2E 01 6A  36 51 C3 45  39 6D 47 73  19 F8 16 F5   ...j6Q.E9mGs....
+8E E0 9E                                             ...
+decrypt_verify(): found 22 bytes cleartext
+ -> State: STATE_READY
+ -> State: STATE_READY
+ -> State: STATE_READY
+ -> State: STATE_READY
+ -> State: STATE_READY
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
