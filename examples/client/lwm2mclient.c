@@ -84,6 +84,7 @@
 #include <sys/un.h>
 #include "sensorData.h"
 #include "object_common.h"
+#include "sqliteUtils.h"
 
 #define MAX_PACKET_SIZE 1024
 #define DEFAULT_SERVER_IPV6 "[::1]"
@@ -1253,7 +1254,7 @@ int main(int argc, char *argv[])
      * We now enter in a while loop that will handle the communications from the server
      */
 
-
+    openDbAndCreateTable();
 
     g_fdIpc = createUnixSocket();
 
@@ -1453,6 +1454,7 @@ int main(int argc, char *argv[])
                 }else {
                     const ObjectData *sensorData = convertJsonToObjectData(rawData);
                     saveSensorDataToLocal(sensorData, lwm2mH);
+                    persistToDb(sensorData);
                 }
 
             }
@@ -1497,6 +1499,6 @@ int main(int argc, char *argv[])
         trace_print(0, 1);
     }
 #endif
-
+    close_db();
     return 0;
 }

@@ -13,7 +13,7 @@ Lwm2mObjDataType lwm2m_data_type_map[] =
 static bool data_encode(const char* value,const char type,  lwm2m_data_t *dataP)
 {
   double valuef = 0.0;
-  int64_t    valuei = 0.0;
+  int64_t    valuei = 0;
   int ret = 0;
   switch(type)
   {

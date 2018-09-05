@@ -16,6 +16,8 @@ add_definitions(${SHARED_DEFINITIONS} ${WAKAAMA_DEFINITIONS})
 
 include_directories (${WAKAAMA_SOURCES_DIR} ${SHARED_INCLUDE_DIRS})
 
+SET(sqlite_src src_sql/sqlite3.c)
+
 SET(SOURCES
     ${CMAKE_CURRENT_LIST_DIR}/lwm2mclient.c
     ${CMAKE_CURRENT_LIST_DIR}/lwm2mclient.h
@@ -31,9 +33,10 @@ SET(SOURCES
     ${CMAKE_CURRENT_LIST_DIR}/test_object.c
         object_vehicle.c unixIPC.c jsonParse.c sensorData.h cJSON.c cJSON.h 
         storeSensorData.c object_temperature.c object_pm25.c object_common.c 
-        object_common.h object_humidity.c utils.c data_convert.c)
+        object_common.h object_humidity.c utils.c data_convert.c  sqliteUtils.c)
 
-add_executable(${PROJECT_NAME} ${SOURCES} ${WAKAAMA_SOURCES} ${SHARED_SOURCES})
+add_executable(${PROJECT_NAME} ${SOURCES} ${WAKAAMA_SOURCES} ${SHARED_SOURCES} ${sqlite_src} )
+target_link_libraries(${PROJECT_NAME} pthread dl) #sqlite depend
 
 # Add WITH_LOGS to debug variant
 set_property(TARGET ${PROJECT_NAME} APPEND PROPERTY COMPILE_DEFINITIONS $<$<CONFIG:Debug>:WITH_LOGS>)
