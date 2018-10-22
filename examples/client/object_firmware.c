@@ -300,10 +300,10 @@ static uint8_t prv_firmware_write(uint16_t instanceId,
 
         case RES_M_PACKAGE_URI:
             // URL for download the firmware
-            if(dataArray->type ==LWM2M_TYPE_STRING  && dataArray->value.asBuffer.buffer) {
+            if((dataArray->type ==LWM2M_TYPE_STRING|| dataArray->type == LWM2M_TYPE_OPAQUE)  && dataArray->value.asBuffer.buffer) {
                 memset(data->pkg_url,0,sizeof(data->pkg_url));
                 length = (dataArray->value.asBuffer.length < MAX_URL_LENGTH) ? dataArray->value.asBuffer.length
-                                                                             : MAX_URL_LENGTH;
+                                                                             : MAX_URL_LENGTH;//must use dataArray->value.asBuffer.length to restrict since dataArray->value.asBuffer.buffer is not teminate with null.
                 strncpy(data->pkg_url, dataArray->value.asBuffer.buffer, length);//if length == 0, strncpy do nothing.
                 ENSURE_END_WITH_NULL_CHAR(data->pkg_url);
                 fprintf(stdout,"pkgurl=%s \n", data->pkg_url);
