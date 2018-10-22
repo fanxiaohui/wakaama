@@ -1316,7 +1316,7 @@ int main(int argc, char *argv[])
 
         if (result != 0)
         {
-            fprintf(stderr, "lwm2m_step() failed: 0x%X\r\n", result);
+            fprintf(stderr, "lwm2m_step() failed: 0x%X\r\n", result);//this happens when network loss(server can't reached)
             if(previousState == STATE_BOOTSTRAPPING)
             {
 #ifdef WITH_LOGS
@@ -1325,7 +1325,11 @@ int main(int argc, char *argv[])
                 prv_restore_objects(lwm2mH);
                 lwm2mH->state = STATE_INITIAL;
             }
-            else return -1;
+            else{
+                fprintf(stdout, "try to recover \n");
+                lwm2mH->state = STATE_INITIAL;
+                continue;
+            }
         }
 #ifdef LWM2M_BOOTSTRAP
         update_bootstrap_info(&previousState, lwm2mH);
